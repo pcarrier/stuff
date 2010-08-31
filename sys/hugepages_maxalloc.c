@@ -1,11 +1,16 @@
-// Maximum size available in HugePages
-//
-// Copyright (c) 2010, Red Hat Inc.
-// Permission to use, copy, modify, and/or distribute this software
-// for any purpose with or without fee is hereby granted, provided that
-// the above copyright notice and this permission notice appear in all copies.
-//
-// Maintainer: Pierre Carrier <prc@redhat.com>
+/*
+Maximum size available in HugePages
+
+Copyright (c) 2010, Red Hat Inc.
+Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted, provided that
+ the above copyright notice and this permission notice appear in all copies.
+
+Maintainer: Pierre Carrier <prc@redhat.com>
+
+This code relying on SHM_HUGETLB, it is Linux-specific.
+Doesn't build with gcc -ansi.
+*/
 
 
 #include <stdlib.h>
@@ -15,7 +20,7 @@
 #include <sys/shm.h>
 #include <limits.h>
 
-// 1MB each
+/* 1MB each */
 #define PRECISION (unsigned long)(1<<20)
 #define MB (unsigned long)(1<<20)
 
@@ -45,7 +50,7 @@ int main(void)
 			fails = size;
 		} else {
 			shmctl(shmid, IPC_RMID, NULL);
-			printf(" succeeded\n", size);
+			printf(" succeeded\n");
 			succeeds = size;
 		}
 		size = (fails+succeeds) / 2;
