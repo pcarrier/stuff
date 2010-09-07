@@ -12,6 +12,7 @@ Maintainer: Pierre Carrier <prc@redhat.com>
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -99,36 +100,60 @@ void test_read(char *buff, int size)
 
 int main(int argc, char **argv)
 {
-    int size = 0, result, file;
-    char *fn, *buff;
+    int size = 0, result, file, pass = 1;
+    int create = 0, fill = 0, verify = 0;
+    char *cmds, *cmd, *fn, *buff;
     /* Check params */
-    if (argc != 3) {
+    if (argc != 4) {
 	fprintf(stderr,
-		"Usage: %s filename size\n"
+		"Usage: %s commands filename size\n"
+		"\tcommand can contain [c]reate, [f]ill, [v]erify\n"
 		"\tfilename the file to fill\n"
 		"\tsize its future size\n", argv[0]);
 	exit(EXIT_FAILURE);
     }
-    fn = argv[1];
-    size = atoi(argv[2]);
+    cmds = argv[1];
+    fn = argv[2];
+    size = atoi(argv[3]);
     if (size <= 0) {
 	fprintf(stderr,
 		"The specified size, %s, is not a positive integer!\n",
 		argv[2]);
 	exit(EXIT_FAILURE);
     }
-    /* File creation */
-    file = test_open(fn, 1);
-    test_enlarge(file, size);
-    test_close(file, 1);
 
-    /* Mapping and filling */
-    file = test_open(fn, 2);
+    for (cmd = cmds + strlen(cmds); cmd >= cmds; cmd--) {
+	switch ((int) *cmd) {
+	case (int) 'c':
+	    create = 1;
+	    break;
+	case (int) 'f':
+	    fill = 1;
+	    break;
+	case (int) 'v':
+	    verify = 1;
+	    break;
+	default:
+	    break;
+	}
+    }
+
+    if (create) {
+	printf("Creating.\n");
+	file = test_open(fn, pass);
+	test_enlarge(file, size);
+	test_close(file, pass);
+	pass++;
+    }
+
+    file = test_open(fn, pass);
     buff = test_mmap(file, size);
-    test_fill(buff, size);
-    test_read(buff, size);
+    if (fill)
+	test_fill(buff, size);
+    if (verify)
+	test_read(buff, size);
     test_munmap(buff, size);
-    test_close(file, 2);
+    test_close(file, pass);
 
     return (EXIT_SUCCESS);
 }
