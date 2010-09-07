@@ -76,9 +76,8 @@ void test_fill(char *buff, int size)
     printf("Writing:\n");
     for (i = 0; i < size; i++) {
 	buff[i] = (char) (i % 256);
-	if (!(i % (1024 * 1024))) {
+	if (!(i % (1024 * 1024)))
 	    printf(".");
-	}
     }
     printf("\n");
 }
@@ -92,9 +91,8 @@ void test_read(char *buff, int size)
 	    fprintf(stderr, "Memory check failed!\n");
 	    exit(EXIT_FAILURE);
 	}
-    }
-    if (!(i % (1024 * 1024))) {
-	printf(".");
+	if (!(i % (1024 * 1024)))
+	    printf(".");
     }
     printf("\n");
 }
