@@ -17,7 +17,7 @@ Maintainer: Pierre Carrier <prc@redhat.com>
 
 int test_open(char *fn, int pass)
 {
-    int file = open(fn, O_RDWR, (mode_t) 0600);
+    int file = open(fn, O_RDWR | O_CREAT, (mode_t) 0600);
     if (file < 0) {
 	fprintf(stderr, "File %s, pass %i: ", fn, pass);
 	perror("Error when opening");
