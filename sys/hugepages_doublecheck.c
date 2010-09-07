@@ -33,48 +33,49 @@ Doesn't build with gcc -ansi.
 
 int main(void)
 {
-	int shmid;
-	unsigned long i;
-	char *shmaddr;
+    int shmid;
+    unsigned long i;
+    char *shmaddr;
 
-	printf("Getting a shared memory segment\n");
-	if ((shmid = shmget(2, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W)) < 0) {
-		perror("Getting failed!");
-		exit(1);
-	}
-	printf("shmid: 0x%x\n", shmid);
+    printf("Getting a shared memory segment\n");
+    if ((shmid =
+	 shmget(2, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W)) < 0) {
+	perror("Getting failed!");
+	exit(1);
+    }
+    printf("shmid: 0x%x\n", shmid);
 
-	shmaddr = shmat(shmid, ADDR, SHMAT_FLAGS);
-	if (shmaddr == (char *)-1) {
-		perror("Attaching failed!");
-		shmctl(shmid, IPC_RMID, NULL);
-		exit(2);
-	}
-	printf("shmaddr: %p\n", shmaddr);
-
-	printf("Writing:\n");
-	for (i = 0; i < LENGTH; i++) {
-		shmaddr[i] = (char)(i);
-		if (!(i % (1024 * 1024)))
-			printf(".");
-	}
-	printf("\n");
-
-	printf("Checking...");
-	for (i = 0; i < LENGTH; i++)
-		if (shmaddr[i] != (char)i)
-			printf("\nIndex %lu mismatched\n", i);
-	printf("Done.\n");
-
-	printf("Detaching the process from the shared memory segment...");
-	if (shmdt((const void *)shmaddr) != 0) {
-		perror("Detach failure");
-		shmctl(shmid, IPC_RMID, NULL);
-		exit(3);
-	}
-
-	printf("Deleting the shared memory segment.\n");
+    shmaddr = shmat(shmid, ADDR, SHMAT_FLAGS);
+    if (shmaddr == (char *) -1) {
+	perror("Attaching failed!");
 	shmctl(shmid, IPC_RMID, NULL);
+	exit(2);
+    }
+    printf("shmaddr: %p\n", shmaddr);
 
-	return EXIT_SUCCESS;
+    printf("Writing:\n");
+    for (i = 0; i < LENGTH; i++) {
+	shmaddr[i] = (char) (i);
+	if (!(i % (1024 * 1024)))
+	    printf(".");
+    }
+    printf("\n");
+
+    printf("Checking:");
+    for (i = 0; i < LENGTH; i++)
+	if (shmaddr[i] != (char) i)
+	    printf("\nIndex %lu mismatched\n", i);
+    printf("Done.\n");
+
+    printf("Detaching the process from the shared memory segment...");
+    if (shmdt((const void *) shmaddr) != 0) {
+	perror("Detach failure");
+	shmctl(shmid, IPC_RMID, NULL);
+	exit(3);
+    }
+
+    printf("Deleting the shared memory segment.\n");
+    shmctl(shmid, IPC_RMID, NULL);
+
+    return EXIT_SUCCESS;
 }
