@@ -36,6 +36,14 @@ void test_close(int file, int pass)
     }
 }
 
+void test_sync(int file)
+{
+    if (fsync(file) < 0) {
+	perror("Error when syncing");
+	exit(EXIT_FAILURE);
+    }
+}
+
 char *test_mmap(int file, int size)
 {
     char *buff = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, file,
@@ -101,13 +109,13 @@ void test_read(char *buff, int size)
 int main(int argc, char **argv)
 {
     int size = 0, result, file, pass = 1;
-    int create = 0, fill = 0, verify = 0;
+    int create = 0, fill = 0, verify = 0, sync = 0;
     char *cmds, *cmd, *fn, *buff;
     /* Check params */
     if (argc != 4) {
 	fprintf(stderr,
 		"Usage: %s commands filename size\n"
-		"\tcommand can contain [c]reate, [f]ill, [v]erify\n"
+		"\tcommand can contain [c]reate, [f]ill, [s]ync, [v]erify\n"
 		"\tfilename the file to fill\n"
 		"\tsize its future size\n", argv[0]);
 	exit(EXIT_FAILURE);
@@ -130,6 +138,9 @@ int main(int argc, char **argv)
 	case (int) 'f':
 	    fill = 1;
 	    break;
+	case (int) 's':
+	    sync = 1;
+	    break;
 	case (int) 'v':
 	    verify = 1;
 	    break;
@@ -150,6 +161,8 @@ int main(int argc, char **argv)
     buff = test_mmap(file, size);
     if (fill)
 	test_fill(buff, size);
+    if (sync)
+	test_sync(file);
     if (verify)
 	test_read(buff, size);
     test_munmap(buff, size);
