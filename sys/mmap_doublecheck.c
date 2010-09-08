@@ -161,8 +161,10 @@ int main(int argc, char **argv)
     buff = test_mmap(file, size);
     if (fill)
 	test_fill(buff, size);
-    if (sync)
+    if (sync) {
+	printf("Syncing.\n");
 	test_sync(file);
+    }
     if (verify)
 	test_read(buff, size);
     test_munmap(buff, size);

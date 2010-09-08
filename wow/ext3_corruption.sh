@@ -183,7 +183,7 @@ mkdir mountpoint
 
 mount -o loop smallext3 mountpoint
 # 20M
-./test cf mountpoint/abc 20971520
+./test cfs mountpoint/abc 20971520
 md5sum mountpoint/abc
 ./test v mountpoint/abc 20971520
 echo Syncing...
