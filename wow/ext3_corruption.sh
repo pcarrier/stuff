@@ -162,6 +162,8 @@ int main(int argc, char **argv)
 	case (int) 'v':
 	    verify = 1;
 	    break;
+	case (int) '\0':
+	    break;
 	default:
 	    fprintf(stderr, "Unknown command '%c'!\n", cmd);
 	    exit(EXIT_FAILURE);
@@ -196,23 +198,34 @@ int main(int argc, char **argv)
     return (EXIT_SUCCESS);
 }
 EOF
+echo == Compiling
 gcc -o test test.c
-
+echo == Creating device
 dd if=/dev/zero of=smallext3 bs=1M count=10
+echo == Creating FS
 yes|mkfs.ext3 smallext3
+echo == Mounting FS
 mkdir mountpoint
-
 mount -o loop smallext3 mountpoint
-# 20M
-./test cfs mountpoint/abc 20971520
+echo == Filling, syncing
+./test cfsS mountpoint/abc 20971520
+echo == Checksum 0
 md5sum mountpoint/abc
+echo == Verifying 0
 ./test v mountpoint/abc 20971520
-echo Syncing...
+echo == Syncing
 sync
+echo == Verifying 1
 ./test v mountpoint/abc 20971520
+echo == Checksum 1
 md5sum mountpoint/abc
+echo == Unmounting
 umount mountpoint
+echo == Remounting
 mount -o loop smallext3 mountpoint
+echo == Verifying 2
 ./test v mountpoint/abc 20971520
+echo == Checksum 2
 md5sum mountpoint/abc
+echo == FINISHED! Unmounting
 umount mountpoint

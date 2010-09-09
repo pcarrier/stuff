@@ -158,6 +158,8 @@ int main(int argc, char **argv)
 	case (int) 'v':
 	    verify = 1;
 	    break;
+	case (int) '\0':
+	    break;
 	default:
 	    fprintf(stderr, "Unknown command '%c'!\n", cmd);
 	    exit(EXIT_FAILURE);
