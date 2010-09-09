@@ -1,7 +1,9 @@
 #!/bin/sh
-# YES, THAT'S SILENT DATA CORRUPTION.
+# Silent data corruption, unless you fsync/msync (commands s and S).
+
 cd $(mktemp -d)
-cat > test.c << EOF
+echo == Compiling
+gcc -o test -x c - << EOF
 /*
 Double check (allocate, write to, read from, release) a mmap'ed file behaviour
 
@@ -198,8 +200,6 @@ int main(int argc, char **argv)
     return (EXIT_SUCCESS);
 }
 EOF
-echo == Compiling
-gcc -o test test.c
 echo == Creating device
 dd if=/dev/zero of=smallext3 bs=1M count=10
 echo == Creating FS
