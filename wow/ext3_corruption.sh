@@ -208,7 +208,7 @@ echo == Mounting FS
 mkdir mountpoint
 mount -o loop smallext3 mountpoint
 echo == Filling, syncing
-./test cfsS mountpoint/abc 20971520
+./test cf mountpoint/abc 20971520
 echo == Checksum 0
 md5sum mountpoint/abc
 echo == Verifying 0
