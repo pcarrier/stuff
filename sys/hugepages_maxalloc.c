@@ -15,7 +15,7 @@ Doesn't build with gcc -ansi.
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>		// needed by strerror()
+#include <string.h>		/* needed by strerror() */
 #include <errno.h>
 #include <sys/shm.h>
 #include <limits.h>

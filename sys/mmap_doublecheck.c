@@ -15,6 +15,7 @@ Maintainer: Pierre Carrier <prc@redhat.com>
 #include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 int test_open(char *fn, int pass)
 {
@@ -54,8 +55,7 @@ void test_fsync(int file)
 
 char *test_mmap(int file, int size)
 {
-    char *buff = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, file,
-		      (off_t) 0);
+    char *buff = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file, (off_t) NULL);
     if (buff == MAP_FAILED) {
 	perror("Error when mmapping");
 	test_close(file, 0);
@@ -118,7 +118,7 @@ void test_read(void *buff, int size)
 
 int main(int argc, char **argv)
 {
-    int size = 0, result, file, pass = 1;
+    int size = 0, file = 0, pass = 1;
     int create = 0, fill = 0, verify = 0, msync = 0, fsync = 0;
     char *cmds, *cmd, *fn;
     void *buff;
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 	    verify = 1;
 	    break;
 	default:
-	    fprintf(stderr, "Unknown command '%c'!\n", cmd);
+	    fprintf(stderr, "Unknown command '%c'!\n", (int)*cmd);
 	    exit(EXIT_FAILURE);
 	}
     }
