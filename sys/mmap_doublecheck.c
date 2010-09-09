@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     if (argc != 4) {
 	fprintf(stderr,
 		"Usage: %s commands filename size\n"
-		"\tcommand can contain [c]reate, [f]ill, [s]ync, [v]erify\n"
+		"\tcommands can contain [c]reate, [f]ill, [s]ync, [v]erify\n"
 		"\tfilename the file to fill\n"
 		"\tsize its future size\n", argv[0]);
 	exit(EXIT_FAILURE);
@@ -145,7 +145,8 @@ int main(int argc, char **argv)
 	    verify = 1;
 	    break;
 	default:
-	    break;
+	    fprintf(stderr, "Unknown command '%c'!\n", cmd);
+	    exit(EXIT_FAILURE);
 	}
     }
 
