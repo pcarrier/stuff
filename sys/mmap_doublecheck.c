@@ -55,7 +55,9 @@ void test_fsync(int file)
 
 char *test_mmap(int file, int size)
 {
-    char *buff = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file, (off_t) NULL);
+    char *buff =
+	mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file,
+	     (off_t) NULL);
     if (buff == MAP_FAILED) {
 	perror("Error when mmapping");
 	test_close(file, 0);
@@ -159,7 +161,7 @@ int main(int argc, char **argv)
 	    verify = 1;
 	    break;
 	default:
-	    fprintf(stderr, "Unknown command '%c'!\n", (int)*cmd);
+	    fprintf(stderr, "Unknown command '%c'!\n", (int) *cmd);
 	    exit(EXIT_FAILURE);
 	}
     }

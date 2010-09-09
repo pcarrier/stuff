@@ -31,7 +31,7 @@ Doesn't build with gcc -ansi.
 #define SHMAT_FLAGS (0)
 #endif
 
-int main(void)
+int main()
 {
     int shmid;
     unsigned long i;

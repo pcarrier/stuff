@@ -1,17 +1,16 @@
 CC = gcc
-CFLAGS = -Wextra -Wall -Werror -pedantic
+CFLAGS = -Wextra -Wall -pedantic
 CPORTABLEFLAGS = -std=c99 -D_XOPEN_SOURCE
-CLINUXFLAGS =
 
-bins := hugepages_doublecheck.l hugepages_maxalloc.l \
-	errnos.p mmap_doublecheck.p
+bins := hugepages_doublecheck.linux hugepages_maxalloc.linux \
+	errnos.portable mmap_doublecheck.portable
 
 all: $(bins)
 
-%.p: %.c
+%.portable: %.c
 	$(CC) $(CFLAGS) $(CPORTABLEFLAGS) -o $@ $^
 
-%.l: %.c
-	$(CC) $(CFLAGS) $(CLINUXFLAGS)    -o $@ $^
+%.linux: %.c
+	$(CC) $(CFLAGS) -o $@ $^
 clean:
 	rm $(bins)

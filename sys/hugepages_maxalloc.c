@@ -34,7 +34,7 @@ Doesn't build with gcc -ansi.
 #endif
 
 
-int main(void)
+int main()
 {
     int shmid;
     unsigned long succeeds = 0;
