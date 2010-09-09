@@ -36,10 +36,18 @@ void test_close(int file, int pass)
     }
 }
 
-void test_sync(int file)
+void test_msync(void *addr, size_t len)
+{
+    if (msync(addr, len, MS_SYNC) < 0) {
+	perror("Error when msyncing");
+	exit(EXIT_FAILURE);
+    }
+}
+
+void test_fsync(int file)
 {
     if (fsync(file) < 0) {
-	perror("Error when syncing");
+	perror("Error when fsyncing");
 	exit(EXIT_FAILURE);
     }
 }
@@ -56,7 +64,7 @@ char *test_mmap(int file, int size)
     return buff;
 }
 
-void test_munmap(char *buff, int size)
+void test_munmap(void *buff, int size)
 {
     if (munmap(buff, size) == -1) {
 	perror("Error un-mapping");
@@ -79,24 +87,26 @@ void test_enlarge(int file, int size)
     }
 }
 
-void test_fill(char *buff, int size)
+void test_fill(void *buff, int size)
 {
     int i;
+    char *cbuff = (char *) buff;
     printf("Writing:\n");
     for (i = 0; i < size; i++) {
-	buff[i] = (char) (i % 256);
+	cbuff[i] = (char) (i % 256);
 	if (!(i % (1024 * 1024)))
 	    printf(".");
     }
     printf("\n");
 }
 
-void test_read(char *buff, int size)
+void test_read(void *buff, int size)
 {
     int i;
+    char *cbuff = (char *) buff;
     printf("Checking:\n");
     for (i = 0; i < size; i++) {
-	if (!(buff[i] == (char) (i % 256))) {
+	if (!(cbuff[i] == (char) (i % 256))) {
 	    fprintf(stderr, "Memory check failed!\n");
 	    exit(EXIT_FAILURE);
 	}
@@ -109,13 +119,14 @@ void test_read(char *buff, int size)
 int main(int argc, char **argv)
 {
     int size = 0, result, file, pass = 1;
-    int create = 0, fill = 0, verify = 0, sync = 0;
-    char *cmds, *cmd, *fn, *buff;
+    int create = 0, fill = 0, verify = 0, msync = 0, fsync = 0;
+    char *cmds, *cmd, *fn;
+    void *buff;
     /* Check params */
     if (argc != 4) {
 	fprintf(stderr,
 		"Usage: %s commands filename size\n"
-		"\tcommands can contain [c]reate, [f]ill, [s]ync, [v]erify\n"
+		"\tcommands can contain [c]reate, [f]ill, m[S]sync, f[s]ync, [v]erify\n"
 		"\tfilename the file to fill\n"
 		"\tsize its future size\n", argv[0]);
 	exit(EXIT_FAILURE);
@@ -138,8 +149,11 @@ int main(int argc, char **argv)
 	case (int) 'f':
 	    fill = 1;
 	    break;
+	case (int) 'S':
+	    msync = 1;
+	    break;
 	case (int) 's':
-	    sync = 1;
+	    fsync = 1;
 	    break;
 	case (int) 'v':
 	    verify = 1;
@@ -162,9 +176,13 @@ int main(int argc, char **argv)
     buff = test_mmap(file, size);
     if (fill)
 	test_fill(buff, size);
-    if (sync) {
-	printf("Syncing.\n");
-	test_sync(file);
+    if (msync) {
+	printf("msyncing.\n");
+	test_msync(buff, size);
+    }
+    if (fsync) {
+	printf("fsyncing.\n");
+	test_fsync(file);
     }
     if (verify)
 	test_read(buff, size);
