@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
     }
 
-    for (cmd = cmds + strlen(cmds); cmd >= cmds; cmd--) {
+    for (cmd = cmds + strlen(cmds) - 1; cmd >= cmds; cmd--) {
 	switch ((int) *cmd) {
 	case (int) 'c':
 	    create = 1;
@@ -157,8 +157,6 @@ int main(int argc, char **argv)
 	    break;
 	case (int) 'v':
 	    verify = 1;
-	    break;
-	case (int) '\0':
 	    break;
 	default:
 	    fprintf(stderr, "Unknown command '%c'!\n", cmd);
