@@ -1,7 +1,8 @@
 #!/bin/sh
 # Silent data corruption, unless you fsync/msync (commands s and S).
 
-cd $(mktemp -d)
+TMP=$(mktemp -d)
+cd $TMP
 echo == Compiling
 gcc -o test -x c - << EOF
 /*
@@ -229,3 +230,5 @@ echo == Checksum 2
 md5sum mountpoint/abc
 echo == FINISHED! Unmounting
 umount mountpoint
+cd ..
+rm -fr $TMP
