@@ -1,5 +1,4 @@
-/*
-I segfault (faster)
+/* I segfault (faster)
 
 Copyright (c) 2010, Red Hat Inc.
 Permission to use, copy, modify, and/or distribute this software
@@ -13,7 +12,8 @@ Maintainer: Pierre Carrier <prc@redhat.com>
 #include <unistd.h>
 #include <signal.h>
 
-int main() {
-	kill(getpid(), SIGSEGV);
-	return EXIT_FAILURE; /* Whaaat? */
+int main()
+{
+    kill(getpid(), SIGSEGV);
+    return EXIT_FAILURE;	/* Whaaat? */
 }

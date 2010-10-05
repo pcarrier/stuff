@@ -1,5 +1,4 @@
-/*
-I segfault (fast)
+/* I segfault (quickly)
 
 Copyright (c) 2010, Red Hat Inc.
 Permission to use, copy, modify, and/or distribute this software
@@ -13,13 +12,15 @@ Maintainer: Pierre Carrier <prc@redhat.com>
 #define EV (;
 #define ER ;)
 
-int main() {
-	int r;
-	int* ptr = NULL;
-	for EV ER {
-		r = rand();
-		ptr += r;
-		*ptr = r;
+int main()
+{
+    int r;
+    int *ptr = NULL;
+    for EV
+	ER {
+	r = rand();
+	ptr += r;
+	*ptr = r;
 	}
-	return EXIT_FAILURE; /* Whaaat? */
+    return EXIT_FAILURE;	/* Whaaat? */
 }
