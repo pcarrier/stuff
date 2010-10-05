@@ -1,22 +1,36 @@
 #!/usr/bin/env python
-# Thanks to http://wiki.oracle.com/page/Python
-# and http://code.activestate.com/recipes/307871/
 
-# TODO SERIAL_PORT = '/dev/ttys0'
+"""
+Copyright (c) 2010, Red Hat Inc.
+Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted, provided that
+the above copyright notice and this permission notice appear in all copies.
 
-DELAY=5
-VIOLENT_ARG="yes_send_a_sysrqc"
+Maintainer: Pierre Carrier <prc@redhat.com>
+
+Thanks to http://wiki.oracle.com/page/Python
+& http://code.activestate.com/recipes/307871
+
+Whenever possible, please try this script in non-violent mode, then with SYSRQ_KEY != "c"!!
+"""
+
+VIOLENT_ARG = "yes_send_a_sysrqc"
+
+TTY_PATH = "/dev/ttyS0"
+SYSRQ_KEY = "c"
 
 ORACLE_CONNSTR = 'scott/tiger'
-ORACLE_TIMEOUT=30
-ORACLE_QUERY="SELECT 1 FROM DUAL;"
+ORACLE_TIMEOUT = 30
+ORACLE_QUERY = "SELECT 1 FROM DUAL;"
 
-ICMP_IP="10.1.1.1"
-ICMP_TIMEOUT=60
+ICMP_IP = "10.1.1.1"
+ICMP_TIMEOUT = 60
+
+DELAY = 5
 
 violent=False
 
-import signal, time, cx_Oracle, subprocess
+import termios, sys, signal, time, subprocess, cx_Oracle
 
 class TimedOutExc(Exception):
   def __init__(self, value = "Timed Out"):
@@ -70,9 +84,25 @@ def test_icmp():
 
 def server_down():
   if violent:
-    call(["minicom", "-S", "./sysrqc"])
+    try:
+      fd = open(TTY_PATH, "rw", 0) # no buffering
+    except:
+      print("=== Cannot open "+TTY_PATH)
+    else:
+      if os.isatty(fd):
+        print("=== /dev/ttyS0 is NOT a TTY!")
+      else:
+        try:
+          termios.tcsendbreak(fd, 0)
+          write(fd, SYSRQ_KEY)
+          termios.tcdrain(fd)
+        except:
+          print("=== We could not send the sysrq!")
+        else:
+          print("=== sysrq sent!")
   else:
-    print("We would sysrq-c if we were violent!")
+    print("=== We would sysrq-c if we were violent!")
+  close(fd)
 
 if __name__ == '__main__':
   if len(sys.argv) < 2:
@@ -86,10 +116,14 @@ if __name__ == '__main__':
     try:
       test_oracle()
     except TimedOutExc:
-      print("Ooops! Oracle does not answer!")
+      print("= Oops! Oracle does not answer!")
       try:
         test_icmp()
       except TimedOutExc:
-        print("Oooooops! ICMP does not answer either!!")
+        print("= Oops! ICMP does not answer either!!")
         server_down()
+      else:
+        print("= Saved by the ping")
+    else:
+      print("= Oracle test successful")
     time.sleep(DELAY)
