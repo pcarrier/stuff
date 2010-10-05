@@ -80,14 +80,14 @@ def test_oracle():
 
 @timed_out(ICMP_TIMEOUT)
 def test_icmp():
-  call(["ping", "-c1","-W3600",ICMP_IP])
+  return subprocess.call(["ping", "-c1","-W3600",ICMP_IP])
 
 def server_down():
   if violent:
     try:
       fd = open(TTY_PATH, "rw", 0) # no buffering
-    except:
-      print("=== Cannot open "+TTY_PATH)
+    except Exception as e:
+      print("=== Cannot open " + TTY_PATH + ": " + e.__repr__())
     else:
       if os.isatty(fd):
         print("=== /dev/ttyS0 is NOT a TTY!")
@@ -96,8 +96,8 @@ def server_down():
           termios.tcsendbreak(fd, 0)
           write(fd, SYSRQ_KEY)
           termios.tcdrain(fd)
-        except:
-          print("=== We could not send the sysrq!")
+        except Exception as e:
+          print("=== We could not send the sysrq! " + e.__repr__())
         else:
           print("=== sysrq sent!")
   else:
@@ -115,12 +115,14 @@ if __name__ == '__main__':
   while true:
     try:
       test_oracle()
-    except TimedOutExc:
-      print("= Oops! Oracle does not answer!")
+    except Exception as e:
+      print("= Oops! Oracle does not answer properly! " + e.__repr__())
       try:
-        test_icmp()
-      except TimedOutExc:
-        print("= Oops! ICMP does not answer either!!")
+        icmp_result = test_icmp()
+        if icmp_result != 0:
+          raise Exception("return code "+icmp_result)
+      except Exception as e:
+        print("= Oops! ping does not answer properly either!! " + e.__repr__())
         server_down()
       else:
         print("= Saved by the ping")
