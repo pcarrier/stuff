@@ -17,7 +17,7 @@ Whenever possible, please try this script in non-violent mode, then with SYSRQ_K
 VIOLENT_ARG = "yes-send-a-sysrq-i-am-sure"
 TTY_PATH = "/dev/ttyS0"
 SYSRQ_KEY = "c"
-ORACLE_CONNSTR = 'HR/redhat@10.33.1.60:1521/XE'
+ORACLE_CONNSTR = 'user/password@host:1521/SID'
 ORACLE_QUERY = "select 1+1 from dual"
 
 ICMP_IP = "10.33.1.60"
