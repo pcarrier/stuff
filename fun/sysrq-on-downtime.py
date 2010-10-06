@@ -21,9 +21,9 @@ ORACLE_CONNSTR = 'user/password@host:1521/SID'
 ORACLE_QUERY = "select 1+1 from dual"
 
 ICMP_IP = "10.33.1.60"
-ICMP_TIMEOUT = 5
+ICMP_TIMEOUT = 30
 
-DELAY = 1
+DELAY = 5
 
 violent = False
 
