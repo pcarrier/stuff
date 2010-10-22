@@ -19,7 +19,6 @@ int main(int argc, char **argv)
     useconds_t delay;
     void *buff;
     FILE *fd;
-    int err;
     signal(SIGALRM, hello);
     if (argc != 5) {
 	printf("Usage: %s path elems elemsize delay", argv[0]);
@@ -43,10 +42,9 @@ int main(int argc, char **argv)
     rsize = fread(buff, elemsize, elems, fd);
     assert(rsize > 0);
 #else
-    while (err == EINTR) {
+    do {
 	rsize = fread(buff, elemsize, elems, fd);
-	err = ferror(fd);
-    }
+    } while (ferror(fd) && errno == EINTR);
 #endif
     printf("read %i = %i * %i\n", (int) rsize, (int) elems,
 	   (int) elemsize);
