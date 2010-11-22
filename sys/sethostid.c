@@ -1,13 +1,13 @@
-/*
-Set the host id
-
-Copyright (c) 2010, Red Hat Inc.
-Permission to use, copy, modify, and/or distribute this software
-for any purpose with or without fee is hereby granted, provided that
-the above copyright notice and this permission notice appear in all copies.
-
-Maintainer: Pierre Carrier <prc@redhat.com>
-*/
+/**
+ * Set the host id
+ *
+ * Copyright (c) 2010, Red Hat Inc.
+ * Permission to use, copy, modify, and/or distribute this software
+ * for any purpose with or without fee is hereby granted, provided that
+ * the above copyright notice and this permission notice appear in all copies.
+ *
+ * Maintainer: Pierre Carrier <prc@redhat.com>
+**/
 
 #include <unistd.h>
 #include <stdio.h>
@@ -19,24 +19,28 @@ int main(int argc, char **argv)
 {
     unsigned int length = 0, new_hostid;
     long old_hostid = gethostid();
+
     if (argc != 2)
-	goto wrong_usage;
+	goto err;
+
     length = strnlen(argv[1], 9);
+
     if (length != 8)
-	goto wrong_usage;
+	goto err;
+
     sscanf(argv[1], "%x", &new_hostid);
-    if ((long) new_hostid == old_hostid) {
-	fprintf(stderr, "%x is already the hostid.\n", new_hostid);
+
+    if ((long) new_hostid == old_hostid)
 	return EXIT_SUCCESS;
-    }
-    fprintf(stderr, "Setting the hostid to %x... ", new_hostid);
+
     if (sethostid(new_hostid) < 0) {
 	fprintf(stderr, "Failed with %u (%s)\n", errno, strerror(errno));
 	return EXIT_FAILURE;
     }
-    fprintf(stderr, "Succeeded.\n");
+
     return EXIT_SUCCESS;
-  wrong_usage:
+
+  err:
     fprintf(stderr, "Usage: %s hostid\nhostid looks like 12cd34ef\n",
 	    argv[0]);
     return EXIT_FAILURE;
