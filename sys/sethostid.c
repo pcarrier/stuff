@@ -41,7 +41,8 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 
   err:
-    fprintf(stderr, "Usage: %s hostid\nhostid looks like 12cd34ef\n",
+    fprintf(stderr, "Usage: %s id\n"
+	    "id is an 8-char hexadecimal representation, as the output of 'hostid'.\n",
 	    argv[0]);
     return EXIT_FAILURE;
 }
