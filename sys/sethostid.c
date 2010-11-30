@@ -25,10 +25,8 @@ int main(int argc, char **argv)
 
     length = strnlen(argv[1], 9);
 
-    if (length != 8)
+    if (length != 8 || sscanf(argv[1], "%x", &new_hostid) != 1)
 	goto err;
-
-    sscanf(argv[1], "%x", &new_hostid);
 
     if ((long) new_hostid == old_hostid)
 	return EXIT_SUCCESS;
@@ -42,7 +40,7 @@ int main(int argc, char **argv)
 
   err:
     fprintf(stderr, "Usage: %s id\n"
-	    "id is an 8-char hexadecimal representation, as the output of 'hostid'.\n",
-	    argv[0]);
+	    "id is an 8-char hexadecimal representation, "
+	    "as in the output of 'hostid'.\n", argv[0]);
     return EXIT_FAILURE;
 }
