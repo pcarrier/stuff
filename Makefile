@@ -2,9 +2,16 @@ CC = gcc
 CFLAGS = -Wall -Wextra -pedantic
 CPORTABLEFLAGS = -std=c99 -D_XOPEN_SOURCE
 
-bins := hugepages_doublecheck.linux hugepages_maxalloc.linux \
-	errnos.portable mmap_doublecheck.portable i_segv.portable i_segv2.portable \
-	sethostid.linux nosymlinks.fuse
+bins := \
+	sys/hugepages_doublecheck.linux \
+	sys/hugepages_maxalloc.linux \
+	sys/errnos.portable \
+	sys/mmap_doublecheck.portable \
+	sys/i_segv.portable \
+	sys/i_segv2.portable \
+	sys/sethostid.linux \
+	fun/nato.portable \
+#	sys/nosymlinks.fuse
 
 all: $(bins)
 
@@ -18,7 +25,7 @@ all: $(bins)
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
 
 indent:
-	indent -kr *.c
+	indent -kr */*.c
 
 clean:
-	rm $(bins) *~
+	rm $(bins) *~ */*~
