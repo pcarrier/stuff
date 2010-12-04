@@ -10,17 +10,16 @@
 **/
 
 #include <stdlib.h>
-#define EV (;
-#define ER ;)
+#define EVER ;;
 
 int main()
 {
     int r;
     int *ptr = NULL;
-    for EV ER {
+    for (EVER) {
 	r = rand();
 	ptr += r;
 	*ptr = r;
-	}
+    }
     return EXIT_FAILURE;	/* Whaaat? */
 }
