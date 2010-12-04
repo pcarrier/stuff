@@ -16,5 +16,5 @@
 int main()
 {
     kill(getpid(), SIGSEGV);
-    return EXIT_FAILURE;	/* Whaaat? */
+    return EXIT_FAILURE;        /* Whaaat? */
 }

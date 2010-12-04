@@ -17,9 +17,9 @@ int main()
     int r;
     int *ptr = NULL;
     for (EVER) {
-	r = rand();
-	ptr += r;
-	*ptr = r;
+        r = rand();
+        ptr += r;
+        *ptr = r;
     }
-    return EXIT_FAILURE;	/* Whaaat? */
+    return EXIT_FAILURE;        /* Whaaat? */
 }

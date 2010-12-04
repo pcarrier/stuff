@@ -54,11 +54,11 @@ static const char *LETTERS[] = {
 static void printc(char c)
 {
     if (c >= 'a' && c < 'z')
-	fputs(LETTERS[c - 'a'], stdout);
+        fputs(LETTERS[c - 'a'], stdout);
     else if (c >= 'A' && c < 'Z')
-	fputs(LETTERS[c - 'A'], stdout);
+        fputs(LETTERS[c - 'A'], stdout);
     else
-	putc(c, stdout);
+        putc(c, stdout);
 }
 
 int main(int argc, char **argv)
@@ -66,15 +66,15 @@ int main(int argc, char **argv)
     int arg, ch;
     char *chp;
     for (arg = 1; arg < argc; arg++) {
-	size_t arglen = strlen(argv[arg]);
-	for (chp = argv[arg]; chp < argv[arg] + arglen; chp++)
-	    printc(*chp);
-	putc(' ', stdout);
+        size_t arglen = strlen(argv[arg]);
+        for (chp = argv[arg]; chp < argv[arg] + arglen; chp++)
+            printc(*chp);
+        putc(' ', stdout);
     }
     if (arg > 1)
-	putc('\n', stdout);
+        putc('\n', stdout);
     else
-	while ((ch = getc(stdin)) != EOF)
-	    printc((char) ch);
+        while ((ch = getc(stdin)) != EOF)
+            printc((char) ch);
     return EXIT_SUCCESS;
 }

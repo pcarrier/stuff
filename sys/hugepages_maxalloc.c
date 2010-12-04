@@ -15,7 +15,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>		/* needed by strerror() */
+#include <string.h>             /* needed by strerror() */
 #include <errno.h>
 #include <sys/shm.h>
 #include <limits.h>
@@ -43,21 +43,21 @@ int main()
 
     printf("Scanning for the biggest HUGETLB segment size available.\n");
     while (fails - succeeds > PRECISION) {
-	printf("Trying size %lu (%luMB),", size, size / MB);
-	if ((shmid = shmget(2, size,
-			    SHM_HUGETLB | IPC_CREAT | IPC_EXCL | 0600)) <
-	    0) {
-	    printf(" failed with %u (%s)\n", errno, strerror(errno));
-	    fails = size;
-	} else {
-	    shmctl(shmid, IPC_RMID, NULL);
-	    printf(" succeeded\n");
-	    succeeds = size;
-	}
-	size = (fails + succeeds) / 2;
+        printf("Trying size %lu (%luMB),", size, size / MB);
+        if ((shmid = shmget(2, size,
+                            SHM_HUGETLB | IPC_CREAT | IPC_EXCL | 0600)) <
+            0) {
+            printf(" failed with %u (%s)\n", errno, strerror(errno));
+            fails = size;
+        } else {
+            shmctl(shmid, IPC_RMID, NULL);
+            printf(" succeeded\n");
+            succeeds = size;
+        }
+        size = (fails + succeeds) / 2;
     }
 
     fprintf(stderr, "Max segment size is %lu (%luMB), +- %lu (%luMB)\n",
-	    size, size / MB, PRECISION, PRECISION / MB);
+            size, size / MB, PRECISION, PRECISION / MB);
     return EXIT_SUCCESS;
 }

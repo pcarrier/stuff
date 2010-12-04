@@ -25,7 +25,7 @@ all: $(bins)
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
 
 indent:
-	indent -kr */*.c
+	indent -kr -nut */*.c
 
 clean:
 	rm $(bins) *~ */*~
