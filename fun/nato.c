@@ -1,5 +1,5 @@
 /**
- * NATO converter
+ * NATO phonetic alphabet one-way converter
  *
  * Copyright (c) 2010, Red Hat Inc.
  * Permission to use, copy, modify, and/or distribute this software
@@ -8,6 +8,9 @@
  * copies.
  *
  * Maintainer: Pierre Carrier <prc@redhat.com>
+ *
+ * TODO:
+ * - Take phone calls for you...
 **/
 
 #include <stdlib.h>
