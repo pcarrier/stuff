@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char *LETTERS[] = {
+static const char *LETTERS[] = {
     "(alpha)",
     "(beta)",
     "(charlie)",
