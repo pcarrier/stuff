@@ -63,18 +63,22 @@ static void printc(char c)
 
 int main(int argc, char **argv)
 {
-    int arg, ch;
+    int ch;
     char *chp;
-    for (arg = 1; arg < argc; arg++) {
-        size_t arglen = strlen(argv[arg]);
-        for (chp = argv[arg]; chp < argv[arg] + arglen; chp++)
-            printc(*chp);
-        putc(' ', stdout);
-    }
-    if (arg > 1)
-        putc('\n', stdout);
-    else                        /* no params given, use stdin */
+    if (argc == 1)
         while ((ch = getc(stdin)) != EOF)
             printc((char) ch);
+    else if (argc == 2) {
+        size_t arglen = strlen(argv[1]);
+        for (chp = argv[1]; chp < argv[1] + arglen; chp++)
+            printc(*chp);
+        putc('\n', stdout);
+    } else {
+        fprintf(stderr,
+                "Usage: %s [message]\n"
+                "If message is not defined, standard input is used instead.\n",
+                argv[0]);
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }
