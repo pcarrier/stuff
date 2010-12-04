@@ -27,7 +27,7 @@ int main(int argc, char **argv)
                 case 'E':
                     parse_backslashes = 0;
                     break;
-                default:       /* if it is not a standard option, we print it */
+                default:       /* if we hit an unknown option, we print the whole argument */
                     drop_opts = 1;
                     break;
                 }
