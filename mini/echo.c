@@ -47,6 +47,8 @@ int main(int argc, char **argv)
     if (print_newline)
         if (fputc('\n', stdout) == EOF)
             goto err;
+    if (close(stdout))
+        goto err;
     return EXIT_SUCCESS;
   err:
     return EXIT_FAILURE;
