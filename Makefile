@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic
+CFLAGS = -O3 -Wall -Wextra -pedantic
 CPORTABLEFLAGS = -std=c99 -D_XOPEN_SOURCE
 
 bins := \
@@ -10,6 +10,9 @@ bins := \
 	sys/i_segv.portable \
 	sys/i_segv2.portable \
 	sys/sethostid.linux \
+	mini/yes.portable \
+	mini/true.portable \
+	mini/false.portable \
 	fun/nato.portable \
 #	sys/nosymlinks.fuse
 
