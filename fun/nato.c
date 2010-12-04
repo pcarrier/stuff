@@ -10,6 +10,7 @@
  * Maintainer: Pierre Carrier <prc@redhat.com>
  *
  * TODO:
+ * - Unicode ponies
  * - Take phone calls for you...
 **/
 
