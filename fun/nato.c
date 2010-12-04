@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static const char *LETTERS[] = {
     "<alpha>",
@@ -50,16 +51,30 @@ static const char *LETTERS[] = {
     "<zulu>"
 };
 
-int main()
+static void printc(char c)
 {
-    int c;
-    while ((c = getc(stdin)) != EOF) {
-	if (c >= 'a' && c < 'z')
-	    fputs(LETTERS[c - 'a'], stdout);
-	else if (c >= 'A' && c < 'Z')
-	    fputs(LETTERS[c - 'A'], stdout);
-	else
-	    putc(c, stdout);
+    if (c >= 'a' && c < 'z')
+	fputs(LETTERS[c - 'a'], stdout);
+    else if (c >= 'A' && c < 'Z')
+	fputs(LETTERS[c - 'A'], stdout);
+    else
+	putc(c, stdout);
+}
+
+int main(int argc, char **argv)
+{
+    int arg, ch;
+    char *chp;
+    for (arg = 1; arg < argc; arg++) {
+	size_t arglen = strlen(argv[arg]);
+	for (chp = argv[arg]; chp < argv[arg] + arglen; chp++)
+	    printc(*chp);
+	putc(' ', stdout);
     }
+    if (arg > 1)
+	putc('\n', stdout);
+    else
+	while ((ch = getc(stdin)) != EOF)
+	    printc((char) ch);
     return EXIT_SUCCESS;
 }
