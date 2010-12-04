@@ -1,13 +1,13 @@
-/*
-Double check (allocate, write to, read from, release) a mmap'ed file behaviour
-
-Copyright (c) 2010, Red Hat Inc.
-Permission to use, copy, modify, and/or distribute this software
-for any purpose with or without fee is hereby granted, provided that
- the above copyright notice and this permission notice appear in all copies.
-
-Maintainer: Pierre Carrier <prc@redhat.com>
-*/
+/**
+ * Double check (allocate, write to, read from, release) a mmap'ed file behaviour
+ *
+ * Copyright (c) 2010, Red Hat Inc.
+ * Permission to use, copy, modify, and/or distribute this software
+ * for any purpose with or without fee is hereby granted, provided that
+ * the above copyright notice and this permission notice appear in all copies.
+ *
+ * Maintainer: Pierre Carrier <prc@redhat.com>
+**/
 
 #include <sys/mman.h>
 #include <stdlib.h>
@@ -55,9 +55,8 @@ void test_fsync(int file)
 
 char *test_mmap(int file, int size)
 {
-    char *buff =
-	mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file,
-	     (off_t) NULL);
+    char *buff = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, file,
+		      (off_t) NULL);
     if (buff == MAP_FAILED) {
 	perror("Error when mmapping");
 	test_close(file, 0);
