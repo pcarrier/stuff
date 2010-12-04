@@ -9,41 +9,45 @@
  *
  * Maintainer: Pierre Carrier <prc@redhat.com>
  *
- * TODO:
- * - Unicode ponies
- * - Take phone calls for you...
+ * TODO ponies:
+ * - Non-ASCII support
+ * - XML-friendly mode
+ * - XML mode
+ * - XML-RPC API
+ * - Fuzzy logic engine
+ * - Taking phone calls for you.
 **/
 
 #include <stdlib.h>
 #include <stdio.h>
 
 static const char *LETTERS[] = {
-    "(alpha)",
-    "(beta)",
-    "(charlie)",
-    "(delta)",
-    "(echo)",
-    "(foxtrot)",
-    "(golf)",
-    "(hotel)",
-    "(india)",
-    "(juliet)",
-    "(kilo)",
-    "(lima)",
-    "(mike)",
-    "(november)",
-    "(oscar)",
-    "(papa)",
-    "(quebec)",
-    "(romeo)",
-    "(sierra)",
-    "(tango)",
-    "(uniform)",
-    "(victor)",
-    "(whisky)",
-    "(x-ray)",
-    "(yankee)",
-    "(zulu)"
+    "<alpha>",
+    "<beta>",
+    "<charlie>",
+    "<delta>",
+    "<echo>",
+    "<foxtrot>",
+    "<golf>",
+    "<hotel>",
+    "<india>",
+    "<juliet>",
+    "<kilo>",
+    "<lima>",
+    "<mike>",
+    "<november>",
+    "<oscar>",
+    "<papa>",
+    "<quebec>",
+    "<romeo>",
+    "<sierra>",
+    "<tango>",
+    "<uniform>",
+    "<victor>",
+    "<whisky>",
+    "<x-ray>",
+    "<yankee>",
+    "<zulu>"
 };
 
 int main()
