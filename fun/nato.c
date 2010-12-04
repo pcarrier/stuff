@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     }
     if (arg > 1)
         putc('\n', stdout);
-    else
+    else                        /* no params given, use stdin */
         while ((ch = getc(stdin)) != EOF)
             printc((char) ch);
     return EXIT_SUCCESS;
