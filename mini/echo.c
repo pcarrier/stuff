@@ -7,16 +7,16 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 int main(int argc, char **argv)
 {
-    int arg_pos = 1, opt_pos, opt_pos_max, drop_opts = 0;
+    int arg_pos = 1, opt_pos, drop_opts = 0;
     int print_newline = 1, parse_backslashes = 0;
+    char opt;
     if (argc > 1) {
         for (; argv[arg_pos][0] == '-'; arg_pos++) {
-            opt_pos_max = strlen(argv[arg_pos]);
-            for (opt_pos = 1; opt_pos < opt_pos_max; opt_pos++) {
+            for (opt_pos = 1; (opt = argv[arg_pos][opt_pos]) != '\0';
+                 opt_pos++)
                 switch (argv[arg_pos][opt_pos]) {
                 case 'e':
                     parse_backslashes = 1;
@@ -31,7 +31,6 @@ int main(int argc, char **argv)
                     drop_opts = 1;
                     break;
                 }
-            }
             if (drop_opts)
                 break;
         }
