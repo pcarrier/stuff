@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     } else {
         fprintf(stderr,
                 "Usage: %s [message]\n"
-                "If message is not defined, standard input is used instead.\n",
+                "If no message is given, standard input is used instead.\n",
                 argv[0]);
         return EXIT_FAILURE;
     }
