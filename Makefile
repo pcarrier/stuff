@@ -13,6 +13,7 @@ bins := \
 	mini/yes.portable \
 	mini/true.portable \
 	mini/false.portable \
+	mini/echo.portable \
 	fun/nato.portable \
 #	sys/nosymlinks.fuse
 

@@ -1,3 +1,7 @@
+/**
+ * A simple (non-standards-compliants?) 'yes' implementation for fun
+**/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
