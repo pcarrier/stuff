@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -O3 -Wall -Wextra -pedantic
-CPORTABLEFLAGS = -std=c99 -D_XOPEN_SOURCE
+CFLAGS += -Wall -Wextra -pedantic
+CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
 
 bins := \
 	sys/hugepages_doublecheck.linux \

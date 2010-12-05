@@ -1,12 +1,76 @@
 /**
  * A simple non-standards-compliant echo implementation for fun
- *
- * TODO:
- * - handle -e HEHE
 **/
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+static inline void print(char *str, int parse_backslashes)
+{
+    char *remaining = str, *cur_pos = str, *end = str + strlen(str);
+    int backslashed = ' ', attempted_backslashed;
+    if (parse_backslashes) {
+        while (remaining < end) {
+            cur_pos = strchr(remaining, '\\');
+            if (cur_pos == NULL) {
+                fputs(remaining, stdout);
+                break;
+            }
+            fwrite(remaining, sizeof(char), cur_pos - remaining, stdout);
+#define ESCAPED_REGISTER(c, p) case c: fputc(p, stdout); ++cur_pos; break;
+            switch (*(++cur_pos)) {
+                ESCAPED_REGISTER('\\', '\\');
+                ESCAPED_REGISTER('a', '\a');
+                ESCAPED_REGISTER('b', '\b');
+                ESCAPED_REGISTER('e', '\e');
+                ESCAPED_REGISTER('f', '\f');
+                ESCAPED_REGISTER('n', '\n');
+                ESCAPED_REGISTER('r', '\r');
+                ESCAPED_REGISTER('t', '\t');
+                ESCAPED_REGISTER('v', '\v');
+            case '0':
+                attempted_backslashed = 0;
+                for (cur_pos++;
+                     *cur_pos >= '0' && *cur_pos <= '8'; cur_pos++) {
+                    attempted_backslashed *= 8;
+                    attempted_backslashed += (*cur_pos - '0');
+                    if (attempted_backslashed <= 0xff)
+                        backslashed = attempted_backslashed;
+                    else
+                        break;
+                }
+                fputc(backslashed, stdout);
+                break;
+            case 'x':
+                attempted_backslashed = 0;
+                for (cur_pos++;
+                     ((*cur_pos >= '0' && *cur_pos <= '9') ||
+                      (*cur_pos >= 'a' && *cur_pos <= 'f') ||
+                      (*cur_pos >= 'A' && *cur_pos <= 'F')); cur_pos++) {
+                    attempted_backslashed *= 16;
+                    if (*cur_pos >= 'a')
+                        attempted_backslashed += 10 + (*cur_pos - 'a');
+                    else if (*cur_pos >= 'A')
+                        attempted_backslashed += 10 + (*cur_pos - 'A');
+                    else
+                        attempted_backslashed += (*cur_pos - '0');
+                    if (attempted_backslashed <= 0xff)
+                        backslashed = attempted_backslashed;
+                    else
+                        break;
+                }
+                fputc(backslashed, stdout);
+                break;
+            }
+            remaining = cur_pos;
+        }
+
+    } else {
+        fputs(str, stdout);
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -27,27 +91,23 @@ int main(int argc, char **argv)
                 case 'E':
                     parse_backslashes = 0;
                     break;
-                default:       /* if we hit an unknown option, we print the whole argument */
+                default:       /* we want to print the whole argument */
                     drop_opts = 1;
                     break;
                 }
             if (drop_opts)
                 break;
         }
-        if (!parse_backslashes) {
-            for (; arg_pos < argc - 1; arg_pos++) {
-                fputs(argv[arg_pos], stdout);
-                fputc(' ', stdout);
-            }
-            fputs(argv[argc - 1], stdout);
-        } else {
-            /* Implementation left as an exercise :) */
+        for (; arg_pos < argc - 1; arg_pos++) {
+            print(argv[arg_pos], parse_backslashes);
+            fputc(' ', stdout);
         }
+        print(argv[argc - 1], parse_backslashes);
     }
     if (print_newline)
         if (fputc('\n', stdout) == EOF)
             goto err;
-    if (close(stdout))
+    if (fclose(stdout))
         goto err;
     return EXIT_SUCCESS;
   err:
