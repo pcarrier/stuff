@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static inline void print(char *str, int parse_backslashes)
+static inline int print(char *str, int parse_backslashes)
 {
     char *remaining = str, *cur_pos = str, *end = str + strlen(str);
     int backslashed = ' ', attempted_backslashed;
@@ -15,7 +15,8 @@ static inline void print(char *str, int parse_backslashes)
         while (remaining < end) {
             cur_pos = strchr(remaining, '\\');
             if (cur_pos == NULL) {
-                fputs(remaining, stdout);
+                if(fputs(remaining, stdout) == EOF)
+                    return EXIT_FAILURE;
                 break;
             }
             fwrite(remaining, sizeof(char), cur_pos - remaining, stdout);
@@ -41,7 +42,8 @@ static inline void print(char *str, int parse_backslashes)
                     else
                         break;
                 }
-                fputc(backslashed, stdout);
+                if(fputc(backslashed, stdout) == EOF)
+                    return EXIT_FAILURE;
                 break;
             case 'x':
                 attempted_backslashed = 0;
@@ -61,15 +63,17 @@ static inline void print(char *str, int parse_backslashes)
                     else
                         break;
                 }
-                fputc(backslashed, stdout);
+                if (fputc(backslashed, stdout) == EOF)
+                    return EXIT_FAILURE;
                 break;
             }
             remaining = cur_pos;
         }
-
     } else {
-        fputs(str, stdout);
+        if(fputs(str, stdout) == EOF)
+            return EXIT_FAILURE;
     }
+    return EXIT_SUCCESS;
 }
 
 int main(int argc, char **argv)
@@ -81,7 +85,7 @@ int main(int argc, char **argv)
         for (; argv[arg_pos][0] == '-'; arg_pos++) {
             for (opt_pos = 1; (opt = argv[arg_pos][opt_pos]) != '\0';
                  opt_pos++)
-                switch (argv[arg_pos][opt_pos]) {
+                switch (opt) {
                 case 'e':
                     parse_backslashes = 1;
                     break;
@@ -103,10 +107,13 @@ int main(int argc, char **argv)
                 break;
         }
         for (; arg_pos < argc - 1; arg_pos++) {
-            print(argv[arg_pos], parse_backslashes);
-            fputc(' ', stdout);
+            if (print(argv[arg_pos], parse_backslashes) == EXIT_FAILURE)
+                goto err;
+            if(fputc(' ', stdout) == EOF)
+                goto err;
         }
-        print(argv[argc - 1], parse_backslashes);
+        if(print(argv[argc - 1], parse_backslashes) == EXIT_FAILURE)
+            goto err;
     }
     if (print_newline)
         if (fputc('\n', stdout) == EOF)
