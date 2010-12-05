@@ -33,7 +33,7 @@ static inline void print(char *str, int parse_backslashes)
             case '0':
                 attempted_backslashed = 0;
                 for (cur_pos++;
-                     *cur_pos >= '0' && *cur_pos <= '8'; cur_pos++) {
+                     *cur_pos >= '0' && *cur_pos <= '7'; cur_pos++) {
                     attempted_backslashed *= 8;
                     attempted_backslashed += (*cur_pos - '0');
                     if (attempted_backslashed <= 0xff)
