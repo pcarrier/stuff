@@ -51,7 +51,7 @@ static const char *LETTERS[] = {
     "<zulu>"
 };
 
-static void printc(char c)
+static inline void printc(char c)
 {
     if (c >= 'a' && c < 'z')
         fputs(LETTERS[c - 'a'], stdout);
