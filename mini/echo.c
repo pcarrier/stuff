@@ -91,7 +91,11 @@ int main(int argc, char **argv)
                 case 'E':
                     parse_backslashes = 0;
                     break;
-                default:       /* we want to print the whole argument */
+                case '-':      /* implements '--' from 1003.1, & more */
+                    drop_opts = 1;
+                    opt_pos++;
+                    break;
+                default:       /* print the whole argument if unknown opt */
                     drop_opts = 1;
                     break;
                 }
