@@ -3,6 +3,7 @@ CFLAGS += -Wall -Wextra -pedantic
 CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
 
 bins := \
+	fun/nato.portable \
 	sys/hugepages_doublecheck.linux \
 	sys/hugepages_maxalloc.linux \
 	sys/errnos.portable \
@@ -11,10 +12,11 @@ bins := \
 	sys/i_segv2.portable \
 	sys/sethostid.linux \
 	mini/yes.portable \
+	mini/yes2.portable \
 	mini/true.portable \
 	mini/false.portable \
 	mini/echo.portable \
-	fun/nato.portable \
+	mini/printf.portable \
 #	sys/nosymlinks.fuse
 
 all: $(bins)
