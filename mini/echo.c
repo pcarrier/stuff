@@ -15,7 +15,7 @@ static inline int print(char *str, int parse_backslashes)
         while (remaining < end) {
             cur_pos = strchr(remaining, '\\');
             if (cur_pos == NULL) {
-                if(fputs(remaining, stdout) == EOF)
+                if (fputs(remaining, stdout) == EOF)
                     return EXIT_FAILURE;
                 break;
             }
@@ -43,7 +43,7 @@ static inline int print(char *str, int parse_backslashes)
                     else
                         break;
                 }
-                if(fputc(backslashed, stdout) == EOF)
+                if (fputc(backslashed, stdout) == EOF)
                     return EXIT_FAILURE;
                 break;
             case 'x':
@@ -71,7 +71,7 @@ static inline int print(char *str, int parse_backslashes)
             remaining = cur_pos;
         }
     } else {
-        if(fputs(str, stdout) == EOF)
+        if (fputs(str, stdout) == EOF)
             return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
@@ -110,10 +110,10 @@ int main(int argc, char **argv)
         for (; arg_pos < argc - 1; arg_pos++) {
             if (print(argv[arg_pos], parse_backslashes) == EXIT_FAILURE)
                 goto err;
-            if(fputc(' ', stdout) == EOF)
+            if (fputc(' ', stdout) == EOF)
                 goto err;
         }
-        if(print(argv[argc - 1], parse_backslashes) == EXIT_FAILURE)
+        if (print(argv[argc - 1], parse_backslashes) == EXIT_FAILURE)
             goto err;
     }
     if (print_newline)

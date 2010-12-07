@@ -10,10 +10,22 @@
 
 int main(int argc, char **argv)
 {
-    char *msg = "y";
-    if (argc > 1)
-        msg = argv[1];
-    for (EVER)
-        puts(msg);
+    int current_arg;
+    size_t msg_len = 0;
+    char *msg;
+
+    if (argc < 2)
+        for (EVER)
+            puts("y");
+
+    else
+        for (EVER) {
+            for (current_arg = 1; current_arg < argc - 1; current_arg++) {
+                fputs(argv[current_arg], stdout);
+                putchar(' ');
+            }
+            puts(argv[argc - 1]);
+        }
+
     return EXIT_FAILURE;        /* should never happen */
 }
