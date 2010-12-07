@@ -31,6 +31,7 @@ static inline int print(char *str, int parse_backslashes)
                 ESCAPED_REGISTER('r', '\r');
                 ESCAPED_REGISTER('t', '\t');
                 ESCAPED_REGISTER('v', '\v');
+                ESCAPED_REGISTER('\0', '\\');
             case '0':
                 attempted_backslashed = 0;
                 for (cur_pos++;
