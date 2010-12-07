@@ -10,7 +10,7 @@
 static inline int print(char *str, int parse_backslashes)
 {
     char *remaining = str, *cur_pos = str, *end = str + strlen(str);
-    int backslashed = ' ', attempted_backslashed;
+    int backslashed = ' ', attempted_backslashed, max_remaining_digits;
     if (parse_backslashes) {
         while (remaining < end) {
             cur_pos = strchr(remaining, '\\');
@@ -33,9 +33,18 @@ static inline int print(char *str, int parse_backslashes)
                 ESCAPED_REGISTER('v', '\v');
                 ESCAPED_REGISTER('\0', '\\');
             case '0':
-                attempted_backslashed = 0;
-                for (cur_pos++;
-                     *cur_pos >= '0' && *cur_pos <= '7'; cur_pos++) {
+                cur_pos++;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+                for (attempted_backslashed = 0, max_remaining_digits = 3;
+                     max_remaining_digits > 0 && *cur_pos >= '0'
+                     && *cur_pos <= '7';
+                     cur_pos++, max_remaining_digits--) {
                     attempted_backslashed *= 8;
                     attempted_backslashed += (*cur_pos - '0');
                     if (attempted_backslashed <= 0xff)
@@ -47,11 +56,13 @@ static inline int print(char *str, int parse_backslashes)
                     return EXIT_FAILURE;
                 break;
             case 'x':
-                attempted_backslashed = 0;
-                for (cur_pos++;
-                     ((*cur_pos >= '0' && *cur_pos <= '9') ||
-                      (*cur_pos >= 'a' && *cur_pos <= 'f') ||
-                      (*cur_pos >= 'A' && *cur_pos <= 'F')); cur_pos++) {
+                for (cur_pos++, attempted_backslashed =
+                     0, max_remaining_digits = 2;
+                     max_remaining_digits > 0
+                     && ((*cur_pos >= '0' && *cur_pos <= '9')
+                         || (*cur_pos >= 'a' && *cur_pos <= 'f')
+                         || (*cur_pos >= 'A' && *cur_pos <= 'F'));
+                     cur_pos++, max_remaining_digits--) {
                     attempted_backslashed *= 16;
                     if (*cur_pos >= 'a')
                         attempted_backslashed += 10 + (*cur_pos - 'a');
