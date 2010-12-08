@@ -53,12 +53,16 @@ static const char *LETTERS[] = {
 
 static inline void printc(char c)
 {
-    if (c >= 'a' && c < 'z')
-        fputs(LETTERS[c - 'a'], stdout);
-    else if (c >= 'A' && c < 'Z')
-        fputs(LETTERS[c - 'A'], stdout);
-    else
-        putc(c, stdout);
+    if (c >= 'a' && c < 'z') {
+        if (fputs(LETTERS[c - 'a'], stdout) == EOF)
+            exit(EXIT_FAILURE);
+    } else if (c >= 'A' && c < 'Z') {
+        if (fputs(LETTERS[c - 'A'], stdout) == EOF)
+            exit(EXIT_FAILURE);
+    } else {
+        if (putc(c, stdout) == EOF)
+            exit(EXIT_FAILURE);
+    }
 }
 
 int main(int argc, char **argv)
@@ -72,7 +76,8 @@ int main(int argc, char **argv)
         size_t arglen = strlen(argv[1]);
         for (chp = argv[1]; chp < argv[1] + arglen; chp++)
             printc(*chp);
-        putc('\n', stdout);
+        if (putc('\n', stdout) == EOF)
+            return EXIT_FAILURE;
     } else {
         fprintf(stderr,
                 "Usage: %s [message]\n"
@@ -80,5 +85,7 @@ int main(int argc, char **argv)
                 argv[0]);
         return EXIT_FAILURE;
     }
+    if (fclose(stdout))
+        return EXIT_FAILURE;
     return EXIT_SUCCESS;
 }
