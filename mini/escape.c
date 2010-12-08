@@ -10,21 +10,25 @@ static inline void escape(char *to, char *from)
 {
     int backslashed, attempted_backslashed, max_remaining_digits;
     size_t jump;
-    char *cur_from, *cur_to = to, *remaining = from;
+    char *cur_from, *cur_to = to ? to : from, *remaining = from;
     char *end_of_from = from + strlen(from);
+
+#define TRANSFER(dest, src, size) if(to) { \
+    memcpy(dest, src, size);} \
+    else {memmove(dest,src, size);}
 
     while (remaining < end_of_from) {
         cur_from = strchr(remaining, '\\');
 
         if (cur_from == NULL) {
             jump = end_of_from - remaining;
-            memcpy(cur_to, remaining, jump);
+            TRANSFER(cur_to, remaining, jump);
             cur_to += jump;
             break;
         }
         // else
         jump = cur_from - remaining;
-        memcpy(cur_to, remaining, jump);
+        TRANSFER(cur_to, remaining, jump);
         cur_from += jump;
         cur_to += jump;
 #define ESCAPED_REGISTER(c, p) case c: *cur_to = p; ++cur_from; ++cur_to; break;
