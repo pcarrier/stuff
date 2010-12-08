@@ -4,21 +4,22 @@ CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
 
 bins := \
 	fun/nato.portable \
-	sys/hugepages_doublecheck.linux \
-	sys/hugepages_maxalloc.linux \
-	sys/errnos.portable \
-	sys/mmap_doublecheck.portable \
-	sys/i_segv.portable \
-	sys/i_segv2.portable \
-	sys/sethostid.linux \
+	mini/echo.portable \
+	mini/false.portable \
+	mini/hostid.portable \
+	mini/logname.portable \
+	mini/printf.portable \
+	mini/sync.portable \
+	mini/true.portable \
 	mini/yes.portable \
 	mini/yes2.portable \
-	mini/true.portable \
-	mini/false.portable \
-	mini/echo.portable \
-	mini/sync.portable \
-	mini/printf.portable \
-	mini/hostid.portable \
+	sys/errnos.portable \
+	sys/hugepages_doublecheck.linux \
+	sys/hugepages_maxalloc.linux \
+	sys/i_segv.portable \
+	sys/i_segv2.portable \
+	sys/mmap_doublecheck.portable \
+	sys/sethostid.linux \
 #	sys/nosymlinks.fuse
 
 all: $(bins)

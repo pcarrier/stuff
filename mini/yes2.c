@@ -14,8 +14,10 @@ int main(int argc, char **argv)
     size_t len = 0;
     char *msg = NULL, *cur_pos;
     if (argc < 2)
-        for (EVER)
-            puts("y");
+        for (EVER) {
+            if (puts("y") == EOF)
+                goto err;
+        }
 
     else {
         len = argc - 1;
@@ -36,10 +38,12 @@ int main(int argc, char **argv)
         cur_pos[-1] = '\0';
 
         for (EVER)
-            puts(msg);
+            if (puts(msg) == EOF)
+                goto err;
 
         free(msg);              /* should never happen */
     }
+
   err:
     return EXIT_FAILURE;        /* either */
 }

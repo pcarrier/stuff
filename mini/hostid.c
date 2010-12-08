@@ -8,8 +8,8 @@
 
 int main()
 {
-    printf("%08x\n", (int)gethostid());
-    if(fclose(stdout) < 0)
+    printf("%08x\n", (int) gethostid());
+    if (fclose(stdout))
         return EXIT_FAILURE;
     return EXIT_SUCCESS;
 }
