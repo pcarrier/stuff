@@ -11,8 +11,6 @@
 int main(int argc, char **argv)
 {
     int current_arg;
-    size_t msg_len = 0;
-    char *msg;
 
     if (argc < 2)
         for (EVER)

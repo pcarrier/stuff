@@ -10,7 +10,7 @@
 static inline int print(char *str, int parse_backslashes)
 {
     char *remaining = str, *cur_pos = str, *end = str + strlen(str);
-    int backslashed = ' ', attempted_backslashed, max_remaining_digits;
+    int backslashed, attempted_backslashed, max_remaining_digits;
     if (parse_backslashes) {
         while (remaining < end) {
             cur_pos = strchr(remaining, '\\');
@@ -41,7 +41,8 @@ static inline int print(char *str, int parse_backslashes)
             case '5':
             case '6':
             case '7':
-                for (attempted_backslashed = 0, max_remaining_digits = 3;
+                for (backslashed = 0, attempted_backslashed =
+                     0, max_remaining_digits = 3;
                      max_remaining_digits > 0 && *cur_pos >= '0'
                      && *cur_pos <= '7';
                      cur_pos++, max_remaining_digits--) {
@@ -56,8 +57,8 @@ static inline int print(char *str, int parse_backslashes)
                     return EXIT_FAILURE;
                 break;
             case 'x':
-                for (cur_pos++, attempted_backslashed =
-                     0, max_remaining_digits = 2;
+                for (backslashed = 0, attempted_backslashed =
+                     0, max_remaining_digits = 2, cur_pos++;
                      max_remaining_digits > 0
                      && ((*cur_pos >= '0' && *cur_pos <= '9')
                          || (*cur_pos >= 'a' && *cur_pos <= 'f')
