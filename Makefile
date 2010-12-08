@@ -16,7 +16,8 @@ bins := \
 	mini/true.portable \
 	mini/false.portable \
 	mini/echo.portable \
-	mini/printf.portable
+	mini/sync.portable \
+	mini/printf.portable \
 #	sys/nosymlinks.fuse
 
 all: $(bins)
