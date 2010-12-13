@@ -30,11 +30,12 @@
 
 #include <mcheck.h>
 
-#ifdef OLD_VERSION 
+#ifdef OLD_VERSION
 void _init(void)
 #else
-__attribute__((constructor)) void init(void)
+__attribute__ ((constructor))
+void init(void)
 #endif
 {
-	mtrace();
+    mtrace();
 }

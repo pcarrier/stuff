@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS += -Wall -Wextra -pedantic
 CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
+CPTHREADFLAGS += -lpthread
 
 bins := \
 	fun/nato.portable \
@@ -18,6 +19,7 @@ bins := \
 	sys/hugepages_maxalloc.linux \
 	sys/i_segv.portable \
 	sys/i_segv2.portable \
+	sys/i_segv3.pthread \
 	sys/mmap_doublecheck.portable \
 	sys/sethostid.linux \
 #	sys/nosymlinks.fuse
@@ -29,6 +31,9 @@ all: $(bins)
 
 %.portable: %.c
 	$(CC) $(CFLAGS) -o $@ $^ $(CPORTABLEFLAGS)
+
+%.pthread: %.c
+	$(CC) $(CFLAGS) -o $@ $^ $(CPTHREADFLAGS)
 
 %.fuse: %.c
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
