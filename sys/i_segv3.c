@@ -26,11 +26,10 @@ int main()
     pthread_t thread0, thread1;
     if (pthread_create(&thread0, NULL, blurp, NULL) ||
         pthread_create(&thread1, NULL, blurp, NULL))
-        return errno;
+        return EXIT_FAILURE;
     if (pthread_kill(thread0, SIGSEGV) || pthread_kill(thread1, SIGSEGV))
         return -errno;
-#ifdef FIX
-    usleep(0);
-#endif
+    if (pthread_join(thread0, NULL) || pthread_join(thread1, NULL))
+        return errno;
     return EXIT_SUCCESS;        /* Whaaat? */
 }
