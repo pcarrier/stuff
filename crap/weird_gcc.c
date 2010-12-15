@@ -14,3 +14,8 @@ int main()
     assert(ptr != NULL);
     return EXIT_SUCCESS;
 }
+
+/* Can someone explain:
+ * crap/weird_gcc.c: In function ‘main’:
+ * crap/weird_gcc.c:11: warning: integer overflow in expression
+*/
