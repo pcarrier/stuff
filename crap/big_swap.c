@@ -1,12 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-
-#define BUFSIZE (2*1024*1024*1024)
+#define BUFSIZE ((size_t)1<<33) /* 8GB */
 
 int main()
 {
