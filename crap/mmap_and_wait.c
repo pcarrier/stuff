@@ -13,9 +13,9 @@ int main(int argc, char **argv)
     char *fn;
     if (argc != 2)
         goto err;
-fn = argv[1];
+    fn = argv[1];
     file = open(fn, O_RDWR | O_CREAT, (mode_t) 0600);
-    mmap(NULL, 1024 * 1024 * 1024, PROT_READ | PROT_WRITE, MAP_SHARED,
+    mmap(NULL, 1024 * 1024 * 1024, PROT_READ | PROT_WRITE, MAP_PRIVATE,
          file, (off_t) NULL);
     getchar();
     return EXIT_SUCCESS;
