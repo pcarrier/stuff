@@ -22,6 +22,7 @@ bins := \
 	sys/i_segv3.pthread \
 	sys/mmap_doublecheck.portable \
 	sys/sethostid.linux \
+	crap/mmap_and_wait.linux \
 #	sys/nosymlinks.fuse
 
 all: $(bins)
