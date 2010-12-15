@@ -24,6 +24,7 @@ bins := \
 	sys/sethostid.linux \
 	crap/mmap_and_wait.portable \
 	crap/big_swap.portable \
+	crap/weird_gcc.portable \
 #	sys/nosymlinks.fuse
 
 all: $(bins)
