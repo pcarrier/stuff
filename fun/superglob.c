@@ -1,5 +1,6 @@
 /**
- * Superglob! Build a "minimal" glob matching a list of entries
+ * Superglob! Build a "minimal" glob matching a list of entries.
+ * We could obviously be a lot more clever (eg by looking at the ends...)
  *
  * Copyright (c) 2010, Red Hat Inc.
  * Permission to use, copy, modify, and/or distribute this software
