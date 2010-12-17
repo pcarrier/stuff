@@ -2,6 +2,8 @@
  * Superglob! Build a "minimal" glob matching a list of entries.
  * We could obviously be a lot more clever (eg by looking at the ends...)
  *
+ * /!\ It is ALWAYS a bad idea to use this.
+ *
  * Copyright (c) 2010, Red Hat Inc.
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided that
@@ -30,7 +32,7 @@ int main(int argc, char **argv)
         arg_length = strlen(argv[arg]);
         if (min_length > arg_length)
             min_length = arg_length;
-        else
+        else if (min_length < arg_length)
             has_trailing_chars = 1;
         arg_lengths[arg] = arg_length;
     }
