@@ -1,5 +1,6 @@
 /**
- * Superglob! Build a "minimal" glob matching a list of entries
+ * Superglob! Build a "minimal" glob matching a list of entries.
+ * We could obviously be a lot more clever (eg by looking at the ends...)
  *
  * /!\ It is ALWAYS a bad idea to use this.
  *

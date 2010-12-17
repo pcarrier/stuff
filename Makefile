@@ -4,6 +4,7 @@ CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
 CPTHREADFLAGS += -lpthread
 
 bins := \
+	fun/bytes_to_chars.portable \
 	fun/nato.portable \
 	fun/superglob.portable \
 	mini/echo.portable \
