@@ -10,13 +10,15 @@ int main()
 {
     void *ptr1, *ptr2, *ptr3;
     printf("%i, %i, %i\n", S1, S2, S3);
-    ptr1 = malloc(S1*sizeof(char)); /* Yes the sizeof is useless */
-    ptr2 = malloc(S2*sizeof(char));
-    ptr3 = malloc(S3*sizeof(char));
+    ptr1 = malloc(S1 * sizeof(char));   /* Yes the sizeof is useless */
+    ptr2 = malloc(S2 * sizeof(char));
+    ptr3 = malloc(S3 * sizeof(char));
     assert(ptr1 != NULL);
     assert(ptr2 != NULL);
     assert(ptr3 != NULL);
-    free(ptr1); free(ptr2); free(ptr3);
+    free(ptr1);
+    free(ptr2);
+    free(ptr3);
     return EXIT_SUCCESS;
 }
 
