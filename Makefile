@@ -5,6 +5,7 @@ CPTHREADFLAGS += -lpthread
 
 bins := \
 	fun/nato.portable \
+	fun/superglob.portable \
 	mini/echo.portable \
 	mini/false.portable \
 	mini/hostid.portable \
