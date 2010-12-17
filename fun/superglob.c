@@ -20,16 +20,16 @@
 
 int main(int argc, char **argv)
 {
-    long min_length, arg_length, arg_lengths[argc], arg, pos;
+    long min_length = LONG_MAX, arg_length, arg_lengths[argc], arg, pos;
     int nb_chars, current_char, has_trailing_chars =
         0, used_char[CHAR_MAX];
-    if (argc <= 2)
+    if (argc < 2)
         goto err;
     for (arg = 1; arg < argc; arg++) {
         arg_length = strlen(argv[arg]);
         if (min_length > arg_length)
             min_length = arg_length;
-        else if (min_length < arg_length)
+        else
             has_trailing_chars = 1;
         arg_lengths[arg] = arg_length;
     }
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
         memset(used_char, 0, CHAR_MAX * sizeof(int));
         nb_chars = 0;
         for (arg = 1; arg < argc; arg++) {
-            current_char = argv[arg][pos] - '\0'; /* positive please :) */
+            current_char = argv[arg][pos] - '\0';       /* positive please :) */
             if (!used_char[current_char]) {
                 used_char[current_char] = 1;
                 nb_chars++;
