@@ -156,15 +156,16 @@ static const char *NAMES[] = {
 static inline void printc(char c)
 {
     if (c >= 'A' && c < 'Z') {
-        if (printf("uppercase %s\n", NAMES[c - 'A' + 'a']) < 0)
+        if (printf("uppercase %s, ", NAMES[c - 'A' + 'a']) < 0)
             goto err;
-    } else if ((unsigned char)(c - '\0') < 0x80u) {
-        if (printf("%s\n", NAMES[c - '\0']) < 0)
+    } else if ((unsigned char) (c - '\0') < 0x80u) {
+        if (printf("%s, ", NAMES[c - '\0']) < 0)
             goto err;
-    } else if (printf("!! dropped !!\n") < 0)
+    } else if (printf("!dropped!, ") < 0)
         goto err;
     return;
-  err:exit(EXIT_FAILURE);
+  err:
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
@@ -178,6 +179,8 @@ int main(int argc, char **argv)
         size_t arglen = strlen(argv[1]);
         for (chp = argv[1]; chp < argv[1] + arglen; chp++)
             printc(*chp);
+        if (fputc('\n', stdout) == EOF)
+            goto err;
     } else {
         fprintf(stderr,
                 "Usage: %s [message]\n"
