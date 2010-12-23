@@ -122,7 +122,7 @@ static const char *NAMES[] = {
     "reverse single quote",     /* 0x60 */
     "alpha",                    /* 0x61 */
     "bravo",                    /* 0x62 */
-    "Charlie",                  /* 0x63 */
+    "charlie",                  /* 0x63 */
     "delta",                    /* 0x64 */
     "echo",                     /* 0x65 */
     "foxtrot",                  /* 0x66 */
@@ -132,18 +132,18 @@ static const char *NAMES[] = {
     "juliet",                   /* 0x6a */
     "kilo",                     /* 0x6b */
     "lima",                     /* 0x6c */
-    "Mike",                     /* 0x6d */
+    "mike",                     /* 0x6d */
     "november",                 /* 0x6e */
-    "Oscar",                    /* 0x6f */
-    "pap",                      /* 0x70 */
-    "Quebec",                   /* 0x71 */
-    "Romeo",                    /* 0x72 */
-    "Sierra",                   /* 0x73 */
+    "oscar",                    /* 0x6f */
+    "papa",                      /* 0x70 */
+    "quebec",                   /* 0x71 */
+    "romeo",                    /* 0x72 */
+    "sierra",                   /* 0x73 */
     "tango",                    /* 0x74 */
     "uniform",                  /* 0x75 */
-    "Victor",                   /* 0x76 */
+    "victor",                   /* 0x76 */
     "whiskey",                  /* 0x77 */
-    "X-ray",                    /* 0x78 */
+    "x-ray",                    /* 0x78 */
     "yankee",                   /* 0x79 */
     "zulu",                     /* 0x7a */
     "opening curly bracket",    /* 0x7b */
