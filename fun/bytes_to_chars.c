@@ -18,6 +18,6 @@ int main()
     char c = '\0';
     int pos;
     for (pos = 0; pos < 256; pos++, c++)
-        printf("%c\t%i\t0x%x\n", c, c, (unsigned char)c);
+        printf("%c\t%i\t0x%x\n", c, c, (unsigned char) c);
     return EXIT_SUCCESS;
 }

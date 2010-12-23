@@ -1,4 +1,4 @@
-/*
+/**
  * A simple 'true' implementation for fun
 **/
 
