@@ -38,3 +38,6 @@ ssendf() { (pv -ptrb -i 0.1 | nc -l -p $1) < $2; }
 # If AVIs and SRTs alphabetical order match, it will rename appropriately. zsh only.
 films=(*.avi); films=(${(oi)films}); subs=(*.srt); subs=(${(oi)subs})
 for film in {1..$#films}; do mv $subs[$film] ${films[$film]:r}.srt; done
+
+# Welcome to xtar xvf *.tar
+mtar() { tarparms="$1"; shift; for fn in $*; do tar "$tarparms" "$fn"; done; }
