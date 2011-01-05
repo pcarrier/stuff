@@ -9,16 +9,21 @@ cut -d: -f3 "$PASSWD" | sort | uniq -d | \
     grep -Po "^[^:]+(?=:[^:]+:$uid:)" "$PASSWD"
   done
 
+# If AVIs and SRTs alphabetical order match, it will rename appropriately. zsh only.
+films=(*.avi); films=(${(oi)films}); subs=(*.srt); subs=(${(oi)subs})
+for film in {1..$#films}; do mv $subs[$film] ${films[$film]:r}.srt; done
+
 # Wake up slowly with cron:
 30 06 * * mon-fri killall mplayer; mplayer $HOME/wakeup.ogg & for i in `seq 1 32`; do amixer sset 'Master',0 1.5dB+; sleep 3; done
 
+# mkcd /wher/ever and you get there
 mkcd() { mkdir -p "$1"; cd "$1"; }
 
 # decimal to hex
-d2h() { echo "obase=16;$1" | bc; }
+d2h() { printf "%x" "$1"; }
 
 # hex to decimal
-h2d() { echo "ibase=16;$1" | bc; }
+h2d() { echo $[$1]; }
 
 # power of 2
 2p() { let x=2\*\*$1; echo $x; }
@@ -35,9 +40,11 @@ csendf() { (pv -ptrb -i 0.1 | nc $1 $2) < $3; }
 # ssendf port file      to send a file as a server
 ssendf() { (pv -ptrb -i 0.1 | nc -l -p $1) < $2; }
 
-# If AVIs and SRTs alphabetical order match, it will rename appropriately. zsh only.
-films=(*.avi); films=(${(oi)films}); subs=(*.srt); subs=(${(oi)subs})
-for film in {1..$#films}; do mv $subs[$film] ${films[$film]:r}.srt; done
-
 # Welcome to xtar xvf *.tar
-mtar() { tarparms="$1"; shift; for fn in $*; do tar "$tarparms" "$fn"; done; }
+mtar() { tarparms="$1"; shift; for fn in $@; do tar "$tarparms" $fn; done; }
+
+loopbacks() { for i in {0..255}; do losetup /dev/loop$i 2> /dev/null ; done; }
+
+
+alias dtail='dmesg | tail -100'
+alias dless='dmesg | ${PAGER:-less}'
