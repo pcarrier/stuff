@@ -14,7 +14,7 @@ films=(*.avi); films=(${(oi)films}); subs=(*.srt); subs=(${(oi)subs})
 for film in {1..$#films}; do mv $subs[$film] ${films[$film]:r}.srt; done
 
 # Wake up slowly with cron:
-30 06 * * mon-fri killall mplayer; mplayer $HOME/wakeup.ogg & for i in `seq 1 32`; do amixer sset 'Master',0 1.5dB+; sleep 3; done
+30 06 * * mon-fri killall mplayer; mplayer $HOME/wakeup.ogg & for i in {1..32}; do amixer sset 'Master',0 1.5dB+; sleep 3; done
 
 # mkcd /wher/ever and you get there
 mkcd() { mkdir -p "$1"; cd "$1"; }
@@ -45,6 +45,16 @@ mtar() { tarparms="$1"; shift; for fn in $@; do tar "$tarparms" $fn; done; }
 
 loopbacks() { for i in {0..255}; do losetup /dev/loop$i 2> /dev/null ; done; }
 
+otmux() { tmux attach-session -d -t "$1" || tmux new-session -s "$1"; }
+
+current_ticket() { osascript -e 'tell application "Google Chrome" to get title of active tab of window 1'|egrep -o '003[0-9]+'; }
+
+t() { mkcd ~/tickets/$(current_ticket); }
+dl() { getattachments $(basename $PWD); }
+
+rt() { mkcd /Volumes/balzac/tickets/$(current_ticket); }
+rdl() { TICKET=$(current_ticket); ssh balzac.local "mkdir -p ~/tickets/$TICKET; cd ~/tickets/$TICKET; ~/support-scripts/internal/getattachments.py $TICKET"; }
+rsos() { CURPATH=$(echo $PWD | sed 's_^/Volumes/balzac/tickets__'); ssh balzac.local "cd ~/tickets/$CURPATH; checksysreport -s \"$1\" > \"$1\".check"; }
 
 alias dtail='dmesg | tail -100'
 alias dless='dmesg | ${PAGER:-less}'
