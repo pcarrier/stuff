@@ -55,7 +55,7 @@ dl() { getattachments $(basename $PWD); }
 rt() { mkcd /Volumes/balzac/tickets/`current_ticket`; }
 rx() { CURPATH=$(echo $PWD | sed 's_^/Volumes/balzac/tickets__'); ssh balzac.local "cd ~/tickets/$CURPATH; $@"; }
 rdl() { rx ~/support-scripts/internal/getattachments.py "$TICKET"; }
-rsos() { rx checksysreport -s "$1" \> "$1".check"; }
+rsos() { rx checksysreport -s "$1" \> "$1".check; }
 
 alias dtail='dmesg | tail -100'
 alias dless='dmesg | ${PAGER:-less}'
