@@ -52,9 +52,10 @@ current_ticket() { osascript -e 'tell application "Google Chrome" to get title o
 t() { mkcd ~/tickets/$(current_ticket); }
 dl() { getattachments $(basename $PWD); }
 
-rt() { mkcd /Volumes/balzac/tickets/$(current_ticket); }
-rdl() { TICKET=$(current_ticket); ssh balzac.local "mkdir -p ~/tickets/$TICKET; cd ~/tickets/$TICKET; ~/support-scripts/internal/getattachments.py $TICKET"; }
-rsos() { CURPATH=$(echo $PWD | sed 's_^/Volumes/balzac/tickets__'); ssh balzac.local "cd ~/tickets/$CURPATH; checksysreport -s \"$1\" > \"$1\".check"; }
+rt() { mkcd /Volumes/balzac/tickets/`current_ticket`; }
+rx() { CURPATH=$(echo $PWD | sed 's_^/Volumes/balzac/tickets__'); ssh balzac.local "cd ~/tickets/$CURPATH; $@"; }
+rdl() { rx ~/support-scripts/internal/getattachments.py "$TICKET"; }
+rsos() { rx checksysreport -s "$1" \> "$1".check"; }
 
 alias dtail='dmesg | tail -100'
 alias dless='dmesg | ${PAGER:-less}'
