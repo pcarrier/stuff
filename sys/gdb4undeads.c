@@ -17,6 +17,10 @@
  * Use with:
  * LD_PRELOAD=/usr/local/lib/gdb4undeads.so gcore [...]
  * LD_PRELOAD=/usr/local/lib/gdb4undeads.so gdb [...]
+ *
+ * Warning: this has the trivial side-effect of messing with symlink values starting
+ * or finishing with '(deleted)' in /proc (sooo likely). If you have some of those,
+ * BEWARE!
 **/
 
 #define _GNU_SOURCE 1
@@ -29,25 +33,25 @@
 
 ssize_t readlink(const char *path, char *buf, size_t bufsiz)
 {
-    char tmp_path[PATH_MAX];
-    char *result = tmp_path;
+    char ibuf[PATH_MAX];
+    char *result = ibuf;
     ssize_t rc;
     ssize_t(*orig_readlink) (const char *path, char *buf, size_t bufsiz) =
-	dlsym(RTLD_NEXT, "readlink");
-    rc = orig_readlink(path, tmp_path, bufsiz);
+        dlsym(RTLD_NEXT, "readlink");
+    rc = orig_readlink(path, ibuf, bufsiz);
     if (rc < 0)
-	goto done;
-    if (!strncmp(tmp_path, "(deleted) ", 10)) {
-	rc -= 10;
-	result += 10;
-	fprintf(stderr, "[gdb4undeads: '%s' was prefixed]\n", tmp_path);
-    } else
-	if (!strncmp(tmp_path + strlen(tmp_path) - 10, " (deleted)", 10)) {
-	rc -= 10;
-	fprintf(stderr, "[gdb4undeads: '%s' was postfixed]\n", tmp_path);
+        goto done;
+    if (!strncmp(path, "/proc", 5)) {
+        if (!strncmp(ibuf, "(deleted) ", 10)) {
+            rc -= 10;
+            result += 10;
+            fprintf(stderr, "[gdb4undeads: '%s' was prefixed]\n", ibuf);
+        } else if (!strncmp(ibuf + strlen(ibuf) - 10, " (deleted)", 10)) {
+            rc -= 10;
+            fprintf(stderr, "[gdb4undeads: '%s' was postfixed]\n", ibuf);
+        }
     }
     strncpy(buf, result, rc);
   done:
     return rc;
 }
-
