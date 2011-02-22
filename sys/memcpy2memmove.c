@@ -11,16 +11,32 @@
  *
  * Compile with:
  * gcc -g -shared -fPIC -ldl -o /usr/local/lib/memcpy2memmove.so memcpy2memmove.c
+ * To also log your app's "misbehaviours", add -DDEBUG
+ * To log without correcting, add -DDEBUG -DDONTFIX
+ *
  * Use in a shell with:
  * LD_PRELOAD=/usr/local/lib/memcpy2memmove.so foo bar
+ *
+ * To log misbehaviours, one can 
  *
  * Warning: This will impact performance!
 **/
 
 #define _GNU_SOURCE 1
 #include <string.h>
+#include <stdio.h>
 
-void *memcpy(void *dest, const void *src, size_t n);
+void *memcpy(void *dest, const void *src, size_t n)
 {
-    return(memmove(dest, src, n));
+#ifdef DEBUG
+    if ((src - dest < n) || (dest - src < n))
+        fprintf(stderr,
+                "[memcpy2memmove: overlap! 0x%x->0x%x (%i bytes)]\n", dest,
+                src, n);
+#endif
+#ifdef DONTFIX
+    return (memcpy(dest, src, n));
+#else
+    return (memmove(dest, src, n));
+#endif
 }
