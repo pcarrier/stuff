@@ -31,8 +31,8 @@ void *memcpy(void *dest, const void *src, size_t n)
 #ifdef DEBUG
     if ((src - dest < n) || (dest - src < n))
         fprintf(stderr,
-                "[memcpy2memmove: overlap! 0x%x->0x%x (%i bytes)]\n", dest,
-                src, n);
+                "[memcpy2memmove: overlap! 0x%x->0x%x (%i bytes)]\n", src,
+                dest, n);
 #endif
 #ifdef DONTFIX
     return (memcpy(dest, src, n));
