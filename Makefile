@@ -24,6 +24,7 @@ bins := \
 	sys/i_segv3.pthread \
 	sys/mmap_doublecheck.portable \
 	sys/sethostid.linux \
+	sys/wtfitf.linux \
 	crap/mmap_and_wait.portable \
 	crap/big_swap.portable \
 #	sys/nosymlinks.fuse
