@@ -122,6 +122,7 @@ int main(int argc, char **argv)
         perror("Final fiemap failed");
         goto err;
     }
+
     printf("logical offset\t\tphysical offset\t\tlength\t\t\tflags\n");
     for (cur_extent = 0; cur_extent < map->fm_mapped_extents; cur_extent++)
         print_extent(&map->fm_extents[cur_extent]);
