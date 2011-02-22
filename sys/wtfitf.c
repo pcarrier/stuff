@@ -41,7 +41,7 @@ static struct flags_descr known_flags[] = {
     {NULL, 0},
 };
 
-void print_flag(const char *name, int num_flags, __u32 flags)
+void print_flag(const char *name, __u32 flags, int num_flags)
 {
     if (num_flags)
         fputs("\t\t\t\t\t\t\t\t\t", stdout);
@@ -65,13 +65,13 @@ void print_extent(struct fiemap_extent *extent)
     }
     for (cur_descr = known_flags; cur_descr->name; cur_descr++) {
         if (flags & cur_descr->mask) {
-            print_flag(cur_descr->name, num_flags, flags);
+            print_flag(cur_descr->name, flags, num_flags);
             flags ^= cur_descr->mask;
             num_flags++;
         }
     }
     if (flags)
-        print_flag(NULL, num_flags, flags);
+        print_flag(NULL, flags, num_flags);
 }
 
 int main(int argc, char **argv)
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     filename = argv[1];
     fd = open(filename, O_RDONLY);
     if (fd < 0) {
-        perror("open failed");
+        perror("open() failed");
         goto err;
     }
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     map->fm_length = FIEMAP_MAX_OFFSET;
 
     if (ioctl(fd, FS_IOC_FIEMAP, map) < 0) {
-        perror("1st fiemap failed");
+        perror("First fiemap failed");
         goto err;
     }
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     map->fm_extent_count = num_extents;
 
     if (ioctl(fd, FS_IOC_FIEMAP, map) < 0) {
-        perror("2nd fiemap failed");
+        perror("Final fiemap failed");
         goto err;
     }
     printf("logical offset\t\tphysical offset\t\tlength\t\t\tflags\n");
