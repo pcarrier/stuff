@@ -20,7 +20,7 @@
 #define _GNU_SOURCE 1
 #include <string.h>
 
-void *memcpy(void *dest, const void *src, size_t n);
+void *memcpy(void *dest, const void *src, size_t n)
 {
     return(memmove(dest, src, n));
 }
