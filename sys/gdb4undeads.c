@@ -13,7 +13,7 @@
  * (requires ln -sf /sbin/nash /bin/nash under RHEL5)
  *
  * Compile with:
- * gcc -g -shared -fPIC -ldl -o /usr/local/lib/gdb4undeads.so gdb4undeads.c
+ * gcc -shared -fPIC -ldl -o /usr/local/lib/gdb4undeads.so gdb4undeads.c
  * Use with:
  * LD_PRELOAD=/usr/local/lib/gdb4undeads.so gcore [...]
  * LD_PRELOAD=/usr/local/lib/gdb4undeads.so gdb [...]

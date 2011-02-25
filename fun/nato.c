@@ -135,7 +135,7 @@ static const char *NAMES[] = {
     "mike",                     /* 0x6d */
     "november",                 /* 0x6e */
     "oscar",                    /* 0x6f */
-    "papa",                      /* 0x70 */
+    "papa",                     /* 0x70 */
     "quebec",                   /* 0x71 */
     "romeo",                    /* 0x72 */
     "sierra",                   /* 0x73 */
