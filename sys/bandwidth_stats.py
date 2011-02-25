@@ -1,8 +1,18 @@
 #!/usr/bin/env python
-
-# Bandwidth statistics for interfaces
+# Bandwidth statistics for Linux interfaces
+#
 # Example:
 # bandwith_stats.py -d 5 lo eth1 eth3
+#
+# Copyright (c) 2010, Red Hat Inc.
+# Permission to use, copy, modify, and/or distribute this software
+# for any purpose with or without fee is hereby granted, provided that
+# the above copyright notice and this permission notice appear in all copies.
+#
+# Maintainer: Pierre Carrier <prc@redhat.com>
+#
+# TODO:
+# - Use powers of 1000 instead of 1024 for packets
 
 import getopt, sys, time
 
@@ -26,12 +36,12 @@ def usage():
 
 def formatted_stat(name, value):
     value = float(value)
-    prefixes = ['', 'K', 'M', 'G', 'T']
+    suffixes = [' ', 'K', 'M', 'G', 'T']
     power_of_1024 = 0
     while(value >= 1024):
         value /= 1024
         power_of_1024 += 1
-    return "%s:%7.2f" % (name, value)
+    return "%s:%7.2f%s" % (name, value, suffixes[power_of_1024])
 
 def main():
     try:
