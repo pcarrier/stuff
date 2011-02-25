@@ -56,7 +56,8 @@ def main():
             try:
                 delay = float(value)
             except:
-                pass
+                print >> sys.stderr, "Could not parse the delay"
+		sys.exit(2)
         elif opt == '-h':
             usage()
             sys.exit(0)
