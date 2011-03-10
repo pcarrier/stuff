@@ -91,12 +91,13 @@ static inline int print(char *str, int parse_backslashes)
 
 int main(int argc, char **argv)
 {
-    int arg_pos = 1, opt_pos, drop_opts = 0;
+    int arg_pos = 1, opt_pos, drop_opts = 0, drop_opt = 0;
     int print_newline = 1, parse_backslashes = 0;
     char opt;
     if (argc > 1) {
-        for (; argv[arg_pos][0] == '-'; arg_pos++) {
-            for (opt_pos = 1; (opt = argv[arg_pos][opt_pos]) != '\0';
+        for (; arg_pos < argc && argv[arg_pos][0] == '-'; arg_pos++) {
+            for (opt_pos = 1;
+                 !drop_opt && (opt = argv[arg_pos][opt_pos]) != '\0';
                  opt_pos++)
                 switch (opt) {
                 case 'e':
@@ -108,9 +109,12 @@ int main(int argc, char **argv)
                 case 'E':
                     parse_backslashes = 0;
                     break;
-                case '-':      /* implements '--' from 1003.1, & more */
-                    drop_opts = 1;
-                    opt_pos++;
+                case '-':
+                    if (opt_pos == 1 && argv[arg_pos][opt_pos + 1] == '\0') {
+                        drop_opt = 1;
+                        drop_opts = 1;
+                        arg_pos++;
+                    }
                     break;
                 default:       /* print the whole argument if unknown opt */
                     drop_opts = 1;
