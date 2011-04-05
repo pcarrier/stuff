@@ -1,0 +1,5 @@
+stap -e "probe syscall.execve { \
+  if (filename == \"/usr/bin/Xvnc\" || filename == \"/usr/bin/vncserver\" ) \
+    printf(\"%s: %s (pid %i) launched by %s (pid %i) owned by uid %i\n\", \
+      ctime(gettimeofday_s()), filename, pid(), pexecname(), ppid(), \
+      task_uid(task_parent(task_current()))) }"
