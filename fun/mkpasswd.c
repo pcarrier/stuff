@@ -1,7 +1,7 @@
 /**
  * Simple password generator
  *
- * Copyright (c) 2010, Red Hat Inc.
+ * Copyright (c) 2011, Red Hat Inc.
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided that
  * the above copyright notice and this permission notice appear in all
@@ -31,11 +31,13 @@ char *default_chars = "bcdefghijklnoprstuvx"
 /* Uppercase is very annoying on many handheld devices.
 "BCDEFGHIJKLNOPRSTUVX"
 */
-;
+    ;
+
+#define DEFAULT_FILENAME "/dev/random"
 
 int main(int argc, char **argv)
 {
-    char *filename = "/dev/random";
+    char *filename = DEFAULT_FILENAME;
     char *chars = default_chars;
     FILE *random_file;
     unsigned long int random_long;
@@ -47,11 +49,12 @@ int main(int argc, char **argv)
     if (argc < 2 || argc > 4) {
         fprintf(stderr, "Usage: %s bits [chars-used [random-file]]\n"
                 "bits: number of bits of entropy required\n"
-                "chars-used: characters that can be used a password\n"
-                "random-file: randomness source (/dev/random by default)\n\n"
+                "chars-used: characters that can be used in the password (%s by default)\n"
+                "random-file: randomness source (" DEFAULT_FILENAME
+                " by default)\n\n"
                 "We are as secure as the randomness source. If your kernel is stupid, tough luck.\n"
                 "Multiple occurences of character increase its frequence and breaks entropy computation.\n",
-                argv[0]);
+                argv[0], default_chars);
         return (1);
     }
 
