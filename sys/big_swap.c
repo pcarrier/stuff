@@ -56,7 +56,8 @@ int main(int argc, char **argv)
     }
 
     fputs("\nCompletely done, going to sleep by SIGSTOP'ing myself.\n"
-			"Remember to kill or SIGCONT me ('fg' from invoking shell).\n", stderr);
+			"Remember to kill or SIGCONT me ('fg' from invoking shell) "
+			"as I keep the memory.\n", stderr);
     kill(getpid(), SIGSTOP);
     return EXIT_SUCCESS;
 }
