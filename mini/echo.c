@@ -96,7 +96,8 @@ int main(int argc, char **argv)
     char opt;
     if (argc > 1) {
         for (; arg_pos < argc && argv[arg_pos][0] == '-'; arg_pos++) {
-            for (opt_pos = 1; !drop_opt && (opt = argv[arg_pos][opt_pos]) != '\0';
+            for (opt_pos = 1;
+                 !drop_opt && (opt = argv[arg_pos][opt_pos]) != '\0';
                  opt_pos++)
                 switch (opt) {
                 case 'e':
@@ -109,10 +110,10 @@ int main(int argc, char **argv)
                     parse_backslashes = 0;
                     break;
                 case '-':
-                    if(opt_pos == 1 && argv[arg_pos][opt_pos+1] == '\0') {
-                      drop_opt = 1;
-                      drop_opts = 1;
-                      arg_pos++;
+                    if (opt_pos == 1 && argv[arg_pos][opt_pos + 1] == '\0') {
+                        drop_opt = 1;
+                        drop_opts = 1;
+                        arg_pos++;
                     }
                     break;
                 default:       /* print the whole argument if unknown opt */
