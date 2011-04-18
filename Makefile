@@ -17,6 +17,7 @@ bins := \
 	mini/true.portable \
 	mini/yes.portable \
 	mini/yes2.portable \
+	sys/big_swap.portable \
 	sys/errnos.portable \
 	sys/hugepages_doublecheck.linux \
 	sys/hugepages_maxalloc.linux \
@@ -27,7 +28,6 @@ bins := \
 	sys/sethostid.linux \
 	sys/wtfitf.linux \
 	crap/mmap_and_wait.portable \
-	crap/big_swap.portable \
 #	sys/nosymlinks.fuse
 
 all: $(bins)
