@@ -1,10 +1,11 @@
 CC = gcc
 CFLAGS += -Wall -Wextra -pedantic
-CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE
+CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE -lm
 CPTHREADFLAGS += -lpthread
 
 bins := \
 	fun/bytes_to_chars.portable \
+	fun/mkpasswd.portable \
 	fun/nato.portable \
 	fun/superglob.portable \
 	mini/echo.portable \
