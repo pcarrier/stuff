@@ -27,8 +27,6 @@
 #include <math.h>
 #include <err.h>
 
-#define RANDOM_FILE "/dev/random"
-
 char *default_chars = "bcdefghijklnoprstuvx"
 /* Uppercase is very annoying on many handheld devices.
 "BCDEFGHIJKLNOPRSTUVX"
