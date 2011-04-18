@@ -15,7 +15,7 @@
  *
  * If you think enforcing at least one uppercase letter, two digits and a
  * punctation character makes safer passwords, this tool is not designed
- * for you. Please go away and do not ask me for my opinion.
+ * for you and I have no interest in your opinion (sorry). 
  *
  * If a "local" brute-force attack is impossible, expect 96 bits to be a
  * "good enough" entropy. Do not quote me on that.
