@@ -1,5 +1,6 @@
 *.portable
 *.linux
+*.pthread
 *.fuse
 *.so
 *~
