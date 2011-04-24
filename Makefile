@@ -46,11 +46,11 @@ osx: $(portable) sys/errnos
 %.fuse: %.c
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
 
-sys/errnos.h: sys/errnos.list
+sys/errnos.h: sys/errnos.list sys/errnos.h.gen
 	bash sys/errnos.h.gen
 
 sys/errnos: sys/errnos.c sys/errnos.h
-	$(CC) $(CFLAGS) $(CPORTABLEFLAGS) -o $@ sys/errnos.c
+	$(CC) $(CFLAGS) $(CPORTABLEFLAGS) $(shell pkg-config --cflags --libs glib-2.0) -o $@ sys/errnos.c
 
 indent:
 	indent -kr -nut */*.c
