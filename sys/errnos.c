@@ -23,7 +23,7 @@
 void add_errconst(GHashTable * table, int nr, char *str)
 {
     GList *list = g_hash_table_lookup(table, GINT_TO_POINTER(nr));
-    list = g_list_append(list, str);    /* g_strdup()ing the string doesn't help */
+    list = g_list_append(list, str);
     g_hash_table_insert(table, GINT_TO_POINTER(nr), list);
 }
 
@@ -63,24 +63,24 @@ int main()
     gint errnr, errmax = 1024;
     const char *errstr;
     GHashTable *errconsts = build_errconsts();
-    GList *cur_errconsts;
+    GList *cur_errconst;
     gboolean has_strerror;
     for (errnr = 0; errnr <= errmax; errnr++) {
         errstr = strerror(errnr);
 
         has_strerror =
             strncmp(errstr, UNKNOWN, sizeof(UNKNOWN) - 1) ? TRUE : FALSE;
-        cur_errconsts =
+        cur_errconst =
             (GList *) g_hash_table_lookup(errconsts,
                                           GINT_TO_POINTER(errnr));
 
-        if (!has_strerror && !cur_errconsts)
+        if (!has_strerror && !cur_errconst)
             continue;
 
         printf("%i\t0x%x\t\"%s\"\n", errnr, errnr, errstr);
-        while (cur_errconsts) {
-            printf("\t\t\t%s\n", (char *) cur_errconsts->data);
-            cur_errconsts = g_list_next(cur_errconsts);
+        while (cur_errconst) {
+            printf("%i\t0x%x\t%s\n", errnr, errnr, (char *) cur_errconst->data);
+            cur_errconst = g_list_next(cur_errconst);
         }
         errmax = errnr + 1024;
     }
