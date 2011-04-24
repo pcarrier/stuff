@@ -60,7 +60,7 @@ GHashTable *build_errconsts()
 
 int main()
 {
-    gint errnr, errmax = 256;
+    gint errnr, errmax = 1024;
     const char *errstr;
     GHashTable *errconsts = build_errconsts();
     GList *cur_errconsts;
@@ -82,7 +82,7 @@ int main()
             printf("\t\t\t%s\n", (char *) cur_errconsts->data);
             cur_errconsts = g_list_next(cur_errconsts);
         }
-        errmax = errnr + 256;
+        errmax = errnr + 1024;
     }
     fprintf(stderr, "Stopped looking at %i\n", errnr);
     return fclose(stdout);
