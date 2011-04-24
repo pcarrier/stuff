@@ -27,7 +27,7 @@ void add_errconst(GHashTable * table, int nr, char *str)
     g_hash_table_insert(table, GINT_TO_POINTER(nr), list);
 }
 
-void GHashTable *build_errconsts()
+GHashTable *build_errconsts()
 {
     GHashTable *res = NULL;
     res = g_hash_table_new(g_direct_hash, g_direct_equal);
