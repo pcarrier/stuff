@@ -20,21 +20,23 @@
 
 #define UNKNOWN "Unknown error"
 
-void add_errconst(GHashTable *table, int nr, char *str) {
+void add_errconst(GHashTable * table, int nr, char *str)
+{
     GList *list = g_hash_table_lookup(table, GINT_TO_POINTER(nr));
-    list = g_list_append(list, str); /* g_strdup()ing the string doesn't help */
+    list = g_list_append(list, str);    /* g_strdup()ing the string doesn't help */
     g_hash_table_insert(table, GINT_TO_POINTER(nr), list);
 }
 
-GHashTable* build_errconsts() {
+void GHashTable *build_errconsts()
+{
     GHashTable *res = NULL;
     res = g_hash_table_new(g_direct_hash, g_direct_equal);
-    if(res) {
-        #undef ERRNO_EXISTS
-        #define ERRNO_EXISTS(nr,str) add_errconst(res, nr, str);
-        #include "errnos.h"
+    if (res) {
+#undef ERRNO_EXISTS
+#define ERRNO_EXISTS(nr,str) add_errconst(res, nr, str);
+#include "errnos.h"
 
-        #ifdef __linux__
+#ifdef __linux__
         /* Kernel-only errnos, from kernel.git/include/linux/errno.h */
         ERRNO_EXISTS(512, "ERESTARTSYS");
         ERRNO_EXISTS(513, "ERESTARTNOINTR");
@@ -51,7 +53,7 @@ GHashTable* build_errconsts() {
         ERRNO_EXISTS(528, "EJUKEBOX");
         ERRNO_EXISTS(529, "EIOCBQUEUED");
         ERRNO_EXISTS(530, "EIOCBRETRY");
-        #endif
+#endif
     }
     return res;
 }
@@ -66,15 +68,18 @@ int main()
     for (errnr = 0; errnr <= errmax; errnr++) {
         errstr = strerror(errnr);
 
-        has_strerror = strncmp(errstr, UNKNOWN, sizeof(UNKNOWN)-1) ? TRUE : FALSE;
-        cur_errconsts = (GList *) g_hash_table_lookup(errconsts, GINT_TO_POINTER(errnr));
+        has_strerror =
+            strncmp(errstr, UNKNOWN, sizeof(UNKNOWN) - 1) ? TRUE : FALSE;
+        cur_errconsts =
+            (GList *) g_hash_table_lookup(errconsts,
+                                          GINT_TO_POINTER(errnr));
 
-        if(!has_strerror && !cur_errconsts)
+        if (!has_strerror && !cur_errconsts)
             continue;
 
         printf("%i\t0x%x\t\"%s\"\n", errnr, errnr, errstr);
-        while(cur_errconsts) {
-            printf("\t\t\t%s\n", (char*) cur_errconsts->data);
+        while (cur_errconsts) {
+            printf("\t\t\t%s\n", (char *) cur_errconsts->data);
             cur_errconsts = g_list_next(cur_errconsts);
         }
         errmax = errnr + 256;
