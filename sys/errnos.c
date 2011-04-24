@@ -30,7 +30,9 @@ void add_errconst(GHashTable * table, int nr, char *str)
 GHashTable *build_errconsts()
 {
     GHashTable *res = NULL;
+
     res = g_hash_table_new(g_direct_hash, g_direct_equal);
+
     if (res) {
 #undef ERRNO_EXISTS
 #define ERRNO_EXISTS(nr,str) add_errconst(res, nr, str);
@@ -55,6 +57,7 @@ GHashTable *build_errconsts()
         ERRNO_EXISTS(530, "EIOCBRETRY");
 #endif
     }
+
     return res;
 }
 
@@ -62,9 +65,10 @@ int main()
 {
     gint errnr, errmax = 1024;
     const char *errstr;
-    GHashTable *errconsts = build_errconsts();
     GList *cur_errconst;
     gboolean has_strerror;
+    GHashTable *errconsts = build_errconsts();
+
     for (errnr = 0; errnr <= errmax; errnr++) {
         errstr = strerror(errnr);
 
@@ -84,6 +88,7 @@ int main()
         }
         errmax = errnr + 1024;
     }
+
     fprintf(stderr, "Stopped looking at %i\n", errnr);
     return fclose(stdout);
 }
