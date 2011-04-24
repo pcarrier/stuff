@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+grep -v '^#' sys/errnos.list |
+while read errno; do
+  echo -e "#ifdef $errno\n  [$errno] = \"$errno\",\n#endif"
+done > sys/errnos.h

@@ -4,3 +4,5 @@
 *.fuse
 *.so
 *~
+sys/errnos
+sys/errnos.h

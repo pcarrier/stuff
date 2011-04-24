@@ -14,18 +14,42 @@
 #include <string.h>
 #include <errno.h>
 
-int main(int argc, char **argv)
+#define UNKNOWN "Unknown error"
+#define STRINGIFY(S) #S
+
+/*
+while read errno; do
+  echo -e "#ifdef $errno\n  [$errno] = \"$errno\",\n#endif"
+done < errnos.list
+ */
+
+const char* const errconsts[] = {
+#include "errnos.h"
+
+#ifndef __MACH__
+#ifdef EWOULDBLOCK
+  [EWOULDBLOCK] = "EWOULDBLOCK",
+#endif
+#endif /* TARGET_OS_MAC */
+};
+
+int main()
 {
-    int errnr, errmax = 0;
-    if ((argc < 2) || (errmax = atoi(*(argv + 1))) <= 0) {
-        fprintf(stderr,
-                "Usage: %s errmax\n"
-                "	errmax the maximum errno to go through\n"
-                "	132 seems the max in Linux 2.6.35\n", *argv);
-        return EXIT_FAILURE;
-    }
+    int errnr, errmax = 1024;
+    const char *errstr = NULL;
+	const char *errconst = NULL;
     for (errnr = 0; errnr <= errmax; errnr++) {
-        printf("%i: [%s]\n", errnr, strerror(errnr));
+        errstr = strerror(errnr);
+        if(strncmp(errstr, UNKNOWN, sizeof(UNKNOWN)-1)) /* Found one */
+			errmax = errnr + 1024;
+		else
+			continue;
+		
+		errconst = errconsts[errnr];
+		errconst = (errconst && *errconst) ? errconst : "?";
+
+        printf("%4i\t0x%02x\t%s\t%s\n", errnr, errnr, errconst, errstr);
     }
-    return EXIT_SUCCESS;
+	fprintf(stderr, "Stopped looking at %i\n", errnr);
+	return fclose(stdout);
 }

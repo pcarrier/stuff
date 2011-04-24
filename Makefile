@@ -18,7 +18,6 @@ portable := \
 	mini/yes.portable \
 	mini/yes2.portable \
 	sys/big_swap.portable \
-	sys/errnos.portable \
 	sys/i_segv.portable \
 	sys/i_segv2.portable \
 	sys/mmap_doublecheck.portable \
@@ -32,8 +31,8 @@ others := \
 	sys/i_segv3.pthread \
 #	sys/nosymlinks.fuse
 
-all: $(portable) $(others)
-osx: $(portable)
+all: $(portable) $(others) sys/errnos
+osx: $(portable) sys/errnos
 
 %.linux: %.c
 	$(CC) $(CFLAGS) -o $@ $^
@@ -48,10 +47,16 @@ osx: $(portable)
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
 
 sys/errnos.h: sys/errnos.list
-	bash sys/errnos_generate.bash
+	bash sys/errnos.h.gen
+
+sys/errnos: sys/errnos.c sys/errnos.h
+	$(CC) $(CFLAGS) $(CPORTABLEFLAGS) -o $@ sys/errnos.c
 
 indent:
 	indent -kr -nut */*.c
 
 clean:
-	rm $(bins) *~ */*~
+	rm *~ */*~
+
+purge:
+	rm $(portable) $(others) sys/errnos
