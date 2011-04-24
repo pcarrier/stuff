@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <err.h>
 #include <unistd.h>
 #include <signal.h>
 
