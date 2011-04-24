@@ -3,7 +3,7 @@ CFLAGS += -Wall -Wextra -pedantic
 CPORTABLEFLAGS += -std=c99 -D_XOPEN_SOURCE -lm
 CPTHREADFLAGS += -lpthread
 
-bins := \
+portable := \
 	fun/bytes_to_chars.portable \
 	fun/mkpasswd.portable \
 	fun/nato.portable \
@@ -17,20 +17,23 @@ bins := \
 	mini/true.portable \
 	mini/yes.portable \
 	mini/yes2.portable \
+	sys/big_swap.portable \
 	sys/errnos.portable \
-	sys/hugepages_doublecheck.linux \
-	sys/hugepages_maxalloc.linux \
 	sys/i_segv.portable \
 	sys/i_segv2.portable \
-	sys/i_segv3.pthread \
 	sys/mmap_doublecheck.portable \
+	crap/mmap_and_wait.portable
+
+others := \
+	sys/hugepages_doublecheck.linux \
+	sys/hugepages_maxalloc.linux \
 	sys/sethostid.linux \
 	sys/wtfitf.linux \
-	crap/mmap_and_wait.portable \
-	crap/big_swap.portable \
+	sys/i_segv3.pthread \
 #	sys/nosymlinks.fuse
 
-all: $(bins)
+osx: $(portable)
+all: $(portable) $(others)
 
 %.linux: %.c
 	$(CC) $(CFLAGS) -o $@ $^
@@ -43,6 +46,9 @@ all: $(bins)
 
 %.fuse: %.c
 	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config --cflags --libs fuse)
+
+sys/errnos.h: sys/errnos.list
+	bash sys/errnos_generate.bash
 
 indent:
 	indent -kr -nut */*.c
