@@ -39,17 +39,21 @@ GHashTable* build_errconsts() {
 
 int main()
 {
-    gint errnr, errmax = 256;
+    gint errnr, errmax = 1024;     /* Kernel internal errnos at 512+ */
     const char *errstr;
     GHashTable *errconsts = build_errconsts();
     GList *cur_errconsts;
+    gboolean has_strerror;
     for (errnr = 0; errnr <= errmax; errnr++) {
         errstr = strerror(errnr);
-        if(!strncmp(errstr, UNKNOWN, sizeof(UNKNOWN)-1))
+
+        has_strerror = strncmp(errstr, UNKNOWN, sizeof(UNKNOWN)-1) ? TRUE : FALSE;
+        cur_errconsts = (GList *) g_hash_table_lookup(errconsts, GINT_TO_POINTER(errnr));
+
+        if(!has_strerror && !cur_errconsts)
             continue;
 
         printf("%i\t0x%x\t\"%s\"\n", errnr, errnr, errstr);
-        cur_errconsts = (GList *) g_hash_table_lookup(errconsts, GINT_TO_POINTER(errnr));
         while(cur_errconsts) {
             printf("\t\t\t%s\n", (char*) cur_errconsts->data);
             cur_errconsts = g_list_next(cur_errconsts);
