@@ -33,13 +33,32 @@ GHashTable* build_errconsts() {
         #undef ERRNO_EXISTS
         #define ERRNO_EXISTS(nr,str) add_errconst(res, nr, str);
         #include "errnos.h"
+
+        #ifdef __linux__
+        /* Kernel-only errnos, from kernel.git/include/linux/errno.h */
+        ERRNO_EXISTS(512, "ERESTARTSYS");
+        ERRNO_EXISTS(513, "ERESTARTNOINTR");
+        ERRNO_EXISTS(514, "ERESTARTNOHAND");
+        ERRNO_EXISTS(515, "ENOIOCTLCMD");
+        ERRNO_EXISTS(516, "ERESTART_RESTARTBLOCK");
+        ERRNO_EXISTS(521, "EBADHANDLE");
+        ERRNO_EXISTS(522, "ENOTSYNC");
+        ERRNO_EXISTS(523, "EBADCOOKIE");
+        ERRNO_EXISTS(524, "ENOTSUPP");
+        ERRNO_EXISTS(525, "ETOOSMALL");
+        ERRNO_EXISTS(526, "ESERVERFAULT");
+        ERRNO_EXISTS(527, "EBADTYPE");
+        ERRNO_EXISTS(528, "EJUKEBOX");
+        ERRNO_EXISTS(529, "EIOCBQUEUED");
+        ERRNO_EXISTS(530, "EIOCBRETRY");
+        #endif
     }
     return res;
 }
 
 int main()
 {
-    gint errnr, errmax = 1024;     /* Kernel internal errnos at 512+ */
+    gint errnr, errmax = 256;
     const char *errstr;
     GHashTable *errconsts = build_errconsts();
     GList *cur_errconsts;
