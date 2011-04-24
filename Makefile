@@ -32,8 +32,8 @@ others := \
 	sys/i_segv3.pthread \
 #	sys/nosymlinks.fuse
 
-osx: $(portable)
 all: $(portable) $(others)
+osx: $(portable)
 
 %.linux: %.c
 	$(CC) $(CFLAGS) -o $@ $^
