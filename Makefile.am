@@ -1,3 +1,1 @@
-bin_PROGRAMS = mkpasswd 
-
-mkpasswd_SOURCES = fun/mkpasswd.c
+SUBDIRS = auth diagnostics fs fun mem net sys

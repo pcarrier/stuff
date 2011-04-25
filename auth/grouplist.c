@@ -18,8 +18,14 @@
 
 void showgrp(const struct group *grp)
 {
-    if (!printf("%i:%s\n", grp->gr_gid, grp->gr_name))
+    char ** gr_mem;
+    if (!printf("%s:%s:%i:", grp->gr_name, grp->gr_passwd, grp->gr_gid))
         exit(2);
+    for (gr_mem = grp->gr_mem; **gr_mem != '\0'; gr_mem++)
+        if(!printf("%s,", gr_mem))
+            exit(3);
+    if(!puts(""))
+        exit(4);
 }
 
 int main(int argc, char **argv)
