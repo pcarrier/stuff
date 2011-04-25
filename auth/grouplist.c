@@ -37,15 +37,25 @@ int main(int argc, char **argv)
     const struct group *grp;
     FILE *grpfile;
 
-    if (argc > 1) {
+    if (argc > 2)
+        goto usage;
+
+    if (argc == 2) {
+#ifdef HAVE_FGETGRENT
         if (!(grpfile = fopen(argv[1], "r")))
             err(1, "could not open group file '%s'", argv[1]);
         while ((grp = fgetgrent(grpfile)))
             showgrp(grp);
+#else
+        goto usage;
+#endif
     } else {
         setgrent();
         while ((grp = getgrent()))
             showgrp(grp);
     }
-    return 0;
+    return EXIT_SUCCESS;
+
+  usage:
+    errx(EXIT_FAILURE, "Usage: %s [group-file]", argv[0]);
 }
