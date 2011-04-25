@@ -1,6 +1,6 @@
 - Get waf:
 
-    $ ./waf-prepare.sh
+    $ ./waf-prepare
 
 - Build and install that stuff! (some test programs stay in build/)
 
