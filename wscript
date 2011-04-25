@@ -28,10 +28,12 @@ linux_bins = [
 test_bins = [
   'fun/async/test-poll',
   'fun/async/test-select',
-  'sys/i_segv2',
-  'sys/i_segv3',
-  'sys/i_segv'
-  
+  'sys/i_segv',
+  'sys/i_segv2'
+]
+
+test_pthread_bins = [
+  'sys/i_segv3'
 ]
 
 mini_bins = [
@@ -58,7 +60,8 @@ def configure(cnf):
   cnf.load('compiler_c')
   cnf.check(header_name = 'linux/fiemap.h', mandatory=False) #features='c cprogram', mandatory=False)
   cnf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'], defines=['_XOPEN_SOURCE'], uselib_store='base')
-  cnf.check_cc(lib=['m'], uselib_store='M')
+  cnf.check_cc(lib=['m'], uselib_store='m')
+  cnf.check_cc(lib=['pthread'], uselib_store='pthread')
   cnf.check_cc(cflags=['-Werror'], uselib_store='strict')
   cnf.check_cfg(package='glib-2.0', args=['--cflags', '--libs'], use='portable', uselib_store='glib2')
   cnf.write_config_header('config.h')
@@ -66,9 +69,11 @@ def configure(cnf):
 def build(bld):
   bld(rule=bld.path.abspath()+'/sys/errnos.h.gen ${SRC} ${TGT} ${ROOT}', source='sys/errnos.list', target='errnos.h')
   for bin in portable_bins+mini_bins+test_bins:
-    bld.program(source=bin+'.c', target=bin, use=['base', 'strict', 'M'])
+    bld.program(source=bin+'.c', target=bin, use=['base', 'strict', 'm'])
+  for bin in linux_bins:
+    bld.program(source=bin+'.c', target=bin, use=['base', 'strict', 'm'])
   for lib in preload_libs:
     # I stopped trying to be strict here...
-    bld.shlib(source=lib+'.c', target=lib, use=['base', 'M'])
-  for bin in linux_bins:
-    bld.program(source=bin+'.c', target=bin, use=['base', 'strict', 'M'])
+    bld.shlib(source=lib+'.c', target=lib, use=['base', 'm'])
+  for bin in test_pthread_bins:
+    bld.program(source=bin+'.c', target=bin, use=['base', 'strict', 'pthread'])

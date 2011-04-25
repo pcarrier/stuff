@@ -12,8 +12,6 @@
  * Maintainer: Pierre Carrier <prc@redhat.com>
 **/
 
-#define __STDC_FORMAT_MACROS
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
@@ -23,11 +21,10 @@
 #include <linux/fiemap.h>
 #include <errno.h>
 #include <string.h>
-#include <inttypes.h>
 
 struct flags_descr {
     const char *name;
-    uint64_t mask;
+    long long unsigned mask;
 };
 
 static struct flags_descr known_flags[] = {
@@ -61,9 +58,9 @@ void print_extent(struct fiemap_extent *extent)
     struct flags_descr *cur_descr;
     int num_flags = 0;
     printf("0x%016llx\t0x%016llx\t0x%016llx\t",
-           (uint64_t)(extent->fe_logical),
-           (uint64_t)(extent->fe_physical),
-           (uint64_t)(extent->fe_length));
+           (long long unsigned int)(extent->fe_logical),
+           (long long unsigned int)(extent->fe_physical),
+           (long long unsigned int)(extent->fe_length));
     if (!flags) {
         printf("none\n");
         return;
