@@ -35,7 +35,9 @@ void showgrp(const struct group *grp)
 int main(int argc, char **argv)
 {
     const struct group *grp;
+#ifdef HAVE_FGETGRENT
     FILE *grpfile;
+#endif
 
     if (argc > 2)
         goto usage;

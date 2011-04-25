@@ -11,6 +11,10 @@
 
 #define _BSD_SOURCE
 
+#ifdef __APPLE__
+# define _DARWIN_C_SOURCE
+#endif
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>

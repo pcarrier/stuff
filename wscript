@@ -1,7 +1,8 @@
+# vim: ft=python
+from sys import platform
+
 APPNAME='stuff'
 VERSION='0.1'
-
-from sys import platform
 
 test_bins = [
   'fun/async/test-poll',
@@ -15,7 +16,7 @@ def options(opt):
 
 def configure(conf):
   conf.load('compiler_c')
-  conf.check_cc(header_name = 'linux/fiemap.h', mandatory=False)
+  # conf.check_cc(header_name = 'linux/fiemap.h', mandatory=False)
   conf.check_cc(function_name='fgetgrent', header_name="grp.h", mandatory=False)
   conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'], defines=['_XOPEN_SOURCE=500'], uselib_store='base')
   conf.check_cc(lib=['m'], uselib_store='m')
