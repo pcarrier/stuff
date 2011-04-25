@@ -1,13 +1,2 @@
 *~
 sys/errnos.h
-Makefile.in
-install-sh
-aclocal.m4
-autom4te.cache
-configure
-config.h.in
-depcomp
-missing
-*.log
-*.status
-*.scan
