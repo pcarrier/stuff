@@ -1,5 +1,7 @@
 - Get waf:
 
-    $ ./prepare.sh
+    $ ./waf-prepare.sh
 
-- 
+- Build and install that stuff! (some test programs stay in build/)
+
+   $ ./waf clean configure build install --prefix=$HOME/usr
