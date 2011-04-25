@@ -22,6 +22,10 @@
 /* 256MB */
 #define LENGTH (256UL*1024*1024)
 
+#ifndef SHM_HUGETLB
+# define SHM_HUGETLB 04000
+#endif
+
 /* Only ia64 requires this */
 #ifdef __ia64__
 #define ADDR (void *)(0x8000000000000000UL)

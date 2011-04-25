@@ -1,5 +1,5 @@
-#!/usr/bin/bash
-grep -v '^#' sys/errnos.list |
+#!/bin/bash
+grep -v '^#' $1 |
 while read errno; do
   echo -e "#ifdef $errno\n  ERRNO_EXISTS($errno, \"$errno\");\n#endif"
-done > sys/errnos.h
+done > $2

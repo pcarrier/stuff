@@ -25,7 +25,7 @@ static int print(char *str, int parse_backslashes)
                 ESCAPED_REGISTER('\\', '\\');
                 ESCAPED_REGISTER('a', '\a');
                 ESCAPED_REGISTER('b', '\b');
-                ESCAPED_REGISTER('e', '\e');
+                ESCAPED_REGISTER('e', (char)27);
                 ESCAPED_REGISTER('f', '\f');
                 ESCAPED_REGISTER('n', '\n');
                 ESCAPED_REGISTER('r', '\r');

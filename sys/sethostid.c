@@ -9,10 +9,13 @@
  * Maintainer: Pierre Carrier <prc@redhat.com>
 **/
 
+#define _BSD_SOURCE
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <err.h>
 #include <string.h>             /* required by strerror */
 
 int main(int argc, char **argv)
@@ -23,7 +26,7 @@ int main(int argc, char **argv)
     if (argc != 2)
         goto err;
 
-    length = strnlen(argv[1], 9);
+    length = strlen(argv[1]);
 
     if (length != 8 || sscanf(argv[1], "%x", &new_hostid) != 1)
         goto err;
@@ -39,8 +42,7 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 
   err:
-    fprintf(stderr, "Usage: %s id\n"
+    errx(EXIT_FAILURE, "Usage: %s id\n"
             "id is an 8-char hexadecimal representation, "
             "as in the output of 'hostid'.\n", argv[0]);
-    return EXIT_FAILURE;
 }

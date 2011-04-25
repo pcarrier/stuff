@@ -24,6 +24,10 @@
 #define PRECISION (unsigned long)(1<<20)
 #define MB (unsigned long)(1<<20)
 
+#ifndef SHM_HUGETLB
+# define SHM_HUGETLB 04000
+#endif
+
 /* Only ia64 requires this */
 #ifdef __ia64__
 #define ADDR (void *)(0x8000000000000000UL)

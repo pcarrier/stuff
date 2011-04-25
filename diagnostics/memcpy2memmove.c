@@ -20,7 +20,6 @@
  * Warning: This will impact performance!
 **/
 
-#define _GNU_SOURCE 1
 #include <string.h>
 #include <stdio.h>
 

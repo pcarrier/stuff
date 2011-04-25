@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <poll.h>
 
-int main(int argc, char **argv)
+int main()
 {
     int ret, fd_flags;
     char buff[1024];

@@ -31,13 +31,14 @@
 #include <sys/param.h>
 #include <dlfcn.h>
 
+typedef ssize_t readlink_t (const char *, char *, size_t);
+
 ssize_t readlink(const char *path, char *buf, size_t bufsiz)
 {
     char ibuf[PATH_MAX];
     char *result = ibuf;
     ssize_t rc;
-    ssize_t(*orig_readlink) (const char *path, char *buf, size_t bufsiz) =
-        dlsym(RTLD_NEXT, "readlink");
+    readlink_t * orig_readlink = (readlink_t *) dlsym(RTLD_NEXT, "readlink");
     rc = orig_readlink(path, ibuf, bufsiz);
     if (rc < 0)
         goto done;

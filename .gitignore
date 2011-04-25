@@ -1,2 +1,7 @@
+waf
+.waf-1*
 *~
+*.swp
+.lock-w*
 sys/errnos.h
+build/
