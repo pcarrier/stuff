@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-static inline void escape(char *to, char *from)
+static void escape(char *to, char *from)
 {
     int backslashed, attempted_backslashed, max_remaining_digits;
     size_t jump;

@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static inline int print(char *str, int parse_backslashes)
+static int print(char *str, int parse_backslashes)
 {
     char *remaining = str, *cur_pos = str, *end = str + strlen(str);
     int backslashed, attempted_backslashed, max_remaining_digits;

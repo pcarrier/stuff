@@ -153,7 +153,7 @@ static const char *NAMES[] = {
     "delete"                    /* 0x7f */
 };
 
-static inline void printc(char c)
+static void printc(char c)
 {
     if (c >= 'A' && c < 'Z') {
         if (printf("uppercase %s, ", NAMES[c - 'A' + 'a']) < 0)
