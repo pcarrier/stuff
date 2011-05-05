@@ -38,10 +38,14 @@ int main(int argc, char **argv)
     if ((long) new_hostid == old_hostid)
         return EXIT_SUCCESS;
 
+#ifdef __APPLE__
+    sethostid(new_hostid);
+#else
     if (sethostid(new_hostid) < 0) {
         fprintf(stderr, "Failed with %u (%s)\n", errno, strerror(errno));
         return EXIT_FAILURE;
     }
+#endif
 
     return EXIT_SUCCESS;
 
