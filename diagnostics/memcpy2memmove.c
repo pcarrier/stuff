@@ -22,12 +22,9 @@
 
 #include <string.h>
 #include <stdio.h>
-
-#ifdef DONTFIX
 #include <dlfcn.h>
-#endif
 
-void *memcpy(void *dest, const void *src, size_t n)
+void * memcpy(void *dest, const void *src, size_t n)
 {
 #ifdef DONTFIX
     void *(*orig_memcpy) (void *dest, const void *src, size_t n) =
@@ -41,7 +38,6 @@ void *memcpy(void *dest, const void *src, size_t n)
 #endif
 #ifdef DONTFIX
     return (orig_memcpy(dest, src, n));
-#else
-    return (memmove(dest, src, n));
 #endif
+    return (memmove(dest, src, n));
 }
