@@ -58,9 +58,9 @@ void print_extent(struct fiemap_extent *extent)
     struct flags_descr *cur_descr;
     int num_flags = 0;
     printf("0x%016llx\t0x%016llx\t0x%016llx\t",
-           (long long unsigned int)(extent->fe_logical),
-           (long long unsigned int)(extent->fe_physical),
-           (long long unsigned int)(extent->fe_length));
+           (long long unsigned int) (extent->fe_logical),
+           (long long unsigned int) (extent->fe_physical),
+           (long long unsigned int) (extent->fe_length));
     if (!flags) {
         printf("none\n");
         return;

@@ -22,13 +22,13 @@
 
 void showgrp(const struct group *grp)
 {
-    char ** gr_mem;
+    char **gr_mem;
     if (!printf("%s:%s:%i:", grp->gr_name, grp->gr_passwd, grp->gr_gid))
         exit(2);
     for (gr_mem = grp->gr_mem; **gr_mem != '\0'; gr_mem++)
-        if(!printf("%s,", *gr_mem))
+        if (!printf("%s,", *gr_mem))
             exit(3);
-    if(!puts(""))
+    if (!puts(""))
         exit(4);
 }
 

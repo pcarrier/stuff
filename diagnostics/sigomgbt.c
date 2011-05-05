@@ -15,18 +15,19 @@
 
 #define TRACE_MAX_LEN 1024
 
-static void segv_hdr(int sig) {
+static void segv_hdr(int sig)
+{
     void *trace[TRACE_MAX_LEN];
     struct sigaction act;
     int trace_size = backtrace(trace, TRACE_MAX_LEN);
 
     backtrace_symbols_fd(trace, trace_size, STDERR_FILENO);
 
-    sigemptyset (&act.sa_mask);
+    sigemptyset(&act.sa_mask);
     act.sa_flags = SA_NODEFER | SA_ONSTACK | SA_RESETHAND;
     act.sa_handler = SIG_DFL;
 
-    sigaction (sig, &act, NULL);
+    sigaction(sig, &act, NULL);
     kill(getpid(), sig);
 }
 
@@ -36,7 +37,7 @@ void init(void)
     struct sigaction act;
     sigemptyset(&act.sa_mask);
     act.sa_flags = SA_NODEFER | SA_ONSTACK | SA_RESETHAND | SA_SIGINFO;
-    act.sa_sigaction = segv_hdr;
+    act.sa_sigaction = (void (*)(int, siginfo_t *, void *)) segv_hdr;
     sigaction(SIGSEGV, &act, NULL);
     sigaction(SIGBUS, &act, NULL);
     sigaction(SIGFPE, &act, NULL);

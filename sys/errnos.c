@@ -83,7 +83,8 @@ int main()
 
         printf("%i\t0x%x\t\"%s\"\n", errnr, errnr, errstr);
         while (cur_errconst) {
-            printf("%i\t0x%x\t%s\n", errnr, errnr, (char *) cur_errconst->data);
+            printf("%i\t0x%x\t%s\n", errnr, errnr,
+                   (char *) cur_errconst->data);
             cur_errconst = g_list_next(cur_errconst);
         }
         errmax = errnr + 1024;

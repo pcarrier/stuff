@@ -51,6 +51,6 @@ int main(int argc, char **argv)
 
   err:
     errx(EXIT_FAILURE, "Usage: %s id\n"
-            "id is an 8-char hexadecimal representation, "
-            "as in the output of 'hostid'.\n", argv[0]);
+         "id is an 8-char hexadecimal representation, "
+         "as in the output of 'hostid'.\n", argv[0]);
 }

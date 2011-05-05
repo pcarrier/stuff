@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 
-void * memcpy(void *dest, const void *src, size_t n)
+void *memcpy(void *dest, const void *src, size_t n)
 {
 #ifdef DONTFIX
     void *(*orig_memcpy) (void *dest, const void *src, size_t n) =
