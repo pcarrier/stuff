@@ -21,6 +21,7 @@ def configure(conf):
   conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'],
     defines=['_XOPEN_SOURCE=500'], uselib_store='base')
   conf.check_cc(lib=['m'], uselib_store='m')
+  conf.check_cc(lib=['dl'], uselib_store='dl')
   conf.check_cc(lib=['pthread'], uselib_store='pthread')
   conf.check_cc(cflags=['-Werror'], uselib_store='strict')
   conf.check_cfg(package='glib-2.0', args=['--cflags', '--libs'],
@@ -58,7 +59,7 @@ def build(build):
 
   for lib in ld_libs:
     # I stopped trying to be strict here...
-    build.shlib(source=lib+'.c', target=lib, use=['base', 'm'])
+    build.shlib(source=lib+'.c', target=lib, use=['base', 'm', 'dl'])
 
   # pthread stuff
   for bin in ['sys/i_segv3']:
