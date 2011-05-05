@@ -21,7 +21,7 @@ def configure(conf):
   conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'],
     defines=['_XOPEN_SOURCE=500'], uselib_store='base')
   conf.check_cc(lib=['m'], uselib_store='m')
-  conf.check_cc(lib=['dl'], uselib_store='dl')
+  conf.check_cc(lib=['dl'], defines=['__USE_GNU'], uselib_store='dl')
   conf.check_cc(lib=['pthread'], uselib_store='pthread')
   conf.check_cc(cflags=['-Werror'], uselib_store='strict')
   conf.check_cfg(package='glib-2.0', args=['--cflags', '--libs'],
