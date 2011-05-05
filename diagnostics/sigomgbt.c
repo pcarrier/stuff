@@ -7,6 +7,18 @@
  * the above copyright notice and this permission notice appear in all copies.
  *
  * Maintainer: Pierre Carrier <prc@redhat.com>
+ *
+ * It is worth noting that the signal handlers will be put in place before
+ * the program starts.
+ * This means that if the application uses its own handler for a signal,
+ * this library will not interfere. On the other end, it also means that you
+ * lose the backtrace.
+ *
+ * TODO: Offer an alternative option to wrap the program's signal handlers:
+ *  - Wrap sigaction to store the new signal handler in a static table on a
+ *    change, but maintain this one in place;
+ *  - Call it after printing the backtrace.
+ * I guess it could have some nasty side effects in certain cases.
 **/
 
 #include <unistd.h>
