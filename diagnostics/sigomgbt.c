@@ -18,9 +18,10 @@
 static void segv_hdr(int sig) {
     void *trace[TRACE_MAX_LEN];
     struct sigaction act;
+    int trace_size = backtrace(trace, TRACE_MAX_LEN);
 
-    backtrace_symbols_fd(trace, TRACE_MAX_LEN, STDERR_FILENO);
-    
+    backtrace_symbols_fd(trace, trace_size, STDERR_FILENO);
+
     sigemptyset (&act.sa_mask);
     act.sa_flags = SA_NODEFER | SA_ONSTACK | SA_RESETHAND;
     act.sa_handler = SIG_DFL;
