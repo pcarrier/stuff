@@ -21,24 +21,24 @@ def configure(conf):
   conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'],
     defines=['_XOPEN_SOURCE=500'], uselib_store='base')
   conf.check_cc(lib=['m'], uselib_store='m')
-  conf.check_cc(lib=['dl'], defines=['__USE_GNU'], uselib_store='dl')
+  conf.check_cc(lib=['dl'], defines=['_GNU_SOURCE'], uselib_store='dl')
   conf.check_cc(lib=['pthread'], uselib_store='pthread')
   conf.check_cc(cflags=['-Werror'], uselib_store='strict')
   conf.check_cfg(package='glib-2.0', args=['--cflags', '--libs'],
     use='portable', uselib_store='glib2')
-  
+
 common_use=['base', 'strict', 'm']
 
 def build(build):
-  build(rule=build.path.abspath()+'/sys/errnos.h.gen ${SRC} ${TGT} ${ROOT}',
-    source='sys/errnos.list', target='errnos.h')
+  build(rule=build.path.abspath()+'/sys/errnos.h.gen ${SRC} ${TGT}',
+    source='sys/errnos.list', target='../sys/errnos.h')
 
   # The basics, should be on any recent Unix system, and we're strict :)
   for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
     'mem/eatmemory', 'mem/mmapdoublecheck', 'mem/mmapnwait',
     'sys/sethostid', 'auth/grouplist']:
     build.program(source=bin+'.c', target=bin, use=common_use)
-  
+
   # mini stuff, shouldn't invade your PATH ever unless you're completely mad
   for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
     'mini/sync', 'mini/true', 'mini/yes', 'mini/yes2']:

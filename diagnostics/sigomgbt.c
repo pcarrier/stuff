@@ -15,7 +15,7 @@
 
 #define TRACE_MAX_LEN 1024
 
-static void segv_hdr(int sig, siginfo_t *info, void *secret) {
+static void segv_hdr(int sig) {
     void *trace[TRACE_MAX_LEN];
     struct sigaction act;
 
