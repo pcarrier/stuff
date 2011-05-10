@@ -35,7 +35,6 @@ def build(build):
 
   # The basics, should be on any recent Unix system, and we're strict :)
   for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
-    'mem/eatmemory', 'mem/mmapdoublecheck', 'mem/mmapnwait',
     'sys/sethostid', 'auth/grouplist']:
     build.program(source=bin+'.c', target=bin, use=common_use)
 
@@ -71,5 +70,6 @@ def build(build):
 
   # Test stuff (not installed)
   for bin in ['fun/async/test-poll', 'fun/async/test-select',
-    'sys/i_segv', 'sys/i_segv2']:
+    'sys/i_segv', 'sys/i_segv2', 'mem/eatmemory',
+    'mem/mmapdoublecheck', 'mem/mmapnwait']:
     build.program(source=bin+'.c', target=bin, use=common_use, install_path=None)
