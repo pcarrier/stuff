@@ -16,7 +16,7 @@ from time import time, sleep
 from sys import stdin, stdout, stderr
 from fcntl import fcntl, F_GETFL, F_SETFL
 from select import select
-from os import read, write, O_NONBLOCK
+from os import read, write, close, O_NONBLOCK
 
 in_f, out_f = stdin, stdout
 in_fd, out_fd = in_f.fileno(), out_f.fileno()
@@ -49,6 +49,15 @@ def blocking(fd, blocking):
     fl |= O_NONBLOCK
   fcntl(fd, F_SETFL, fl)
 
+def leave():
+  try:
+    close(in_fd)
+    close(out_fd)
+  except:
+    print >> stderr, "Could not close file descriptors."
+    exit(3)
+  exit(0)
+
 def loop():
   allowed_per_iter = int(bandwidth * time_resolution)
 
@@ -64,7 +73,7 @@ def loop():
       chunk = read(in_fd, min(max_chunk, bytes_still_writeable))
 
       just_read = len(chunk)
-      if(just_read == 0): exit(0) # EOF
+      if(just_read == 0): leave() # EOF
       bytes_still_writeable -= just_read
 
       try: written = write(out_fd, chunk)
@@ -76,8 +85,8 @@ def loop():
     iter_start = iter_end
 
 if __name__ == "__main__":
-  blocking(in_fd, True)  # read often from stdin
-  blocking(in_fd, False) # but block on write
+  blocking(in_fd, False) # read often from stdin
+  blocking(out_fd, True) # but block on write
   
   try:
     opts, args = getopt(argv[1:], 'hr:b:m:')
