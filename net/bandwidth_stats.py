@@ -12,7 +12,7 @@
 # Maintainer: Pierre Carrier <prc@redhat.com>
 #
 # TODO:
-# - Use powers of 1000 instead of 1024 for packets
+# - Use powers of 1000 instead of 1024 for packet counts
 
 import getopt, sys, time
 
@@ -57,7 +57,7 @@ def main():
                 delay = float(value)
             except:
                 print >> sys.stderr, "Could not parse the delay"
-		sys.exit(2)
+                sys.exit(2)
         elif opt == '-h':
             usage()
             sys.exit(0)
@@ -67,7 +67,7 @@ def main():
 
     for itf in interfaces:
         stats[itf] = read_stats(itf)
-    
+
     while True:
         time.sleep(delay)
         for itf in interfaces:
