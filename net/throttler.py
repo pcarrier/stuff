@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.5
-# Primitive throttler
+# Primitive throttler to cap the bandwidth (between stdin and stdout)
+# Use socat for more fun!
 #
 # Copyright (c) 2011, Pierre Carrier <pierre@gcarrier.fr>
 # Permission to use, copy, modify, and/or distribute this software
@@ -17,6 +18,7 @@ from sys import stdin, stdout, stderr
 from fcntl import fcntl, F_GETFL, F_SETFL
 from select import select
 from os import read, write, close, O_NONBLOCK
+from errno import EAGAIN, EWOULDBLOCK
 
 in_f, out_f = stdin, stdout
 in_fd, out_fd = in_f.fileno(), out_f.fileno()
@@ -70,7 +72,15 @@ def loop():
     while(time() < iter_end and bytes_still_writeable > 0):
 
       select([in_fd],[],[]) # Passive wait for data/EOF
-      chunk = read(in_fd, min(max_chunk, bytes_still_writeable))
+      try:
+        chunk = read(in_fd, min(max_chunk, bytes_still_writeable))
+      except OSError, e:
+        # AFAIK should never happen after our select(),
+        # unless someone else is reading from stdin too
+        if e.errno in [EAGAIN, EWOULDBLOCK]:
+          continue
+        else:
+          raise
 
       just_read = len(chunk)
       if(just_read == 0): leave() # EOF
