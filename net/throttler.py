@@ -97,7 +97,7 @@ def loop():
 if __name__ == "__main__":
   blocking(in_fd, False) # read often from stdin
   blocking(out_fd, True) # but block on write
-  
+
   try:
     opts, args = getopt(argv[1:], 'hr:b:m:')
   except GetoptError, err:
