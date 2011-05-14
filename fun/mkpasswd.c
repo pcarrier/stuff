@@ -26,6 +26,7 @@
 #include <string.h>
 #include <math.h>
 #include <err.h>
+#include <limits.h>
 
 char *default_chars = "bcdefghijklnoprstuvx"
 /* Uppercase is very annoying on many handheld devices.
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
     chars_required =
         ceill((long double) entropy_required / entropy_per_char);
     chars_per_long =
-        floorl((long double) (sizeof(unsigned long int) * 8) /
+        floorl((long double) (sizeof(unsigned long int) * CHAR_BIT) /
                entropy_per_char);
     fprintf(stderr,
             "%i bits requested, %i different chars, "
@@ -97,7 +98,7 @@ int main(int argc, char **argv)
                 read_char = fgetc(random_file);
                 if (read_char == EOF)
                     goto fd_err;
-                random_long <<= sizeof(unsigned char) * 8;
+                random_long <<= sizeof(unsigned char) * CHAR_BIT;
                 random_long += (unsigned char) read_char;
             }
         }
