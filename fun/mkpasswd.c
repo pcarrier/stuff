@@ -98,7 +98,7 @@ int main(int argc, char **argv)
                 read_char = fgetc(random_file);
                 if (read_char == EOF)
                     goto fd_err;
-                random_long <<= sizeof(unsigned char) * CHAR_BIT;
+                random_long <<= sizeof(char) * CHAR_BIT;
                 random_long += (unsigned char) read_char;
             }
         }
