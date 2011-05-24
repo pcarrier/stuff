@@ -14,8 +14,10 @@ int main()
     fds.fd = 0;
     fds.events = POLLIN;
 
-    fd_flags = fcntl(0, F_GETFL);
-    fcntl(0, F_SETFD, fd_flags | O_NONBLOCK);
+    if((fd_flags = fcntl(0, F_GETFL)) < 0)
+            err(1, "F_GETFL");
+    if(fcntl(0, F_SETFD, fd_flags | O_NONBLOCK) < 0)
+            err(1, "F_SETFD");
 
     for (;;) {
         ret = poll(&fds, 1, 1000);
