@@ -31,13 +31,9 @@ static void vert_border(seven_seg_size window) {
 int main (int argc, char const **argv)
 {
     seven_seg_size available, used;
-    int cur_line, length;
+    int cur_line, cur_col, length;
     const char *msg;
-    char **display;
-    #ifdef COLOR
-    char cur_char;
-    int cur_col;
-    #endif
+    char cur_char, **display;
 
     if(argc != 4)
         goto syntax;

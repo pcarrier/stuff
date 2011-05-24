@@ -8,6 +8,11 @@
  * copies.
 **/
 
+/* for SIGWINCH */
+#ifdef __APPLE__
+# define _DARWIN_C_SOURCE
+#endif
+
 #include <err.h>
 #include <errno.h>
 #include <fcntl.h>

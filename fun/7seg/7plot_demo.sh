@@ -11,16 +11,16 @@
 
 
 show_date() {
-        ./7seg 7 80 "$(date +"%Y.%m.%d")" | sed 's/^/                                                                      /'
+        7plot 7 80 "$(date +"%Y.%m.%d")" | sed 's/^/                                                                      /'
 }
 
 while true; do
         clear
-        ./7seg 15 150 "$(date +"%H:%M:%S")"
+        7plot 15 150 "$(date +"%H:%M:%S")"
         show_date
         sleep 1
         clear
-        ./7seg 15 150 "$(date +"%H:%M;%S")"
+        7plot 15 150 "$(date +"%H:%M;%S")"
         show_date
         sleep 1
 done
