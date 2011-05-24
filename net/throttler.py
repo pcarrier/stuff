@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
 # Primitive throttler to cap the bandwidth (between stdin and stdout)
 # Use socat for more fun!
 #
