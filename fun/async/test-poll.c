@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <poll.h>
+#include <err.h>
 
 int main()
 {
