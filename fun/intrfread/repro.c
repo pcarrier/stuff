@@ -21,8 +21,8 @@ int main(int argc, char **argv)
     FILE *fd;
     signal(SIGALRM, hello);
     if (argc != 5) {
-	printf("Usage: %s path elems elemsize delay", argv[0]);
-	return EXIT_FAILURE;
+        printf("Usage: %s path elems elemsize delay", argv[0]);
+        return EXIT_FAILURE;
     }
     path = argv[1];
     elems = (size_t) atoi(argv[2]);
@@ -43,10 +43,10 @@ int main(int argc, char **argv)
     assert(rsize > 0);
 #else
     do {
-	rsize = fread(buff, elemsize, elems, fd);
+        rsize = fread(buff, elemsize, elems, fd);
     } while (ferror(fd) && errno == EINTR);
 #endif
     printf("read %i = %i * %i\n", (int) rsize, (int) elems,
-	   (int) elemsize);
+           (int) elemsize);
     return EXIT_SUCCESS;
 }
