@@ -77,3 +77,6 @@ def build(build):
     'sys/i_segv', 'sys/i_segv2', 'mem/eatmemory',
     'mem/mmapdoublecheck', 'mem/mmapnwait']:
     build.program(source=bin+'.c', target=bin, use=common_use, install_path=None)
+
+  # Python scripts
+  build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler')

@@ -2,7 +2,7 @@
 # Bandwidth statistics for Linux interfaces
 #
 # Example:
-# bandwith_stats.py -d 5 lo eth1 eth3
+# bwstats -d 5 lo eth1 eth3
 #
 # Copyright (c) 2010, Red Hat Inc.
 # Permission to use, copy, modify, and/or distribute this software
