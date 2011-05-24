@@ -68,6 +68,10 @@ def build(build):
   for bin in ['sys/errnos']:
     build.program(source=bin+'.c', target=bin, use=['base', 'strict', 'glib2'])
 
+  # Cool 7-segment stuff
+  for bin in ['fun/7seg/7plot', 'fun/7seg/7clock']:
+    build.program(source=[bin+'.c','fun/7seg/7seg.c'], target=bin, use=common_use)
+
   # Test stuff (not installed)
   for bin in ['fun/async/test-poll', 'fun/async/test-select',
     'sys/i_segv', 'sys/i_segv2', 'mem/eatmemory',
