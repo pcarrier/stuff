@@ -211,6 +211,7 @@ int main()
             switch (event) {
             case WINDOW_WAS_RESIZED:
                 update_window(&window, &clock_text);
+                display_time(&window, clock_text);
                 break;
             case NEW_TIME_TO_DISPLAY:
                 display_time(&window, clock_text);
