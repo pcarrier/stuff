@@ -2,11 +2,14 @@
 
 # Terminal locker relying on a PIN file to avoid PAM/setuid
 #
+# THIS IS A PROTOTYPE.
+# Don't expect a quickly hacked Python script to be resilient.
+#
 # Copyright (c) 2011, Pierre Carrier <pierre@gcarrier.fr>
 # Permission to use, copy, modify, and/or distribute this software
 # for any purpose with or without fee is hereby granted, provided that
 # the above copyright notice and this permission notice appear in all copies.
-
+#
 # TODO: A SUID version that
 # 1) Uses pam, of course
 # 2) Is "resilient to its own crashes" thanks to:
