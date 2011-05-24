@@ -1,12 +1,21 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env python
 # Terminal locker relying on a PIN file to avoid PAM/setuid
 #
 # Copyright (c) 2011, Pierre Carrier <pierre@gcarrier.fr>
 # Permission to use, copy, modify, and/or distribute this software
 # for any purpose with or without fee is hereby granted, provided that
 # the above copyright notice and this permission notice appear in all copies.
+
+# TODO: A SUID version that
+# 1) Uses pam, of course
+# 2) Is "resilient to its own crashes" thanks to:
+# 2.1) A mechanism like 'stty -isig' to disable keyboard control of
+#      the underlying processes
+# 2.2) A SIGSTOP of the PPID
+# 3) Traps a max of signals, including segfaults, and
+#    handles all errors no matter what (worst case notify & discard)
+
 
 from getopt import getopt, GetoptError
 from getpass import getpass
