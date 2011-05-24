@@ -40,14 +40,16 @@ typedef char event_t;
 
 enum {
     WINDOW_WAS_RESIZED = 0x42,
-    NEW_TIME_TO_DISPLAY = 0x43
+    NEW_TIME_TO_DISPLAY = 0x43,
+    WANTS_TO_LEAVE = 0x44
 };
 
 struct {
     event_t window_was_resized;
     event_t new_time_to_display;
+    event_t wants_to_leave;
 } events = {
-WINDOW_WAS_RESIZED, NEW_TIME_TO_DISPLAY};
+WINDOW_WAS_RESIZED, NEW_TIME_TO_DISPLAY, WANTS_TO_LEAVE};
 
 
 static void notify_event(event_t event)
@@ -67,7 +69,13 @@ static void new_time(int sig)
     sig = sig;
 }
 
-void set_non_blocking(int fd)
+static void leaving(int sig)
+{
+    notify_event(events.wants_to_leave);
+    sig = sig;
+}
+
+static void set_non_blocking(int fd)
 {
     int fd_flags;
     if ((fd_flags = fcntl(fd, F_GETFL)) < 0)
@@ -76,7 +84,7 @@ void set_non_blocking(int fd)
         err(1, "F_SETFD %i", fd);
 }
 
-void update_window(seven_seg_size * window, char ***clock_text_ptr)
+static void update_window(seven_seg_size * window, char ***clock_text_ptr)
 {
     int cur_line;
     struct winsize term_win;
@@ -90,7 +98,7 @@ void update_window(seven_seg_size * window, char ***clock_text_ptr)
     }
 
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &term_win))
-        err(6, "getting the window size");
+        err(7, "getting the window size");
     window->height = term_win.ws_row;
     window->width = term_win.ws_col;
 
@@ -107,10 +115,10 @@ void update_window(seven_seg_size * window, char ***clock_text_ptr)
     printf("\033[2J");
     return;
   alloc_fail:
-    err(7, "alloc window");
+    err(8, "alloc window");
 }
 
-void display_time(seven_seg_size * window, char **clock_text)
+static void display_time(seven_seg_size * window, char **clock_text)
 {
     time_t raw_time;
     struct tm *timeinfo;
@@ -175,10 +183,6 @@ int main()
         err(1, "self-pipe creation");
     set_non_blocking(self_pipe[1]);
 
-    /* initial window size & display */
-    update_window(&window, &clock_text);
-    display_time(&window, clock_text);
-
     /* signal handlers in place */
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_SIGINFO;
@@ -188,6 +192,9 @@ int main()
     sa.sa_handler = new_time;
     if (sigaction(SIGALRM, &sa, NULL) < 0)
         err(4, "handling SIGARLM");
+    sa.sa_handler = leaving;
+    if (sigaction(SIGINT, &sa, NULL) < 0)
+        err(6, "handling SIGINT");
 
     /* only poll on the reading end of self_pipe */
     polled_fd.fd = self_pipe[0];
@@ -198,6 +205,11 @@ int main()
     every_sec.it_value.tv_sec = 1;
     every_sec.it_interval.tv_sec = 1;
     setitimer(ITIMER_REAL, &every_sec, NULL);
+
+    /* initial window display */
+    printf("\033[?25l"); /* hide cursor */
+    update_window(&window, &clock_text);
+    display_time(&window, clock_text);
 
     for (;;) {
         if (poll(&polled_fd, 1, -1 /* block forever */ ) < 0
@@ -216,8 +228,10 @@ int main()
             case NEW_TIME_TO_DISPLAY:
                 display_time(&window, clock_text);
                 break;
+            case WANTS_TO_LEAVE:
+                printf("\033[?25h"); /* show cursor */
+                exit(0);
             }
         }
     }
-    return 0;
 }
