@@ -12,46 +12,55 @@
 #
 # TODO: A SUID version that
 # 1) Uses pam, of course
-# 2) Is "resilient to its own crashes" thanks to:
-# 2.1) A mechanism like 'stty -isig' to disable keyboard control of
-#      the underlying processes
-# 2.2) A SIGSTOP of the PPID
-# 3) Traps a max of signals, including segfaults, and
+# 2) Traps a max of signals, including segfaults, and
 #    handles all errors no matter what (worst case notify & discard)
 
 
 from getopt import getopt, GetoptError
 from getpass import getpass
 from hashlib import sha256
-from os import getuid, stat, chmod, ttyname
+from os import getuid, stat, chmod, isatty, ttyname, kill, getppid
 from os.path import join, isfile, exists
 from pwd import getpwnam, getpwuid
-from signal import signal, SIG_IGN, SIGINT, SIGTSTP, SIGQUIT
+from signal import signal, SIG_IGN, SIGINT, SIGTSTP, SIGQUIT, SIGSTOP, SIGCONT
 from socket import gethostname
 from sys import stdout, stderr, argv, exit
+from termios import tcgetattr, tcsetattr, ISIG, TCSANOW
 from time import sleep
 
-def ignore_signals():
-  """The process will ignore keyboard signals"""
-  for sig_number in (SIGINT, SIGTSTP, SIGQUIT):
-    signal(sig_number, SIG_IGN)
+def block_everything(blocking):
+  """If blocking, make sure we drop signals, and keep the tty blocked if crash; if not undo"""
+  if blocking:
+    # Just in case
+    for sig_number in (SIGINT, SIGTSTP, SIGQUIT):
+      signal(sig_number, SIG_IGN)
+  attrs = tcgetattr(stdout.fileno())
+  if blocking:
+    attrs[3] &= ~ISIG
+  else:
+    attrs[3] |= ISIG
+  tcsetattr(stdout.fileno(), TCSANOW, attrs)
+  if blocking:
+    kill(getppid(), SIGSTOP)
+  else:
+    kill(getppid(), SIGCONT)
 
 def get_pin(pw):
-  return(getpass('%s@%s locked by %s. PIN? ' % (gethostname(), ttyname(stdout.fileno()), pw.pw_name)))
+  return getpass('%s@%s locked by %s. PIN? ' % (gethostname(), ttyname(stdout.fileno()), pw.pw_name))
 
 def pin_path(pw):
   return join(pw.pw_dir, '.pinlock')
   
 def read_pinhash(pw):
   pinfilename = pin_path(pw)
-  if (not exists(pinfilename)):
+  if not exists(pinfilename):
     print >> stderr, 'No pin file (%s) found. Let\'s create one!' % pinfilename
     set_pin(pw)
     exit(0)
-  if (not isfile(pinfilename)):
+  if not isfile(pinfilename):
     print >> stderr, "%s is not a file" % pw_file
     exit(2)
-  if(stat(pinfilename).st_mode & 077):
+  if stat(pinfilename).st_mode & 077:
     print >> stderr, 'You shouldn\'t allow anyone else but you to do anything with %s. please "chmod go= %s"' % (pinfilename, pinfilename)
     exit(3)
   try:
@@ -63,7 +72,7 @@ def read_pinhash(pw):
 def set_pin(pw):
   pin  = getpass('Please enter the desired PIN: ')
   pin_confirm = getpass('Please confirm the desired PIN: ')
-  if(pin != pin_confirm):
+  if pin != pin_confirm:
     print >> stderr, 'The PINs differ!'
     exit(5)
   pinfilename = pin_path(pw)
@@ -105,7 +114,12 @@ def main():
     elif opt == '-i':
       fullscreen = False
 
-  ignore_signals()
+  if not isatty(stdout.fileno()):
+    print >> stderr, 'Not a tty'
+    exit(8)
+
+  # We'll be enforcing a password
+  block_everything(True)
   password = None
   pinhash = read_pinhash(pw)
 
@@ -117,15 +131,16 @@ def main():
 
   password = get_pin(pw)
   sleep_time = 1.0
-  while (sha256(password).hexdigest() != pinhash):
+  while sha256(password).hexdigest() != pinhash:
     print >> stderr, 'Incorrect password! Please wait for %gs.' % sleep_time
     sleep(sleep_time)
     sleep_time *= 2
     password = get_pin(pw)
 
-  if(fullscreen):
+  if fullscreen:
     print tigetstr("rmcup"),
     stdout.flush()
+  block_everything(False)
 
 if __name__ == "__main__":
   main()
