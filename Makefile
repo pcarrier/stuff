@@ -1,5 +1,5 @@
 indent:
-	indent -kr -nut */*.c
+	indent -kr -nut */*.c */*/*.c
 
 clean:
-	rm *~ */*~
+	rm *~ */*~ */*/*~
