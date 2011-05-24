@@ -22,7 +22,13 @@ from hashlib import sha256
 from os import getuid, stat, chmod, isatty, ttyname, kill, getppid
 from os.path import join, isfile, exists
 from pwd import getpwnam, getpwuid
-from signal import signal, SIG_IGN, SIGINT, SIGTSTP, SIGQUIT, SIGSTOP, SIGCONT
+from signal import signal, SIG_IGN, SIGSTOP
+# blocked signals
+from signal import SIGTSTP, SIGQUIT, SIGINT, SIGCONT, SIGILL, \
+                   SIGTRAP, SIGABRT, SIGFPE, SIGBUS, SIGSEGV, \
+                   SIGSYS, SIGPIPE, SIGALRM, SIGTERM, \
+                   SIGXCPU, SIGXFSZ, SIGVTALRM, SIGPROF, \
+                   SIGUSR1, SIGUSR2
 from socket import gethostname
 from sys import stdout, stderr, argv, exit
 from termios import tcgetattr, tcsetattr, ISIG, TCSANOW
@@ -32,7 +38,11 @@ def block_everything(blocking):
   """If blocking, make sure we drop signals, and keep the tty blocked if crash; if not undo"""
   if blocking:
     # Just in case
-    for sig_number in (SIGINT, SIGTSTP, SIGQUIT):
+    for sig_number in (SIGTSTP, SIGQUIT, SIGINT, SIGCONT, SIGILL, \
+                       SIGTRAP, SIGABRT, SIGFPE, SIGBUS, SIGSEGV, \
+                       SIGSYS, SIGPIPE, SIGALRM, SIGTERM, \
+                       SIGXCPU, SIGXFSZ, SIGVTALRM, SIGPROF, \
+                       SIGUSR1, SIGUSR2):
       signal(sig_number, SIG_IGN)
   attrs = tcgetattr(stdout.fileno())
   if blocking:
