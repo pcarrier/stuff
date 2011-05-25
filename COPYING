@@ -1,4 +1,8 @@
-Copyright (c) 2010, Red Hat Inc.
+Except for gcore_on_bp.sh:
+
+Copyright (c) 2010-2011, Red Hat Inc.
+              2011, Pierre Carrier <pierre@gcarrier.fr>
+
 Permission to use, copy, modify, and/or distribute this software
 for any purpose with or without fee is hereby granted, provided that
 the above copyright notice and this permission notice appear in all copies.
