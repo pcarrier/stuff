@@ -10,11 +10,10 @@
 # for any purpose with or without fee is hereby granted, provided that
 # the above copyright notice and this permission notice appear in all copies.
 #
-# TODO: A SUID version that
-# 1) Uses pam, of course
-# 2) Traps a max of signals, including segfaults, and
-#    handles all errors no matter what (worst case notify & discard)
-
+# TODO: A C version that
+# 1) Uses pam, of course (SUID somewhere)
+# 2) Traps more signals (SIGTTIN and SIGTTOUT :)
+# 3) Handles all errors no matter what (worst case notify & discard)
 
 from getopt import getopt, GetoptError
 from getpass import getpass
