@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <err.h>
+#include <sysexits.h>
 
 #define MB ((size_t)1<<20)
 
@@ -35,23 +36,23 @@ int main(int argc, char **argv)
         nr_of_mb = (size_t) atoi(argv[1]);
 
     if (nr_of_mb <= 0)
-        errx(1, "Negative memory size: %li MB", nr_of_mb);
+        errx(EX_USAGE, "Negative memory size: %li MB", nr_of_mb);
     else
         fprintf(stderr,
                 "We will really try to take those %li MB of memory, "
                 "confirm with 'y'! ", nr_of_mb);
 
     if ((char) getchar() != 'y')
-        errx(2, "Operation cancelled");
+        errx(1, "Operation cancelled");
 
     buf_size = (size_t) nr_of_mb *MB;
     buf = malloc(buf_size);
     if (buf == NULL)
-        errx(3, "Could not allocate");
+        errx(EX_OSERR, "Could not allocate");
 
     page_size = (size_t) sysconf(_SC_PAGESIZE);
     if (page_size <= 0)
-        errx(4, "Wrong page size: %li bytes", page_size);
+        errx(EX_OSERR, "Wrong page size: %li bytes", page_size);
 
     for (dark_passenger = buf, done = 0; dark_passenger < buf + buf_size;
          dark_passenger += page_size, done += page_size) {
@@ -68,5 +69,5 @@ int main(int argc, char **argv)
           "Remember to kill or SIGCONT me ('fg' from invoking shell).\n",
           stderr);
     kill(getpid(), SIGSTOP);
-    return EXIT_SUCCESS;
+    return EX_OK;
 }

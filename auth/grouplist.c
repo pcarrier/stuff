@@ -16,6 +16,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sysexits.h>
 #include <sys/types.h>
 #include <grp.h>
 #include <err.h>
@@ -24,12 +25,12 @@ void showgrp(const struct group *grp)
 {
     char **gr_mem;
     if (!printf("%s:%s:%i:", grp->gr_name, grp->gr_passwd, grp->gr_gid))
-        exit(2);
+        exit(EX_IOERR);
     for (gr_mem = grp->gr_mem; **gr_mem != '\0'; gr_mem++)
         if (!printf("%s,", *gr_mem))
-            exit(3);
+            exit(EX_IOERR);
     if (!puts(""))
-        exit(4);
+        exit(EX_IOERR);
 }
 
 int main(int argc, char **argv)
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
     if (argc == 2) {
 #ifdef HAVE_FGETGRENT
         if (!(grpfile = fopen(argv[1], "r")))
-            err(1, "could not open group file '%s'", argv[1]);
+            err(EX_OSFILE, "could not open group file '%s'", argv[1]);
         while ((grp = fgetgrent(grpfile)))
             showgrp(grp);
 #else
@@ -56,8 +57,8 @@ int main(int argc, char **argv)
         while ((grp = getgrent()))
             showgrp(grp);
     }
-    return EXIT_SUCCESS;
+    return EX_OK;
 
   usage:
-    errx(EXIT_FAILURE, "Usage: %s [group-file]", argv[0]);
+    errx(EX_USAGE, "Usage: %s [group-file]", argv[0]);
 }

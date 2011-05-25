@@ -1,8 +1,7 @@
 #!/bin/sh
 # Silent data corruption, unless you fsync/msync (commands s and S).
 
-# C code copied from
-# https://github.com/pcarrier/stuff/blob/master/sys/mmap_doublecheck.c
+# C code copied from mmapdoublecheck.c
 
 TMP=$(mktemp -d)
 cd $TMP
