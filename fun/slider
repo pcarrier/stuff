@@ -9,13 +9,11 @@
 #
 # Example: slider < slides
 #
-# slides contains slides separated by a "%" line,
-# and finishes with a "%" line.
+# slides contains slides separated by a "%" line, and finishes with a "%" line.
 #
 # Yes, this is a crappy script.
 # Quickly hacked for my personal use, needs some serious cleanup.
 
-import subprocess
 from sys import exit, argv, stdin, stdout
 from curses import setupterm, tigetstr
 
