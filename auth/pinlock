@@ -64,6 +64,7 @@ def read_pinhash(pw):
   pinfilename = pin_path(pw)
   if not exists(pinfilename):
     print >> stderr, 'No pin file (%s) found. Let\'s create one!' % pinfilename
+    block_everything(False)
     set_pin(pw)
     exit(0)
   if not isfile(pinfilename):
