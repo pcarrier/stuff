@@ -4,13 +4,6 @@ from sys import platform
 APPNAME='stuff'
 VERSION='0.1'
 
-test_bins = [
-    'fun/async/test-poll',
-    'fun/async/test-select',
-    'sys/i_segv',
-    'sys/i_segv2'
-]
-
 def options(opt):
     opt.load('compiler_c')
 
