@@ -1,13 +1,6 @@
 require 'sinatra/base'
 require 'json'
 
-error 404 do
-    'Not found'
-end
-error ParseError do
-    'Parsing issue'
-end
-
 module FAI
     class NoSuchDistro < Exception; end
     class CommandFailed < Exception; end
@@ -15,14 +8,16 @@ module FAI
     def self.statuses
         Hash[%x{fai-chboot -l}.collect do |l|
             if l =~ /([^ ]+) +([^ ]+) +(.*)/
-                [:name => $1, {:file => $2, :action => $3}]
+                name, file, action = $1, $2, $3
+                enabled = file[/\.disable$/].nil?
+                next [name, {:enabled => enabled, :file => file, :action => action}]
             else
-                raise ParseError.new
+                raise Exception.new "Couldn't parse"
             end
         end]
     end
 
-    def self.install :machine, :distro
+    def self.install machine, distro
         case distro
         when 'lenny'
             options = '-IFv'
@@ -33,13 +28,12 @@ module FAI
         else
             raise NoSuchDistro.new
         end
+        puts "fai-chboot #{options} #{machine}"
         output = IO.popen "fai-chboot #{options} #{machine}" do |io|
             io.read
         end
-        raise CommandFailed.new output unless $? == 0
-        case $?
-        if output =~ /Source file for .* not available/
-            raise NoSuchDistro.new
+        if $? != 0 or output =~ /Source file for .* not available/
+            raise CommandFailed.new output
         end
         return output
     end
@@ -48,24 +42,23 @@ end
 class FAIWebAPI < Sinatra::Base
     get '/status/:machine' do |name|
         statuses = FAI.statuses
-        case machine
+        case name
         when 'all'
-            statuses.to_json
+            return statuses.to_json
         else
-            return statuses[machine].to_json or [404, 'No such system']
+            status = statuses[name]
+            return status.to_json if status
+            return [404, 'No such system']
         end
     end
 
-    post '/boot/:machine/:distro' do |machine, distro|
-        retcode, output = FAI.install name, machine
+    post '/install/:machine/:distro' do |machine, distro|
         begin
-            output
-        rescue CommandFailed => e
-            [500, e.to_s]
-        rescue NoSuchDistro => e
-            [404, e.to_s]
+            return FAI.install machine, distro
+        rescue FAI::CommandFailed => e
+            return [500, e.to_s]
+        rescue FAI::NoSuchDistro => e
+            return [404, e.to_s]
         end
     end
-
-    run! if app_file == $0
 end
