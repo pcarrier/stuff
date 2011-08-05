@@ -28,7 +28,6 @@ end.each do |k, v|
     itf = k[/lldp\.[^.]+/][5..-1]
     if answers_per_itf[itf] == 1
         fkey = k.gsub /[^a-zA-Z0-9]/, '_'
-        puts fkey, v
         Facter.add(fkey) { setcode { v } }
     end
 end
