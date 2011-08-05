@@ -72,7 +72,7 @@ do
 set \$corenb=0
 attach $pid
 break $breakpoint
-while ($rip > 0)
+while (\$rip > 0)
   gcore $name.$pid.\$corenb
   set \$corenb++
   continue
