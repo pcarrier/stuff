@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'fai-webservice'
+require 'fai'
 FAIWebAPI.new.run!
