@@ -5,7 +5,7 @@ from os import listdir
 from os.path import dirname, join
 
 path.append(dirname(__file__))
-from bottle import route, run, default_app
+from bottle import run, route, default_app
 
 @route('/envs')
 def envs():
@@ -15,4 +15,5 @@ def envs():
         )
     )+"\n"
 
-application = default_app()
+# application = default_app()
+run(host='localhost', port=8080)
