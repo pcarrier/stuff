@@ -46,7 +46,7 @@ end
 puts "Libraries: #{libs.keys.join ','}"
 
 libs.reject { |name, versions| versions.length == 1 }.each do |name, versions|
-	$stderr.puts "#{name} has multiple versions:"
+	$stderr.puts "#{name} has #{versions.length} versions used:"
 	versions.each do |descr, pids|
 		$stderr.puts "  #{descr} used by PIDs #{pids.join ','}"
 	end
