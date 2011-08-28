@@ -19,8 +19,7 @@ pids = Dir.new("/proc").entries.grep /^[0-9]+$/
 
 pids.each do |p|
 	pid = p.to_i
-	name = IO::read("/proc/#{pid}/cmdline")[0..-2].gsub /\0/, ' '
-	liblines = 
+	name = IO::read("/proc/#{pid}/cmdline")[0..-2].strip.gsub /\0/, ' '
 	libs = Hash[
 		IO::read("/proc/#{pid}/maps").lines.grep(/\.so/).collect do |line|
 			fields = line.split
