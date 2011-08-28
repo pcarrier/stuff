@@ -19,7 +19,7 @@ pids = Dir.new("/proc").entries.grep /^[0-9]+$/
 
 pids.each do |p|
 	pid = p.to_i
-	name = IO::read("/proc/#{pid}/cmdline")[0..-1].gsub /\0/, ' '
+	name = IO::read("/proc/#{pid}/cmdline")[0..-2].gsub /\0/, ' '
 	liblines = 
 	libs = Hash[
 		IO::read("/proc/#{pid}/maps").lines.grep(/\.so/).collect do |line|
@@ -36,18 +36,19 @@ libs = {}
 infos.each do |pid, info|
 	info[:libs].each do |devinode, path|
 		name = libname path
-		descr = "[#{devinode}]#{path}"
+		descr = "[#{devinode}] #{path}"
 		libs[name] ||= {}
 		libs[name][descr] ||= []
 		libs[name][descr] << pid
 	end
 end
 
-puts "Libraries: #{libs.keys.join ','}"
-
 libs.reject { |name, versions| versions.length == 1 }.each do |name, versions|
-	$stderr.puts "#{name} has #{versions.length} versions used:"
+	puts "- #{name} has #{versions.length} versions used:"
 	versions.each do |descr, pids|
-		$stderr.puts "  #{descr} used by PIDs #{pids.join ','}"
+		puts "  - #{descr} used by:"
+		pids.each do |pid|
+			puts "    - [#{pid}] #{infos[pid][:name]}"
+		end
 	end
 end
