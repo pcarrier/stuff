@@ -6,10 +6,6 @@ from errno import ENOENT, errorcode
 path.append(dirname(__file__))
 from bottle import run, get, post, abort, request, default_app
 
-#TMP
-from bottle import debug
-debug(True)
-
 PASTIES_DIR = join(dirname(__file__), 'pasties')
 URI = 'http://localhost:8080/'
 
