@@ -4,19 +4,20 @@ from hashlib import sha1
 from errno import ENOENT, errorcode
 
 path.append(dirname(__file__))
-from bottle import run, get, post, abort, request, default_app
+from bottle import run, get, post, redirect, abort, request, template, TEMPLATE_PATH, default_app
 
 PASTIES_DIR = join(dirname(__file__), 'pasties')
+TEMPLATE_PATH.append(join(dirname(__file__), 'templates'))
 URI = 'http://localhost:8080/'
 
 @get('/')
 def help():
-    return "Send your pastie to\n"\
-        "$ curl -F 'pastie=<-' "+URI+"\n"
+    return template('pasties_index', uri=URI)
 
 @post('/')
 def post():
     contents = request.forms.get('pastie')
+    submit = request.forms.get('submit')
     hash = sha1(contents).hexdigest()
     try:
         f = open(join(PASTIES_DIR, hash), 'w')
@@ -24,7 +25,13 @@ def post():
         abort(500, errorcode[e.errno])
     else:
         f.write(contents)
-    return URI+hash+"\n"
+        f.close()
+    if submit:
+        # In a web client, redirect to the page
+        redirect(URI+hash)
+    else:
+        # From the command-line, show the URI
+        return URI+hash+"\n"
 
 @get('/:hash')
 def get(hash):
@@ -36,7 +43,9 @@ def get(hash):
         else:
             abort(500, errorcode[e.errno])
     else:
-        return f.read()
+        contents = f.read()
+        f.close()
+        return contents
 
 # application = default_app()
 run(host='localhost', port=8080)
