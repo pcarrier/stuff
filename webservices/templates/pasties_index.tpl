@@ -13,7 +13,7 @@
 			</p>
 			<p><input type="submit" name="submit" value="Paste"></p>
 		</form>
-		<p>You can also send stuff to:</p>
+		<p>You can also send stuff through the standard input of:</p>
 		<pre>$ curl -F 'pastie=<-' {{uri}}</pre>
 	</body>
 </html>
