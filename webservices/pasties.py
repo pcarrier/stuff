@@ -33,8 +33,9 @@ def post():
         # From the command-line, show the URI
         return URI+hash+"\n"
 
-@get('/:hash')
+@get('/:hash#[0-9a-f]+#')
 def get(hash):
+    print(hash)
     try:
         f = open(join(PASTIES_DIR, hash), 'r')
     except IOError, e:
