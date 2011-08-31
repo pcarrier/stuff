@@ -35,7 +35,7 @@ def post():
 
 @get('/:hash#[0-9a-f]+#')
 def get(hash):
-    print(hash)
+    response.content_type = 'text/plain'
     try:
         f = open(join(PASTIES_DIR, hash), 'r')
     except IOError, e:
