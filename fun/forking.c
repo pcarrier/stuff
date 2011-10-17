@@ -5,6 +5,12 @@
 
 int main() {
 	int loop = 0;
+	void *big = malloc((size_t)1024*1024*1024); /* 1GB */
+	if(NULL == big) {
+		fprintf(stderr, "Failed to allocate 1GB\n");
+		return(EXIT_FAILURE);
+	}
+
 	pid_t p;
 	while (loop < 2048) {
 		p = fork();
