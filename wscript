@@ -28,7 +28,7 @@ def build(build):
 
     # The basics, should be on any recent Unix system, and we're strict :)
     for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
-        'sys/sethostid', 'auth/grouplist']:
+        'sys/sethostid', 'auth/grouplist', 'fun/forking']:
         build.program(source=bin+'.c', target=bin, use=common_use)
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
@@ -72,4 +72,4 @@ def build(build):
         build.program(source=bin+'.c', target=bin, use=common_use, install_path=None)
 
     # Python scripts
-    build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0755)
+    # build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0755)

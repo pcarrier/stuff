@@ -23,7 +23,7 @@
 
 int main(int argc, char **argv)
 {
-    long min_length = LONG_MAX, arg_length, arg_lengths[argc], arg, pos;
+    long min_length = LONG_MAX, arg_length, arg, pos;
     int nb_chars, current_char, has_trailing_chars =
         0, used_char[CHAR_MAX];
     if (argc < 2)
@@ -34,7 +34,6 @@ int main(int argc, char **argv)
             min_length = arg_length;
         else if (min_length < arg_length)
             has_trailing_chars = 1;
-        arg_lengths[arg] = arg_length;
     }
     for (pos = 0; pos < min_length; pos++) {
         memset(used_char, 0, CHAR_MAX * sizeof(int));
