@@ -38,7 +38,7 @@ def build(build):
             install_path = "${PREFIX}/bin/mini")
 
     # Linux-specific stuff
-    if platform is 'linux':
+    if platform.startswith('linux'):
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
             'mem/hugepagesmaxalloc']:
             build.program(source=bin+'.c', target=bin, use=common_use)
