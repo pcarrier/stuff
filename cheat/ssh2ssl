@@ -1,0 +1,46 @@
+Create CA (self-signed here)
+============================
+
+server$ openssl genrsa -out ssl_ca_key
+server$ openssl req -new -key ssl_ca_key -out ssl_ca_csr -batch
+# self sign, because evil is fun:
+server$ openssl x509 -req -in ssl_ca_csr -out ssl_ca_crt \
+  -signkey ssl_ca_key -days 365
+
+Generate SSH key
+================
+
+client$ ssh-keygen -f ssh_my_rsa
+
+Transform SSH key into SSL csr
+==============================
+
+client$ openssl req -new -key ssh_my_rsa -batch > ssl_my_csr
+client$ scp ssl_my_csr server:
+
+Create SSL crt
+==============
+
+# We need to check the request's public key first
+server$ ssh-keygen -em PEM -f ssh_rsa.pub > pubkey_verif_1
+server$ openssl req -pubkey -in ssl_req -noout > pubkey_verif_2
+server$ diff pubkey_verif_{1,2} && \
+  openssl x509 -req \
+  -in ssl_my_csr -out ssl_my_crt \
+  -CA ssl_ca_crt -CAkey ssl_ca_key \
+  -CAcreateserial -CAserial ssl_ca_srl \
+  -days 180
+
+Simpler version (no client-side operation):
+-------------------------------------------
+$ ssh-keygen -em PEM -f ssh_my_rsa.pub > ssh_my_ssl_pkey
+# ...?
+# WIN.
+
+Create SSL PKCS12
+=================
+
+client$ curl public://server/{ssl_ca_crt,ssl_my_crt}
+client$ openssl pkcs12 -export \
+  -in ssl_my_crt -inkey ssh_my_rsa -certfile ssl_ca_crt \
+  -out ssl_my_cert.p12 -name "My super cert"
