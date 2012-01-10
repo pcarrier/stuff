@@ -4,9 +4,9 @@
 Bash your script in a bash 'oneliner'
 
 Usage:
-$ eval $(bashin test.sh foo bar)
-will call test.sh with the parameters foo and bar
-The output of bashin can be used without the presence of test.sh
+$ eval $(bashin example.py foo bar)
+will call example.py with the parameters foo and bar
+The output of bashin can be used without the presence of example.py
 
 Example:
 Useful to run a local script through pssh, eg:
