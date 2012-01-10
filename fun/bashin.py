@@ -38,8 +38,8 @@ def str_to_printf(str):
 def file_to_printf(name):
     return str_to_printf(open(name, 'r').read())
 
-BASH_EXEC_PREFIX = r"""BASHIN_DEST="$(mktemp)";trap "rm -f \"$BASHIN_DEST\";exit" INT TERM EXIT;printf '"""
-BASH_EXEC_INTERM = r"""'>>"$BASHIN_DEST";chmod +x "$BASHIN_DEST";"$BASHIN_DEST" """
+BASH_EXEC_PREFIX = r"""BASHIN_DEST="$(mktemp)"&&trap "rm -f \"$BASHIN_DEST\";exit" INT TERM EXIT&&printf '"""
+BASH_EXEC_INTERM = r"""'>>"$BASHIN_DEST"&&chmod +x "$BASHIN_DEST"&&"$BASHIN_DEST" """
 BASH_EXEC_SUFFIX = r""";exit $?"""
 ESCAPE_PREFIX = "\"$(printf '"
 ESCAPE_SUFFIX = "')\""
