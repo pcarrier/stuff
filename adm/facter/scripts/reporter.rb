@@ -2,7 +2,7 @@
 
 %w{puppet net/http net/https socket facter json}.each {|m| require m}
 
-raise Exception.new "Usage: reporter server" if ARGV.length != 1
+raise Exception.new "Usage: reporter.rb server" if ARGV.length != 1
 
 Puppet.parse_config
 $LOAD_PATH << Puppet[:libdir]
