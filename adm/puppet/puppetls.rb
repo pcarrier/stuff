@@ -9,7 +9,7 @@ def display_resource res, length_to_strip
     description = 'GETS REMOVED'
   else
     source = res[:source]
-    source = 'a template' if source.nil? or source.empty?
+    source = 'a "content" parameter' if source.nil? or source.empty?
     description = "content from #{source}"
   end
 
