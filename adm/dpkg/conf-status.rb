@@ -14,12 +14,9 @@ file_sum_hash = Hash[*files_and_sums]
 file_sum_hash.sort.each { |file, pkgsum|
   if File.exists? file
     fssum = Digest::MD5.hexdigest IO::read file
-    if fssum == pkgsum
-      puts "== #{file}"
-    else
-      puts "<> #{file}"
-    end
+    flag = (fssum == pkgsum ? '==' or '<>'
   else
-    puts "-- #{file}"
+    flag = '--'
   end
+  puts "#{flag} #{file}"
 }
