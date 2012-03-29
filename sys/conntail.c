@@ -13,45 +13,49 @@
 #include <libnetfilter_conntrack/libnetfilter_conntrack.h>
 
 #define CONNTAIL_MAX_LINE 1024
+#define FAIL(name) {perror(#name); goto err;}
 
 static int callback(enum nf_conntrack_msg_type type,
                     struct nf_conntrack *ct, void *data)
 {
     char buffer[CONNTAIL_MAX_LINE];
 
-    nfct_snprintf(buffer, sizeof(buffer), ct, type, NFCT_O_XML,
-                  NFCT_OF_TIME);
-    printf("%s\n", buffer);
+    if (nfct_snprintf(buffer, sizeof(buffer), ct, type,
+                      NFCT_O_XML, NFCT_OF_TIME) < 0)
+        FAIL("nfct_snprintf");
+
+    if (printf("%s\n", buffer) < 0)
+        FAIL("printf");
+
     return NFCT_CB_CONTINUE;
+
+  err:
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv)
 {
-    struct nfct_handle *handle;
+    struct nfct_handle *handle = NULL;
 
-    handle = nfct_open(CONNTRACK, NFNL_SUBSYS_CTNETLINK);
-    if (NULL == handle) {
-        perror("nfct_open");
-        goto err;
-    }
+    handle = nfct_open(CONNTRACK, NFCT_ALL_CT_GROUPS);
 
-    if (nfct_callback_register(handle, NFCT_T_NEW | NFCT_T_DESTROY, callback,
-                               NULL) < 0) {
-        perror("nfct_callback_register");
-        goto err;
-    }
+    if (!handle)
+        FAIL("nfct_open");
 
-    if (nfct_catch(handle) < 0) {
-        perror("nfct_catch");
-        goto err;
-    }
+    if (nfct_callback_register(handle,
+    	                       NFCT_T_NEW | NFCT_T_DESTROY,
+                               callback, NULL) < 0)
+        FAIL("nfct_callback_register");
 
-    if (nfct_close(handle) < 0) {
-        perror("nfct_close");
-        goto err;
+    if (nfct_catch(handle) < 0)
+        FAIL("nfct_catch");
+
+    if (handle && nfct_close(handle) < 0) {
+        FAIL("nfct_close");
     }
 
     return EXIT_SUCCESS;
+
   err:
     return EXIT_FAILURE;
 }
