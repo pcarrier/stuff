@@ -18,7 +18,9 @@ def configure(conf):
     conf.check_cc(lib=['pthread'], uselib_store='pthread')
     conf.check_cc(cflags=['-Werror'], uselib_store='strict')
     conf.check_cfg(package='glib-2.0', args=['--cflags', '--libs'],
-        use='portable', uselib_store='glib2')
+        use='portable', uselib_store='glib2', mandatory=False)
+    conf.check_cfg(package='libnetfilter_conntrack', args=['--cflags', '--libs'],
+        use='portable', uselib_store='nfconntrack', mandatory=False)
 
 common_use=['base', 'strict', 'm']
 
@@ -42,6 +44,8 @@ def build(build):
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
             'mem/hugepagesmaxalloc']:
             build.program(source=bin+'.c', target=bin, use=common_use)
+        for nf_bin in ['sys/conntail']:
+            build.program(source=bin+'.c', target=bin, use=['base', 'strict', 'conntrack'])
 
     # LD_PRELOAD libs
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
