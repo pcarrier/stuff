@@ -29,21 +29,28 @@ int main(int argc, char **argv)
 {
     struct nfct_handle *handle;
 
-    handle = nfct_open(CONNTRACK, NFCT_ALL_CT_GROUPS);
-    if (!handle) {
+    handle = nfct_open(CONNTRACK, NFNL_SUBSYS_CTNETLINK);
+    if (NULL == handle) {
         perror("nfct_open");
         goto err;
     }
 
-    nfct_callback_register(handle, NFCT_T_NEW | NFCT_T_DESTROY, callback,
-                           NULL);
+    if (nfct_callback_register(handle, NFCT_T_NEW | NFCT_T_DESTROY, callback,
+                               NULL) < 0) {
+        perror("nfct_callback_register");
+        goto err;
+    }
 
     if (nfct_catch(handle) < 0) {
         perror("nfct_catch");
         goto err;
     }
 
-    nfct_close(handle);
+    if (nfct_close(handle) < 0) {
+        perror("nfct_close");
+        goto err;
+    }
+
     return EXIT_SUCCESS;
   err:
     return EXIT_FAILURE;
