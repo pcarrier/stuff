@@ -13,7 +13,7 @@
 #include <libnetfilter_conntrack/libnetfilter_conntrack.h>
 
 #define CONNTAIL_MAX_LINE 1024
-#define FAIL(name) {perror(#name); goto err;}
+#define FAIL(n) {perror(#n); goto err;}
 
 static const enum nfct_filter_attr EXCLUDED_ATTRS[] = {
     NFCT_FILTER_L4PROTO,
@@ -29,10 +29,10 @@ static int callback(enum nf_conntrack_msg_type type,
 
     if (nfct_snprintf(buffer, sizeof(buffer), ct, type,
                       NFCT_O_XML, NFCT_OF_TIME) < 0)
-        FAIL("nfct_snprintf");
+        FAIL(nfct_snprintf);
 
     if (printf("%s\n", buffer) < 0)
-        FAIL("printf");
+        FAIL(printf);
 
     return NFCT_CB_CONTINUE;
 
@@ -59,17 +59,17 @@ int main(int argc, char **argv)
     handle = nfct_open(CONNTRACK,
                        NF_NETLINK_CONNTRACK_NEW | NF_NETLINK_CONNTRACK_DESTROY);
     if (!handle)
-        FAIL("nfct_open");
+        FAIL(nfct_open);
 
     filter = nfct_filter_create();
     if (!filter)
-        FAIL("nfct_filter_create");
+        FAIL(nfct_filter_create);
 
     while (*filter_attr != NFCT_FILTER_MAX) {
         if (nfct_filter_set_logic(filter,
                                   *filter_attr,
                                   NFCT_FILTER_LOGIC_NEGATIVE) < 0)
-            FAIL("nfct_filter_set_logic");
+            FAIL(nfct_filter_set_logic);
         filter_attr++;
     }
 
@@ -79,19 +79,19 @@ int main(int argc, char **argv)
     nfct_filter_add_attr(filter, NFCT_FILTER_SRC_IPV6, &lo_ipv6);
 
     if (nfct_filter_attach(nfct_fd(handle), filter) < 0) {
-        FAIL("nfct_filter_attach");
+        FAIL(nfct_filter_attach);
     }
 
     if (nfct_callback_register(handle,
                                NFCT_T_ALL,
                                callback, NULL) < 0)
-        FAIL("nfct_callback_register");
+        FAIL(nfct_callback_register);
 
     if (nfct_catch(handle) < 0)
-        FAIL("nfct_catch");
+        FAIL(nfct_catch);
 
     if (handle && nfct_close(handle) < 0) {
-        FAIL("nfct_close");
+        FAIL(nfct_close);
     }
 
     return EXIT_SUCCESS;
