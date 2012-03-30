@@ -39,7 +39,7 @@ GHashTable *build_errconsts()
     if (res) {
 #undef ERRNO_EXISTS
 #define ERRNO_EXISTS(nr,str) add_errconst(res, nr, str);
-#include "errnos.h"
+#include "sys/errnos.h"
 
 #ifdef __linux__
         /* Kernel-only errnos, from kernel.git/include/linux/errno.h */

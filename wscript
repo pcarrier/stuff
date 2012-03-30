@@ -1,5 +1,7 @@
 # vim: ft=python
 from sys import platform
+from waflib import Logs
+from waflib.Build import BuildContext
 
 APPNAME='stuff'
 VERSION='0.1'
@@ -35,8 +37,28 @@ def configure(conf):
                    use='portable',
                    uselib_store='nfconntrack',
                    mandatory=False)
+    if conf.env.DEST_OS is 'linux':
+        conf.env.LINUX = True
+    summary(conf)
 
-common_use=['base', 'strict', 'm']
+class Summary(BuildContext):
+    cmd = 'summary'
+    fun = 'summary'
+
+def summary(smr):
+    def report_if_missing(var, name):
+        if not var:
+            Logs.warn('Binaries requiring {0} will not be compiled!'.format(name))
+        return var
+
+    report_if_missing(smr.env.HAVE_GLIB2,
+                      'glib2')
+    report_if_missing(smr.env.HAVE_NFCONNTRACK,
+                      'libnetfilter_conntrack')
+    report_if_missing(smr.env.LINUX,
+                      'Linux')
+
+STANDARD_USE=['base', 'strict', 'm']
 
 def build(build):
     build(rule=build.path.abspath()+'/sys/errnos.h.gen ${SRC} ${TGT}',
@@ -48,22 +70,22 @@ def build(build):
         'sys/sethostid', 'auth/grouplist', 'fun/forking']:
         build.program(source=bin+'.c',
                       target=bin,
-                      use=common_use)
+                      use=STANDARD_USE)
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
         'mini/sync', 'mini/true', 'mini/yes', 'mini/yes2']:
         build.program(source=bin+'.c',
                      target=bin,
-                     use=common_use,
+                     use=STANDARD_USE,
                      install_path = "${PREFIX}/bin/mini")
 
     # Linux-specific stuff
-    if platform.startswith('linux'):
+    if build.env.LINUX:
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
             'mem/hugepagesmaxalloc']:
             build.program(source=bin+'.c',
-                          target=bin, use=common_use)
+                          target=bin, use=STANDARD_USE)
     
     if build.env.HAVE_NFCONNTRACK:
         for nf_bin in ['sys/conntail']:
@@ -73,9 +95,8 @@ def build(build):
 
     # LD_PRELOAD libs
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
-
-    if platform is 'linux':
-        ld_libs += [ 'diagnostics/mtrace', 'diagnostics/memcpy2memmove' ]
+    if build.env.LINUX:
+        ld_libs.extend(['diagnostics/mtrace',  'diagnostics/memcpy2memmove'])
 
     for lib in ld_libs:
         # I stopped trying to be strict here...
@@ -83,23 +104,21 @@ def build(build):
                     target=lib,
                     use=['base', 'm', 'dl'])
 
-    # pthread stuff
-    for bin in ['sys/i_segv3']:
-        build.program(source=bin+'.c',
-                      target=bin,
-                      use=['base', 'strict', 'pthread'])
-
-    # glib stuff
-    for bin in ['sys/errnos']:
-        build.program(source=bin+'.c',
-                      target=bin,
-                      use=['base', 'strict', 'glib2'])
-
     # Cool 7-segment stuff
     for bin in ['fun/7seg/7plot', 'fun/7seg/7clock']:
         build.program(source=[bin+'.c','fun/7seg/7seg.c'],
                       target=bin,
-                      use=common_use)
+                      use=STANDARD_USE)
+
+    if build.env.HAVE_GLIB2:
+        build.program(source='sys/errnos.c',
+                      target='sys/errnos',
+                      includes='.',
+                      use=['base', 'strict', 'glib2'])
+
+    build.program(source='sys/i_segv3.c',
+                  target='sys/i_segv3',
+                  use=['base', 'strict', 'pthread'])
 
     # Test stuff (not installed)
     for bin in ['fun/async/test-poll', 'fun/async/test-select',
@@ -107,7 +126,7 @@ def build(build):
         'mem/mmapdoublecheck', 'mem/mmapnwait']:
         build.program(source=bin+'.c',
                       target=bin,
-                      use=common_use,
+                      use=STANDARD_USE,
                       install_path=None)
 
     # Python scripts
