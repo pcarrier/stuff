@@ -15,6 +15,13 @@
 #define CONNTAIL_MAX_LINE 1024
 #define FAIL(name) {perror(#name); goto err;}
 
+static const enum nfct_filter_attr EXCLUDED_ATTRS[] = {
+    NFCT_FILTER_L4PROTO,
+    NFCT_FILTER_SRC_IPV4,
+    NFCT_FILTER_SRC_IPV6,
+    NFCT_FILTER_MAX
+};
+
 static int callback(enum nf_conntrack_msg_type type,
                     struct nf_conntrack *ct, void *data)
 {
@@ -36,14 +43,47 @@ static int callback(enum nf_conntrack_msg_type type,
 int main(int argc, char **argv)
 {
     struct nfct_handle *handle = NULL;
+    struct nfct_filter *filter = NULL;
+    static const enum nfct_filter_attr *filter_attr = EXCLUDED_ATTRS;
 
-    handle = nfct_open(CONNTRACK, NFCT_ALL_CT_GROUPS);
+    struct nfct_filter_ipv4 lo_ipv4 = {
+        .addr = ntohl(inet_addr("127.0.0.1")),
+        .mask = 0xffffffff,
+    };
 
+    struct nfct_filter_ipv6 lo_ipv6 = {
+        .addr = { 0x0, 0x0, 0x0, 0x1 },
+        .mask = { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff },
+    };
+
+    handle = nfct_open(CONNTRACK,
+                       NF_NETLINK_CONNTRACK_NEW | NF_NETLINK_CONNTRACK_DESTROY);
     if (!handle)
         FAIL("nfct_open");
 
+    filter = nfct_filter_create();
+    if (!filter)
+        FAIL("nfct_filter_create");
+
+    while (*filter_attr != NFCT_FILTER_MAX) {
+        if (nfct_filter_set_logic(filter,
+                                  *filter_attr,
+                                  NFCT_FILTER_LOGIC_NEGATIVE) < 0)
+            FAIL("nfct_filter_set_logic");
+        filter_attr++;
+    }
+
+    nfct_filter_add_attr_u32(filter, NFCT_FILTER_L4PROTO, IPPROTO_ICMP);
+    nfct_filter_add_attr_u32(filter, NFCT_FILTER_L4PROTO,IPPROTO_ICMPV6);
+    nfct_filter_add_attr(filter, NFCT_FILTER_SRC_IPV4, &lo_ipv4);
+    nfct_filter_add_attr(filter, NFCT_FILTER_SRC_IPV6, &lo_ipv6);
+
+    if (nfct_filter_attach(nfct_fd(handle), filter) < 0) {
+        FAIL("nfct_filter_attach");
+    }
+
     if (nfct_callback_register(handle,
-    	                       NFCT_T_NEW | NFCT_T_DESTROY,
+                               NFCT_T_ALL,
                                callback, NULL) < 0)
         FAIL("nfct_callback_register");
 
