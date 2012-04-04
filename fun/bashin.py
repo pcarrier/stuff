@@ -19,7 +19,7 @@ from sys import argv, stderr, exit
 try:
   from cStringIO import StringIO
 except:
-  from StringIO import stringio
+  from StringIO import StringIO
 
 def str_to_printf(str):
     """
