@@ -59,3 +59,7 @@ rsos() { rx checksysreport -s "$1" \> "$1".check; }
 
 alias dtail='dmesg | tail -100'
 alias dless='dmesg | ${PAGER:-less}'
+
+# List system calls in zsh
+setopt extendedglob
+print /sys/kernel/debug/tracing/events/syscalls/sys_enter_*(:t:s/sys_enter_//)
