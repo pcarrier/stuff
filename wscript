@@ -90,7 +90,7 @@ def build(build):
     if build.env.HAVE_NFCONNTRACK:
         for nf_bin in ['sys/conntail']:
             build.program(source='sys/conntail.c',
-                          target='sys/conntail.c',
+                          target='sys/conntail',
                           use=['base', 'strict', 'nfconntrack'])
 
     # LD_PRELOAD libs
