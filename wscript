@@ -91,7 +91,7 @@ def build(build):
         for nf_bin in ['sys/conntail']:
             build.program(source='sys/conntail.c',
                           target='sys/conntail',
-                          use=['base', 'strict', 'nfconntrack'])
+                          use=['base', 'nfconntrack'])
 
     # LD_PRELOAD libs
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
