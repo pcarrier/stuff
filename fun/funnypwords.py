@@ -25,7 +25,7 @@ class subwords:
 def main():
     import sys
     def cleanup(x): return x.strip().lower()
-    def pretty(transf): print transf[0] + " > " + transf[1]
+    def pretty(transf): print(transf[0] + " > " + transf[1])
     words = map(cleanup, sys.stdin.xreadlines())
     map(pretty, subwords(words, sys.argv[1]))
 
