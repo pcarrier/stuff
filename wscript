@@ -83,7 +83,7 @@ def build(build):
     # Linux-specific stuff
     if build.env.LINUX:
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
-            'mem/hugepagesmaxalloc']:
+            'mem/hugepagesmaxalloc', 'sys/leap_set', 'sys/leap_get']:
             build.program(source=bin+'.c',
                           target=bin, use=STANDARD_USE)
     
