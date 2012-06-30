@@ -96,7 +96,7 @@ def build(build):
     # LD_PRELOAD libs
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
     if build.env.LINUX:
-        ld_libs.extend(['diagnostics/mtrace',  'diagnostics/memcpy2memmove'])
+        ld_libs.extend(['diagnostics/mtrace',  'diagnostics/memcpy2memmove', 'adm/dellkeycodes'])
 
     for lib in ld_libs:
         # I stopped trying to be strict here...
