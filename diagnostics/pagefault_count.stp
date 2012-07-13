@@ -1,0 +1,15 @@
+#!/usr/bin/env stap -v
+# sort -n its output
+
+global faults
+
+probe kernel.function("filemap_fault") {
+	fpath = d_name($vma->vm_file->f_path->dentry)
+	faults[fpath]++
+}
+
+probe end {
+	foreach (fpath in faults) {
+		printf("%i\t%s\n", faults[fpath], fpath)
+	}
+}
