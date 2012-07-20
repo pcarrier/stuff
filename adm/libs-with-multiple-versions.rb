@@ -6,8 +6,6 @@
 # Known issues:
 # - openvz makes it utterly useless
 
-require 'pp'
-
 ProcInfo = Struct.new :name, :libs
 infos = {}
 
@@ -15,12 +13,12 @@ def libname path
   File.basename(path)[/^\w+(-[a-zA-Z]+)?/]
 end
 
-pids = Dir.new("/proc").entries.grep /^[0-9]+$/
+pids = Dir.new("/proc").entries.grep(/^[0-9]+$/)
 
 pids.each do |p|
   pid = p.to_i
   begin
-    name = IO::read("/proc/#{pid}/cmdline")[0..-2].strip.gsub /\0/, ' '
+    name = IO::read("/proc/#{pid}/cmdline")[0..-2].strip.gsub(/\0/, ' ')
     libs = Hash[
       IO::read("/proc/#{pid}/maps").lines.grep(/\.so/).collect do |line|
         fields = line.split
@@ -46,9 +44,9 @@ end
 
 libs.reject { |name, versions| versions.length == 1 }.each do |name, versions|
   puts "- #{name} has #{versions.length} versions used:"
-  versions.each do |descr, pids|
+  versions.each do |descr, upids|
     puts "  - #{descr} used by:"
-    pids.each do |pid|
+    upids.each do |pid|
       puts "    - [#{pid}] #{infos[pid][:name]}"
     end
   end
