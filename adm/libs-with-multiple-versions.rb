@@ -19,16 +19,18 @@ pids = Dir.new("/proc").entries.grep /^[0-9]+$/
 
 pids.each do |p|
   pid = p.to_i
-  name = IO::read("/proc/#{pid}/cmdline")[0..-2].strip.gsub /\0/, ' '
-  libs = Hash[
-    IO::read("/proc/#{pid}/maps").lines.grep(/\.so/).collect do |line|
-      fields = line.split
-      devinode = "#{fields[3]} #{fields[4]}"
-      path = fields[5..-1].join ' '
-      next [devinode, path]
-    end
-  ]
-  infos[pid] = ProcInfo.new name, libs
+  begin
+    name = IO::read("/proc/#{pid}/cmdline")[0..-2].strip.gsub /\0/, ' '
+    libs = Hash[
+      IO::read("/proc/#{pid}/maps").lines.grep(/\.so/).collect do |line|
+        fields = line.split
+        devinode = "#{fields[3]} #{fields[4]}"
+        path = fields[5..-1].join ' '
+        next [devinode, path]
+      end
+    ]
+    infos[pid] = ProcInfo.new name, libs
+  rescue; end # PIDs come and go...
 end
 
 libs = {}
