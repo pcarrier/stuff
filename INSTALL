@@ -5,3 +5,5 @@
 - Build and install that stuff! (some test programs stay in build/)
 
    $ ./waf -p configure build install
+
+- A lot of stuff isn't waf'ed properly. I don't care. Patches welcome.
