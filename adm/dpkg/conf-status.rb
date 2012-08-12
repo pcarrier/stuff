@@ -14,7 +14,11 @@ file_sum_hash = Hash[*files_and_sums]
 file_sum_hash.sort.each { |file, pkgsum|
   if File.exists? file
     fssum = Digest::MD5.hexdigest IO::read file
-    flag = (fssum == pkgsum ? '==' or '<>'
+    if fssum == pkgsum
+      flag = '=='
+    else
+      flag = '<>'
+    end
   else
     flag = '--'
   end
