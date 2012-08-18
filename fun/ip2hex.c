@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
 	if (sscanf(argv[1], "%u.%u.%u.%u", &a, &b, &c, &d) != 4)
 		return EXIT_FAILURE;
 
-	if (printf("%02x%02x%02x%02x\n", a, b, c, d) != 9)
+	if (printf("%02X%02X%02X%02X\n", a, b, c, d) != 9)
 		return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
