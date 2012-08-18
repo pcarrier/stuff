@@ -67,7 +67,7 @@ def build(build):
 
     # The basics, should be on any recent Unix system, and we're strict :)
     for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
-        'sys/sethostid', 'auth/grouplist', 'fun/forking']:
+        'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip' ]:
         build.program(source=bin+'.c',
                       target=bin,
                       use=STANDARD_USE)
