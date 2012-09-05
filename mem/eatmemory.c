@@ -52,14 +52,14 @@ int main(int argc, char **argv)
 
     page_size = (size_t) sysconf(_SC_PAGESIZE);
     if (page_size <= 0)
-        errx(EX_OSERR, "Wrong page size: %li bytes", page_size);
+        errx(EX_OSERR, "Wrong page size: %li bytes", (long int) page_size);
 
     for (dark_passenger = buf, done = 0; dark_passenger < buf + buf_size;
          dark_passenger += page_size, done += page_size) {
         *((int *) dark_passenger) = rand();
         if (done % (10 * MB) == 0) {
             if (done % (100 * MB) == 0)
-                fprintf(stderr, " %li MB ", done / MB);
+                fprintf(stderr, " %li MB ", (long int) (done / MB));
             else
                 fputc('.', stderr);
         }
