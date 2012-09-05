@@ -9,7 +9,6 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-
 static int (*real_XNextEvent)(Display *, XEvent *) = NULL;
 static KeyCode (*real_XKeysymToKeycode)(Display *, KeySym) = NULL;
 static KeySym (*sym_XKeycodeToKeysym)(Display *, KeyCode, int) = NULL;
