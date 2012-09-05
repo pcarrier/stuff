@@ -11,10 +11,10 @@ def options(opt):
 
 def configure(conf):
     conf.load('compiler_c')
-    # conf.check_cc(header_name = 'linux/fiemap.h', mandatory=False)
     conf.check_cc(function_name='fgetgrent',
                   header_name="grp.h",
                   mandatory=False)
+    conf.check_cc(header_name="X11/Xlib.h")
     conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'],
                   defines=['_XOPEN_SOURCE=500'],
                   uselib_store='base')
@@ -23,6 +23,8 @@ def configure(conf):
     conf.check_cc(lib=['dl'],
                   defines=['_GNU_SOURCE'],
                   uselib_store='dl')
+    conf.check_cc(lib=['crypt'],
+                  uselib_store='crypt')
     conf.check_cc(lib=['pthread'],
                   uselib_store='pthread')
     conf.check_cc(cflags=['-Werror'],
@@ -48,12 +50,12 @@ class Summary(BuildContext):
 def summary(smr):
     def report_if_missing(var, name):
         if not var:
-            Logs.warn('Binaries requiring {0} will not be compiled!'.format(name))
+            Logs.error('Binaries requiring {0} won\'t be compiled!'.format(name))
         return var
 
-    report_if_missing(smr.env.HAVE_GLIB2,
+    report_if_missing(smr.env.LIB_glib2,
                       'glib2')
-    report_if_missing(smr.env.HAVE_NFCONNTRACK,
+    report_if_missing(smr.env.LIB_nfconntrack,
                       'libnetfilter_conntrack')
     report_if_missing(smr.env.LINUX,
                       'Linux')
@@ -67,10 +69,16 @@ def build(build):
 
     # The basics, should be on any recent Unix system, and we're strict :)
     for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
-        'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip' ]:
+        'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip',
+        'fun/hello_world', 'crap/xchathash']:
         build.program(source=bin+'.c',
                       target=bin,
                       use=STANDARD_USE)
+
+    for bin in ['sys/crypt']:
+        build.program(source=bin+'.c',
+                      target=bin,
+                      use=STANDARD_USE + ['crypt'])
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
@@ -86,7 +94,7 @@ def build(build):
             'mem/hugepagesmaxalloc', 'sys/leap_set', 'sys/leap_get']:
             build.program(source=bin+'.c',
                           target=bin, use=STANDARD_USE)
-    
+
     if build.env.HAVE_NFCONNTRACK:
         for nf_bin in ['sys/conntail']:
             build.program(source='sys/conntail.c',
