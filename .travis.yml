@@ -4,6 +4,7 @@ compiler:
 script:
   - ./waf-prepare
   - ./waf configure build
+  - sudo ./waf install
 install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq libglib2.0-dev libx11-dev libnetfilter-conntrack-dev
