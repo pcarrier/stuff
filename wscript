@@ -18,7 +18,7 @@ def configure(conf):
                   mandatory=False)
     conf.check_cc(header_name="X11/Xlib.h")
     conf.check_cc(cflags=['-Wall', '-Wextra', '-pedantic', '-std=c99'],
-                  defines=['_XOPEN_SOURCE=500'],
+                  defines=['_XOPEN_SOURCE=700'],
                   uselib_store='base')
     conf.check_cc(lib=['m'],
                   uselib_store='m')
@@ -101,7 +101,7 @@ def build(build):
             build.program(source=bin + '.c',
                           target=bin, use=STANDARD_USE)
 
-    if build.env.HAVE_NFCONNTRACK:
+    if build.env.LIB_nfconntrack:
         for nf_bin in ['sys/conntail']:
             build.program(source='sys/conntail.c',
                           target='sys/conntail',
@@ -124,11 +124,11 @@ def build(build):
                       target=bin,
                       use=STANDARD_USE)
 
-    if build.env.HAVE_GLIB2:
-        build.program(source='sys/errnos.c',
-                      target='sys/errnos',
-                      includes='.',
-                      use=['base', 'strict', 'glib2'])
+    if build.env.LIB_glib2:
+        for bin in ['sys/errnos', 'fun/urlencode', 'fun/urldecode']:
+            build.program(source=bin + '.c',
+                          target=bin, includes='.',
+                          use=['base', 'strict', 'glib2'])
 
     build.program(source='sys/i_segv3.c',
                   target='sys/i_segv3',
