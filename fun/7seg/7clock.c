@@ -10,7 +10,7 @@
 
 /* for SIGWINCH */
 #ifdef __APPLE__
-# define _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE
 #endif
 
 #include <err.h>
@@ -207,7 +207,7 @@ int main()
     setitimer(ITIMER_REAL, &every_sec, NULL);
 
     /* initial window display */
-    printf("\033[?25l"); /* hide cursor */
+    printf("\033[?25l");        /* hide cursor */
     update_window(&window, &clock_text);
     display_time(&window, clock_text);
 
@@ -229,7 +229,7 @@ int main()
                 display_time(&window, clock_text);
                 break;
             case WANTS_TO_LEAVE:
-                printf("\033[?25h"); /* show cursor */
+                printf("\033[?25h");    /* show cursor */
                 exit(0);
             }
         }

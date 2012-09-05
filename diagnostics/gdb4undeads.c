@@ -24,7 +24,7 @@
 **/
 
 #ifdef __APPLE__
-# define _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE
 #endif
 
 #include <unistd.h>

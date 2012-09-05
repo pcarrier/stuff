@@ -41,7 +41,7 @@ int main()
     }
 
     if (getenv("DEBUG")) {
-      printf("%#x\n", t.status);
+        printf("%#x\n", t.status);
     }
 
     return (EXIT_SUCCESS);

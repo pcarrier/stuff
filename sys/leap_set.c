@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
     rc = adjtimex(&t);
     if (rc < 0) {
-      perror("adjtimex write");
-      return (EXIT_FAILURE);
+        perror("adjtimex write");
+        return (EXIT_FAILURE);
     }
 
     printf("%i:%i\n", t.status, rc);

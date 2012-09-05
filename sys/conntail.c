@@ -52,12 +52,13 @@ int main(int argc, char **argv)
     };
 
     struct nfct_filter_ipv6 lo_ipv6 = {
-        .addr = { 0x0, 0x0, 0x0, 0x1 },
-        .mask = { 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff },
+        .addr = {0x0, 0x0, 0x0, 0x1},
+        .mask = {0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff},
     };
 
     handle = nfct_open(CONNTRACK,
-                       NF_NETLINK_CONNTRACK_NEW | NF_NETLINK_CONNTRACK_DESTROY);
+                       NF_NETLINK_CONNTRACK_NEW |
+                       NF_NETLINK_CONNTRACK_DESTROY);
     if (!handle)
         FAIL(nfct_open);
 
@@ -74,7 +75,7 @@ int main(int argc, char **argv)
     }
 
     nfct_filter_add_attr_u32(filter, NFCT_FILTER_L4PROTO, IPPROTO_ICMP);
-    nfct_filter_add_attr_u32(filter, NFCT_FILTER_L4PROTO,IPPROTO_ICMPV6);
+    nfct_filter_add_attr_u32(filter, NFCT_FILTER_L4PROTO, IPPROTO_ICMPV6);
     nfct_filter_add_attr(filter, NFCT_FILTER_SRC_IPV4, &lo_ipv4);
     nfct_filter_add_attr(filter, NFCT_FILTER_SRC_IPV6, &lo_ipv6);
 
@@ -82,9 +83,7 @@ int main(int argc, char **argv)
         FAIL(nfct_filter_attach);
     }
 
-    if (nfct_callback_register(handle,
-                               NFCT_T_ALL,
-                               callback, NULL) < 0)
+    if (nfct_callback_register(handle, NFCT_T_ALL, callback, NULL) < 0)
         FAIL(nfct_callback_register);
 
     if (nfct_catch(handle) < 0)

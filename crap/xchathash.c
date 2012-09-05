@@ -19,8 +19,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-uint32_t
-str_hash (const char *key)
+uint32_t str_hash(const char *key)
 {
     const char *p = key;
     uint32_t h = *p;
@@ -32,7 +31,8 @@ str_hash (const char *key)
     return h;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     if (argc != 2)
         return EXIT_FAILURE;
 

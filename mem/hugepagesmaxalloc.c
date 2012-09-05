@@ -25,7 +25,7 @@
 #define MB (unsigned long)(1<<20)
 
 #ifndef SHM_HUGETLB
-# define SHM_HUGETLB 04000
+#define SHM_HUGETLB 04000
 #endif
 
 /* Only ia64 requires this */

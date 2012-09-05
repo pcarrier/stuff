@@ -23,7 +23,7 @@
 #define LENGTH (256UL*1024*1024)
 
 #ifndef SHM_HUGETLB
-# define SHM_HUGETLB 04000
+#define SHM_HUGETLB 04000
 #endif
 
 /* Only ia64 requires this */
