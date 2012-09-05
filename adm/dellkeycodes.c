@@ -11,7 +11,7 @@
 
 static int (*real_XNextEvent) (Display *, XEvent *) = NULL;
 static KeyCode(*real_XKeysymToKeycode) (Display *, KeySym) = NULL;
-static KeySym(*sym_XKeycodeToKeysym) (Display *, KeyCode, int) = NULL;
+static KeySym(*real_XKeycodeToKeysym) (Display *, KeyCode, int) = NULL;
 static int hack_initialised = 0;
 
 static void hack_init(void)
@@ -24,20 +24,23 @@ static void hack_init(void)
         _exit(1);
     }
 
-    real_XNextEvent = dlsym(h, "XNextEvent");
+    real_XNextEvent =
+        (int (*)(Display *, XEvent *)) dlsym(h, "XNextEvent");
     if (real_XNextEvent == NULL) {
         fprintf(stderr, "Unable to find symbol\n");
         _exit(1);
     }
 
-    real_XKeysymToKeycode = dlsym(h, "XKeysymToKeycode");
+    real_XKeysymToKeycode =
+        (KeyCode(*)(Display *, KeySym)) dlsym(h, "XKeysymToKeycode");
     if (real_XKeysymToKeycode == NULL) {
         fprintf(stderr, "Unable to find symbol\n");
         _exit(1);
     }
 
-    sym_XKeycodeToKeysym = dlsym(h, "XKeycodeToKeysym");
-    if (sym_XKeycodeToKeysym == NULL) {
+    real_XKeycodeToKeysym =
+        (KeySym(*)(Display *, KeyCode, int)) dlsym(h, "XKeycodeToKeysym");
+    if (real_XKeycodeToKeysym == NULL) {
         fprintf(stderr, "Unable to find symbol\n");
         _exit(1);
     }
@@ -61,7 +64,7 @@ int XNextEvent(Display * display, XEvent * event)
         keyevent = (XKeyEvent *) event;
 
         /* mangle keycodes */
-        keysym = sym_XKeycodeToKeysym(display, keyevent->keycode, 0);
+        keysym = real_XKeycodeToKeysym(display, keyevent->keycode, 0);
         switch (keysym) {
         case XK_Up:
             keyevent->keycode = 98;
