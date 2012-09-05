@@ -41,8 +41,8 @@ def event_to_pagerduty_json(event):
 def generate_incident_key(event):
     trigger_id = event['triggerid']
 
-    with FileLock('/tmp/zabbix_pagerduty.lock') as lock:
-        with closing(shelve.open('/tmp/zabbix_pagerduty.shelve')) as shelf:
+    with FileLock('/var/tmp/zabbix_pagerduty.lock') as lock:
+        with closing(shelve.open('/var/tmp/zabbix_pagerduty.shelve')) as shelf:
             if event['status'] == 'OK':
                 if trigger_id in shelf:
                     return shelf[trigger_id]
