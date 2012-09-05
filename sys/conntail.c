@@ -11,6 +11,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <libnetfilter_conntrack/libnetfilter_conntrack.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define CONNTAIL_MAX_LINE 1024
 #define FAIL(n) {perror(#n); goto err;}

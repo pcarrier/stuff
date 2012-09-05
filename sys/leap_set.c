@@ -2,7 +2,7 @@
 #include <sys/timex.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 int main(int argc, char **argv)
 {
@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     if (argc < 2)
         exit(EXIT_FAILURE);
 
-    bzero(&t, sizeof(struct timex));
+    memset(&t, 0, sizeof(struct timex));
 
     if (adjtimex(&t) < 0) {
         perror("adjtimex read");

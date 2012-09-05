@@ -2,14 +2,14 @@
 #include <sys/timex.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 
 int main()
 {
     struct timex t;
     int rc;
 
-    bzero(&t, sizeof(struct timex));
+    memset(&t, 0, sizeof(struct timex));
 
     rc = adjtimex(&t);
 
