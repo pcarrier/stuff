@@ -17,16 +17,18 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <glib.h>
+#include <stdint.h>
 
-guint32
+uint32_t
 str_hash (const char *key)
 {
     const char *p = key;
-    guint32 h = *p;
+    uint32_t h = *p;
+
     if (h)
         for (p += 1; *p != '\0'; p++)
             h = (h << 5) - h + *p;
+
     return h;
 }
 
