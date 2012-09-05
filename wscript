@@ -1,13 +1,15 @@
 # vim: ft=python
-from sys import platform
+
 from waflib import Logs
 from waflib.Build import BuildContext
 
-APPNAME='stuff'
-VERSION='0.1'
+APPNAME = 'stuff'
+VERSION = '0.1'
+
 
 def options(opt):
     opt.load('compiler_c')
+
 
 def configure(conf):
     conf.load('compiler_c')
@@ -15,7 +17,7 @@ def configure(conf):
                   header_name="grp.h",
                   mandatory=False)
     conf.check_cc(header_name="X11/Xlib.h")
-    conf.check_cc(cflags=['-Wall','-Wextra', '-pedantic', '-std=c99'],
+    conf.check_cc(cflags=['-Wall', '-Wextra', '-pedantic', '-std=c99'],
                   defines=['_XOPEN_SOURCE=500'],
                   uselib_store='base')
     conf.check_cc(lib=['m'],
@@ -43,9 +45,11 @@ def configure(conf):
         conf.env.LINUX = True
     summary(conf)
 
+
 class Summary(BuildContext):
     cmd = 'summary'
     fun = 'summary'
+
 
 def summary(smr):
     def report_if_missing(var, name):
@@ -60,10 +64,12 @@ def summary(smr):
     report_if_missing(smr.env.LINUX,
                       'Linux')
 
-STANDARD_USE=['base', 'strict', 'm']
+
+STANDARD_USE = ['base', 'strict', 'm']
+
 
 def build(build):
-    build(rule=build.path.abspath()+'/sys/errnos.h.gen ${SRC} ${TGT}',
+    build(rule=build.path.abspath() + '/sys/errnos.h.gen ${SRC} ${TGT}',
           source='sys/errnos.list',
           target='../sys/errnos.h')
 
@@ -71,28 +77,28 @@ def build(build):
     for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
         'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip',
         'fun/hello_world', 'crap/xchathash']:
-        build.program(source=bin+'.c',
+        build.program(source=bin + '.c',
                       target=bin,
                       use=STANDARD_USE)
 
     for bin in ['sys/crypt']:
-        build.program(source=bin+'.c',
+        build.program(source=bin + '.c',
                       target=bin,
                       use=STANDARD_USE + ['crypt'])
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
         'mini/sync', 'mini/true', 'mini/yes', 'mini/yes2']:
-        build.program(source=bin+'.c',
+        build.program(source=bin + '.c',
                      target=bin,
                      use=STANDARD_USE,
-                     install_path = "${PREFIX}/bin/mini")
+                     install_path="${PREFIX}/bin/mini")
 
     # Linux-specific stuff
     if build.env.LINUX:
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
             'mem/hugepagesmaxalloc', 'sys/leap_set', 'sys/leap_get']:
-            build.program(source=bin+'.c',
+            build.program(source=bin + '.c',
                           target=bin, use=STANDARD_USE)
 
     if build.env.HAVE_NFCONNTRACK:
@@ -108,13 +114,13 @@ def build(build):
 
     for lib in ld_libs:
         # I stopped trying to be strict here...
-        build.shlib(source=lib+'.c',
+        build.shlib(source=lib + '.c',
                     target=lib,
                     use=['base', 'm', 'dl'])
 
     # Cool 7-segment stuff
     for bin in ['fun/7seg/7plot', 'fun/7seg/7clock']:
-        build.program(source=[bin+'.c','fun/7seg/7seg.c'],
+        build.program(source=[bin + '.c', 'fun/7seg/7seg.c'],
                       target=bin,
                       use=STANDARD_USE)
 
@@ -132,7 +138,7 @@ def build(build):
     for bin in ['fun/async/test-poll', 'fun/async/test-select',
         'sys/i_segv', 'sys/i_segv2', 'mem/eatmemory',
         'mem/mmapdoublecheck', 'mem/mmapnwait']:
-        build.program(source=bin+'.c',
+        build.program(source=bin + '.c',
                       target=bin,
                       use=STANDARD_USE,
                       install_path=None)
