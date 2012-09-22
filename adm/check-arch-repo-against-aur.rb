@@ -24,13 +24,12 @@ Dir.glob('*.pkg.tar.xz').sort.each do |file|
   pkgname = infos['pkgname']
   pkgver = infos['pkgver']
   newver = AUR.infos(pkgname)['Version']
-  %x[vercmp #{pkgver} #{newver}]
-  res = $?.to_i
+  res = %x[vercmp #{pkgver} #{newver}].to_i
   if res < 0
-    puts "OUTDATED\t#{pkgname}"
+    puts "OUTDATED\t#{pkgname}\t#{pkgver} #{newver}"
   elsif res == 0
-    puts "identical\t#{pkgname}"
+    puts "identical\t#{pkgname}\t#{pkgver} #{newver}"
   else
-    puts "TOO NEW\t#{pkgname}"
+    puts "TOO NEW\t#{pkgname}\t#{pkgver} #{newver}"
   end
 end
