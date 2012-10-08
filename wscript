@@ -74,7 +74,7 @@ def build(build):
           target='../sys/errnos.h')
 
     # The basics, should be on any recent Unix system, and we're strict :)
-    for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
+    for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/firemeplz', 'fun/nato', 'fun/superglob',
         'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip',
         'fun/hello_world', 'crap/xchathash']:
         build.program(source=bin + '.c',
