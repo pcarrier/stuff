@@ -1,0 +1,32 @@
+#!/bin/sh
+
+case $1 in
+  ingest)
+    printf "Press a few times, then Ctrl-D.\n" >&2
+    while read line; do
+      redis-cli lpush yubi $line
+    done
+    ;;
+  pop)
+    redis-cli --raw rpop yubi|pbcopy
+    ;;
+  size)
+    size=$(redis-cli --raw llen yubi)
+    printf "$size entries"
+    if [ $size -lt 10 ]; then
+      printf "!!!"
+    fi
+    printf '\n'
+    ;;
+  'flush!')
+    if [ "a$SURE" = aYES ]; then
+      redis-cli del yubi
+    else
+      printf "Please use with SURE=YES\n" >&2
+      exit 1
+    fi
+    ;;
+  *)
+    printf "Usage: $0 [ingest|pop|size|flush!]\n" >&2
+    ;;
+esac
