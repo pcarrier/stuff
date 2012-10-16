@@ -16,7 +16,7 @@ def configure(conf):
     conf.check_cc(function_name='fgetgrent',
                   header_name="grp.h",
                   mandatory=False)
-    conf.check_cc(header_name="X11/Xlib.h")
+    conf.check_cc(header_name="X11/Xlib.h", mandatory=False)
     conf.check_cc(cflags=['-Wall', '-Wextra', '-pedantic', '-std=c99'],
                   defines=['_XOPEN_SOURCE=700'],
                   uselib_store='base')
@@ -26,7 +26,8 @@ def configure(conf):
                   defines=['_GNU_SOURCE'],
                   uselib_store='dl')
     conf.check_cc(lib=['crypt'],
-                  uselib_store='crypt')
+                  uselib_store='crypt',
+                  mandatory=False)
     conf.check_cc(lib=['pthread'],
                   uselib_store='pthread')
     conf.check_cc(cflags=['-Werror'],
@@ -84,7 +85,7 @@ def build(build):
     for bin in ['sys/crypt']:
         build.program(source=bin + '.c',
                       target=bin,
-                      use=STANDARD_USE + ['crypt'])
+                      use=STANDARD_USE) # + ['crypt']) under linux TODO
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
@@ -110,7 +111,8 @@ def build(build):
     # LD_PRELOAD libs
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
     if build.env.LINUX:
-        ld_libs.extend(['diagnostics/mtrace',  'diagnostics/memcpy2memmove', 'adm/dellkeycodes'])
+        ld_libs.extend(['diagnostics/mtrace',  'diagnostics/memcpy2memmove'])
+# 'adm/dellkeycodes': only if Xlib is available TODO
 
     for lib in ld_libs:
         # I stopped trying to be strict here...
