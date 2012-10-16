@@ -1,14 +1,17 @@
 #!/usr/bin/env ruby
 
-require 'httparty'
+require 'httpclient'
+require 'httpclient/include_client'
+require 'json'
 
 class AUR
-  include HTTParty
-  format :json
-  base_uri 'https://aur.archlinux.org'
+  extend HTTPClient::IncludeClient
+  include_http_client
 
   def self.infos name
-    get('/rpc.php', query: {type: :info, arg: name}).parsed_response['results']
+    resp = http_client.get 'http://aur.archlinux.org/rpc.php', query: {type: :info, arg: name}
+    data = JSON::parse resp.body
+    data['results']['Version']
   end
 end
 
@@ -18,18 +21,20 @@ def parse metadata
   end]
 end
 
-Dir.glob('*.pkg.tar.xz').sort.each do |file|
-  metadata = %x[bsdtar xfO #{file} .PKGINFO]
-  infos = parse metadata
-  pkgname = infos['pkgname']
-  pkgver = infos['pkgver']
-  newver = AUR.infos(pkgname)['Version']
-  res = %x[vercmp #{pkgver} #{newver}].to_i
-  if res < 0
-    puts "OUTDATED\t#{pkgname}\t#{pkgver} #{newver}"
-  elsif res == 0
-    puts "identical\t#{pkgname}\t#{pkgver} #{newver}"
-  else
-    puts "TOO NEW\t#{pkgname}\t#{pkgver} #{newver}"
+Dir.glob('*.pkg.tar.xz').sort.collect do |file|
+  Thread.new do
+    metadata = %x[bsdtar xfO #{file} .PKGINFO]
+    infos = parse metadata
+    pkgname = infos['pkgname']
+    pkgver = infos['pkgver']
+    newver = AUR.infos pkgname
+    res = %x[vercmp #{pkgver} #{newver}].to_i
+    if res < 0
+      print "OUTDATED\t#{pkgname}\t#{pkgver} #{newver}\n"
+    elsif res == 0
+      print "identical\t#{pkgname}\t#{pkgver} #{newver}\n"
+    else
+      print "TOO NEW\t#{pkgname}\t#{pkgver} #{newver}\n"
+    end
   end
-end
+end.each {|t| t.join}
