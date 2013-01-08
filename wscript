@@ -66,33 +66,36 @@ def summary(smr):
                       'Linux')
 
 
-STANDARD_USE = ['base', 'strict', 'm']
-
-
 def build(build):
     build(rule=build.path.abspath() + '/sys/errnos.h.gen ${SRC} ${TGT}',
           source='sys/errnos.list',
           target='../sys/errnos.h')
 
     # The basics, should be on any recent Unix system, and we're strict :)
-    for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/firemeplz', 'fun/nato', 'fun/superglob',
+    for bin in ['fun/b2c', 'fun/mkpasswd', 'fun/nato', 'fun/superglob',
         'sys/sethostid', 'auth/grouplist', 'fun/forking', 'fun/ip2hex', 'fun/hex2ip',
         'fun/hello_world', 'crap/xchathash']:
         build.program(source=bin + '.c',
                       target=bin,
-                      use=STANDARD_USE)
+                      use=['base', 'strict', 'm'])
+
+    # Don't be strict
+    for bin in ['fun/firemeplz']:
+        build.program(source=bin + '.c',
+                      target=bin,
+                      use=['base'])    
 
     for bin in ['sys/crypt']:
         build.program(source=bin + '.c',
                       target=bin,
-                      use=STANDARD_USE) # + ['crypt']) under linux TODO
+                      use=['base', 'strict', 'm']) # + ['crypt']) under linux TODO
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
         'mini/sync', 'mini/true', 'mini/yes', 'mini/yes2']:
         build.program(source=bin + '.c',
                      target=bin,
-                     use=STANDARD_USE,
+                     use=['base', 'strict', 'm'],
                      install_path="${PREFIX}/bin/mini")
 
     # Linux-specific stuff
@@ -100,7 +103,7 @@ def build(build):
         for bin in ['fs/wtfitf', 'mem/hugepagesdoublecheck',
             'mem/hugepagesmaxalloc', 'sys/leap_set', 'sys/leap_get']:
             build.program(source=bin + '.c',
-                          target=bin, use=STANDARD_USE)
+                          target=bin, use=['base', 'strict', 'm'])
 
     if build.env.LIB_nfconntrack:
         for nf_bin in ['sys/conntail']:
@@ -124,7 +127,7 @@ def build(build):
     for bin in ['fun/7seg/7plot', 'fun/7seg/7clock']:
         build.program(source=[bin + '.c', 'fun/7seg/7seg.c'],
                       target=bin,
-                      use=STANDARD_USE)
+                      use=['base', 'strict', 'm'])
 
     if build.env.LIB_glib2:
         for bin in ['sys/errnos', 'fun/urlencode', 'fun/urldecode']:
@@ -142,10 +145,10 @@ def build(build):
         'mem/mmapdoublecheck', 'mem/mmapnwait']:
         build.program(source=bin + '.c',
                       target=bin,
-                      use=STANDARD_USE,
+                      use=['base', 'strict', 'm'],
                       install_path=None)
 
     # Python scripts
-    # build.install_files('${PREFIX}/bin',
-    #                     'auth/pinlock net/bwstats net/throttler fun/slider',
-    #                     chmod=0755)
+    build.install_files('${PREFIX}/bin',
+                        'auth/pinlock net/bwstats net/throttler fun/slider',
+                        chmod=0755)
