@@ -85,10 +85,15 @@ def build(build):
                       target=bin,
                       use=['base'])    
 
+    if build.env.LINUX:
+        crypt_use = ['crypt']
+    else:
+        crypt_use = []
+
     for bin in ['sys/crypt']:
         build.program(source=bin + '.c',
                       target=bin,
-                      use=['base', 'strict', 'm']) # + ['crypt']) under linux TODO
+                      use=['base', 'strict', 'm'] + crypt_use)
 
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname',
