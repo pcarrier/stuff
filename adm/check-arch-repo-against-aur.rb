@@ -9,7 +9,7 @@ class AUR
   include_http_client
 
   def self.infos name
-    resp = http_client.get 'http://aur.archlinux.org/rpc.php', query: {type: :info, arg: name}
+    resp = http_client.get 'https://aur.archlinux.org/rpc.php', query: {type: :info, arg: name}
     data = JSON::parse resp.body
     data['results']['Version']
   end
