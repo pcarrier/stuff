@@ -7,6 +7,7 @@ require 'json'
 class AUR
   extend HTTPClient::IncludeClient
   include_http_client
+  http_client.ssl_config.verify_callback = proc { true }
 
   def self.infos name
     resp = http_client.get 'https://aur.archlinux.org/rpc.php', query: {type: :info, arg: name}
@@ -23,18 +24,22 @@ end
 
 Dir.glob('*.pkg.tar.xz').sort.collect do |file|
   Thread.new do
-    metadata = %x[bsdtar xfO #{file} .PKGINFO]
-    infos = parse metadata
-    pkgname = infos['pkgname']
-    pkgver = infos['pkgver']
-    newver = AUR.infos pkgname
-    res = %x[vercmp #{pkgver} #{newver}].to_i
-    if res < 0
-      print "OUTDATED\t#{pkgname}\t#{pkgver} #{newver}\n"
-    elsif res == 0
-      print "identical\t#{pkgname}\t#{pkgver} #{newver}\n"
-    else
-      print "TOO NEW\t#{pkgname}\t#{pkgver} #{newver}\n"
+    begin
+      metadata = %x[bsdtar xfO #{file} .PKGINFO]
+      infos = parse metadata
+      pkgname = infos['pkgname']
+      pkgver = infos['pkgver']
+      newver = AUR.infos pkgname
+      res = %x[vercmp #{pkgver} #{newver}].to_i
+      if res < 0
+        print "OUTDATED\t#{pkgname}\t#{pkgver} #{newver}\n"
+      elsif res == 0
+        print "identical\t#{pkgname}\t#{pkgver} #{newver}\n"
+      else
+        print "TOO NEW\t#{pkgname}\t#{pkgver} #{newver}\n"
+      end
+    rescue Exception => e
+      $stderr.puts "#{file}: #{e}"
     end
   end
 end.each {|t| t.join}
