@@ -1,5 +1,5 @@
 /**
- * wtfitf: Where's The File In This Filesystem
+ * wtfitf: Where's This File In The Filesystem
  *
  * Relies on fiemap.
  * TODO: use bmap when fiemap is not available
@@ -9,7 +9,7 @@
  * for any purpose with or without fee is hereby granted, provided that
  * the above copyright notice and this permission notice appear in all copies.
  *
- * Maintainer: Pierre Carrier <prc@redhat.com>
+ * Maintainer: Pierre Carrier <pierre@gcarrier.fr>
 **/
 
 #include <stdlib.h>
