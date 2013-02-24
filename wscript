@@ -19,7 +19,6 @@ GLIBC_FRAGMENT = '''
 
 
 def configure(conf):
-    conf.env.LINUX = conf.env.DEST_OS == 'linux'
     conf.load('compiler_c')
     conf.check_cc(fragment=GLIBC_FRAGMENT, execute=False, mandatory=False, uselib_store='glibc')
     conf.check_cc(function_name='fgetgrent', header_name="grp.h", mandatory=False)
@@ -35,6 +34,7 @@ def configure(conf):
         mandatory=False)
     conf.check_cfg(package='libnetfilter_conntrack', args=['--cflags', '--libs'], use='portable',
         uselib_store='nfconntrack', mandatory=False)
+    conf.env.LINUX = (conf.env.DEST_OS == 'linux')
     summary(conf)
     conf.write_config_header('config.h')
 
