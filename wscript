@@ -95,7 +95,8 @@ def build(build):
     ld_libs = ['diagnostics/gdb4undeads', 'diagnostics/sigomgbt']
     if build.env.LINUX:
         ld_libs.extend(['diagnostics/mtrace', 'diagnostics/memcpy2memmove'])
-        # I stopped trying to be strict here...
+
+    # I stopped trying to be strict here...
     for lib in ld_libs:
         build.shlib(source=lib + '.c', target=lib, use=['base', 'dl'])
     if build.env.LIB_x11:
