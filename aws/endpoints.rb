@@ -38,7 +38,7 @@ def format_entries entries
   Hash[
     entries.collect do |e|
       [format_region(e[:region]), {
-        :endpoint => e[:endpoint],
+        :endpoint => e[:endpoint].strip,
         :protocols => extract_protocols(e[:protocol])
       }]
     end
