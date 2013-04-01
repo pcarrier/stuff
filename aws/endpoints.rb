@@ -76,4 +76,4 @@ doc.css('div.chapter#rande > div.section').each do |section|
   end
 end
 
-puts JSON::dump({:generated => Time.now.utc.iso8601, :data => endpoints})
+puts JSON::dump({:generated_at => Time.now.utc.iso8601, :data => endpoints})
