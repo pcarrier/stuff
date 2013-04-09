@@ -12,7 +12,7 @@ DNS = Resolv::DNS::new
 def format_value v
   return v if Resolv::IPv4 === v or Resolv::IPv6 === v
   w='[A-Za-z0-9-]'
-  res = v.gsub(
+  v.gsub(
     /^
       (          # Non-.-terminated hostname:
         [A-za-z]   # Not starting by a number, excludes IPs
@@ -23,8 +23,6 @@ def format_value v
       )
       (?=\s|$)   # Space or end of line, not replaced
     /x, '\1.')
-  puts res
-  res
 end
 
 def format_record zone, record, value
