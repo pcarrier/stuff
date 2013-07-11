@@ -51,7 +51,7 @@ EOS
       if record.alias_target
         tgt = record.alias_target['DNSName']
 
-        file.puts "; Alias for #{tgt}"
+        file.puts "; #{record.name}: alias for #{tgt}"
         DNS.each_address tgt do |addr|
           file.write format_record zone, record, addr
         end
