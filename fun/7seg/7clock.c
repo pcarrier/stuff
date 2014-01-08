@@ -60,19 +60,19 @@ static void notify_event(event_t event)
 static void new_window_size(int sig)
 {
     notify_event(events.window_was_resized);
-    sig = sig;
+    (void)sig;
 }
 
 static void new_time(int sig)
 {
     notify_event(events.new_time_to_display);
-    sig = sig;
+    (void)sig;
 }
 
 static void leaving(int sig)
 {
     notify_event(events.wants_to_leave);
-    sig = sig;
+    (void)sig;
 }
 
 static void set_non_blocking(int fd)

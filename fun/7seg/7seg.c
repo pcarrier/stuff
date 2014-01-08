@@ -194,9 +194,9 @@ int seven_seg_plot(char **dest, char const *msg, char seg_char,
                    seven_seg_size * used)
 {
     int msg_len;
-    int nb_stdchar, nb_spechar, nb_chars, nb_spaces;
-    int stdchar_width, spechar_width, space_width, real_width;
-    int line, colon_line1, colon_line2, spechar_shift;
+    int nb_stdchar = 0, nb_spechar = 0, nb_chars = 0, nb_spaces = 0;
+    int stdchar_width = 0, spechar_width = 0, space_width = 0, real_width = 0;
+    int line = 0, colon_line1 = 0, colon_line2 = 0, spechar_shift = 0;
     int dest_pos = 0;
     char *current_char;
     symbol_repr_t *current_repr;
