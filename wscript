@@ -111,8 +111,8 @@ def build(build):
             build.program(source=bin + '.c', target=bin, includes='.', use=['base', 'strict', 'glib2'])
 
     # Test stuff (not installed)
-    for bin in ['fun/async/test-poll', 'fun/async/test-select', 'sys/i_segv', 'sys/i_segv2', 'mem/eatmemory',
-                'mem/mmapdoublecheck', 'mem/mmapnwait']:
+    for bin in ['fun/async/test-poll', 'fun/async/test-select', 'sys/i_segv', 'sys/i_segv2',
+                'mem/eatmemory', 'mem/eatexec', 'mem/mmapdoublecheck', 'mem/mmapnwait']:
         build.program(source=bin + '.c', target=bin, use=['base', 'strict'], install_path=None)
     build.program(source='sys/i_segv3.c', target='sys/i_segv3', use=['base', 'strict', 'pthread'], install_path=None)
 
