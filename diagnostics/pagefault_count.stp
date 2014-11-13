@@ -1,4 +1,4 @@
-#!/usr/bin/env stap -v
+#!/usr/bin/env stap
 # sort -n its output
 
 global faults
