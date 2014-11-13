@@ -1,15 +1,16 @@
-#!/usr/bin/env stap
+# use stap -v -D MAXSTRINLEN=1024
 # sort -n its output
 
-global faults
+# 256K
+global faults[262144]
 
 probe kernel.function("filemap_fault") {
 	fpath = d_name($vma->vm_file->f_path->dentry)
-	faults[fpath]++
+	faults[pid(), fpath]++
 }
 
 probe end {
-	foreach (fpath in faults) {
-		printf("%i\t%s\n", faults[fpath], fpath)
+	foreach ([pid, fpath] in faults) {
+		printf("%i\t%i\t%s\n", faults[pid,fpath], pid, fpath)
 	}
 }
