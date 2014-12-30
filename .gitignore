@@ -1,5 +1,6 @@
-waf
 .waf-1*
 .lock-w*
 sys/errnos.h
 build/
+*.o
+*.ko

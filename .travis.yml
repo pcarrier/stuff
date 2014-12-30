@@ -1,8 +1,8 @@
 language: c
 compiler:
+  - clang
   - gcc
 script:
-  - ./waf-prepare
   - ./waf configure build
   - sudo ./waf install
 install:

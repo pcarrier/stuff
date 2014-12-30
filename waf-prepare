@@ -1,4 +1,0 @@
-#!/bin/sh
-set -ex
-curl -sf http://ftp.waf.io/pub/release/waf-1.8.5 > waf
-chmod +x waf
