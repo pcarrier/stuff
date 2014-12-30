@@ -19,14 +19,15 @@
  * Using stderr because it's unbuffered by default. Yes that's ugly.
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <signal.h>
 #include <err.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <sysexits.h>
+#include <unistd.h>
 
 #define MB ((size_t)1<<20)
 
