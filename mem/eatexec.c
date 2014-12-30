@@ -39,9 +39,8 @@ void print_time() {
 
 int main(int argc, char **argv)
 {
-    size_t page_size, buf_size, done;
+    size_t page_size, buf_size, done, nr_of_mb = 8192, nr_of_forks = 1000;
     char *buf, *dark_passenger;
-    long int nr_of_mb = 8192, nr_of_forks = 1000, fork_i;
     pid_t pid;
     int stat;
     char *cmd = "/bin/true";
