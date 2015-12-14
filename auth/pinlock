@@ -55,7 +55,7 @@ def block_everything(blocking):
     kill(getppid(), SIGCONT)
 
 def get_pin(pw):
-  return getpass('%s@%s locked by %s. PIN? ' % (gethostname(), ttyname(stdout.fileno()), pw.pw_name))
+  return getpass('%s@%s locked by %s. PIN? ' % (ttyname(stdout.fileno()), gethostname(), pw.pw_name))
 
 def pin_path(pw):
   return join(pw.pw_dir, '.pinlock')

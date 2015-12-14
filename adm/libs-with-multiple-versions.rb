@@ -13,6 +13,10 @@ def libname path
   File.basename(path)[/^\w+(-[a-zA-Z]+)?/]
 end
 
+def truncate str, len
+  str.length > len and str[0..len] + '...' or s
+end
+
 pids = Dir.new("/proc").entries.grep(/^[0-9]+$/)
 
 pids.each do |p|
@@ -47,7 +51,7 @@ libs.reject { |name, versions| versions.length == 1 }.each do |name, versions|
   versions.each do |descr, upids|
     puts "  - #{descr} used by:"
     upids.each do |pid|
-      puts "    - [#{pid}] #{infos[pid][:name]}"
+      puts "    - [#{pid}] #{truncate infos[pid][:name], 40}"
     end
   end
 end
