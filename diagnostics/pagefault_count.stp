@@ -1,4 +1,4 @@
-# use stap -v -D MAXSTRINLEN=1024
+# use stap -v -D MAXSTRINGLEN=1024
 # sort -n its output
 
 global faults%
