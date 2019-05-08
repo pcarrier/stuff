@@ -155,7 +155,7 @@ static const char *NAMES[] = {
 
 static void printc(char c)
 {
-    if (c >= 'A' && c < 'Z') {
+    if (c >= 'A' && c <= 'Z') {
         if (printf("uppercase %s, ", NAMES[c - 'A' + 'a']) < 0)
             goto err;
     } else if ((unsigned char) (c - '\0') < 0x80u) {
