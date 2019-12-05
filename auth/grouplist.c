@@ -12,8 +12,6 @@
  * If no file is specified, goes through all nss backends
  */
 
-#define _SVID_SOURCE
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sysexits.h>

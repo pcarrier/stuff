@@ -26,7 +26,6 @@ def configure(conf):
         uselib_store='base')
     conf.check_cc(lib=['m'], uselib_store='m')
     conf.check_cc(lib=['dl'], defines=['_GNU_SOURCE'], uselib_store='dl')
-    conf.check_cc(lib=['crypt'], uselib_store='crypt', mandatory=False)
     conf.check_cc(lib=['pthread'], uselib_store='pthread')
     conf.check_cc(cflags=['-Werror'], uselib_store='strict')
     conf.check_cfg(package='x11', args=['--cflags', '--libs'], use='portable', uselib_store='x11', mandatory=False)
@@ -71,13 +70,6 @@ def build(build):
     for bin in ['fun/firemeplz']:
         build.program(source=bin + '.c', target=bin, use=['base'])
 
-    crypt_use = []
-    if build.env.LIB_crypt:
-        crypt_use.extend(['crypt'])
-
-    for bin in ['sys/crypt']:
-        build.program(source=bin + '.c', target=bin, use=['base', 'strict'] + crypt_use)
-
     # mini stuff, shouldn't invade your PATH ever unless you're completely mad
     for bin in ['mini/echo', 'mini/false', 'mini/hostid', 'mini/logname', 'mini/sync', 'mini/true', 'mini/yes',
                 'mini/yes2']:
@@ -117,4 +109,4 @@ def build(build):
     build.program(source='sys/i_segv3.c', target='sys/i_segv3', use=['base', 'strict', 'pthread'], install_path=None)
 
     # Python scripts
-    build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0755)
+    build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0o755)

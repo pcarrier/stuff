@@ -34,6 +34,7 @@ static int print(char *str, int parse_backslashes)
                 ESCAPED_REGISTER('\0', '\\');
             case '0':
                 cur_pos++;
+		__attribute__ ((fallthrough));
             case '1':
             case '2':
             case '3':

@@ -23,10 +23,6 @@
  * BEWARE!
 **/
 
-#ifdef __APPLE__
-#define _DARWIN_C_SOURCE
-#endif
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>

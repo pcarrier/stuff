@@ -12,9 +12,6 @@
  * - Not thorough, please report missing E* constants I missed.
 **/
 
-/* Grab everything under OSX */
-#define _DARWIN_C_SOURCE
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
