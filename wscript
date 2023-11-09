@@ -117,4 +117,4 @@ def build(build):
     build.program(source='sys/i_segv3.c', target='sys/i_segv3', use=['base', 'strict', 'pthread'], install_path=None)
 
     # Python scripts
-    build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0755)
+    build.install_files('${PREFIX}/bin', 'auth/pinlock net/bwstats net/throttler fun/slider', chmod=0o755)
